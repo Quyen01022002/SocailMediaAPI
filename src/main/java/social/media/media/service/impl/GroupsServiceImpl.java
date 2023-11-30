@@ -1,0 +1,130 @@
+package social.media.media.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import social.media.media.exception.ApplicationException;
+import social.media.media.exception.NotFoundException;
+import social.media.media.model.entity.*;
+import social.media.media.model.mapper.GroupMapper;
+import social.media.media.model.mapper.GroupsMembersMapper;
+import social.media.media.model.mapper.PageMapper;
+import social.media.media.model.mapper.PageMembersMapper;
+import social.media.media.model.reponse.GroupsMembersResponse;
+import social.media.media.model.reponse.GroupsResponse;
+import social.media.media.model.reponse.PageMembersResponse;
+import social.media.media.model.reponse.PageResponse;
+import social.media.media.repository.*;
+import social.media.media.service.GroupService;
+import social.media.media.service.PageService;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class GroupsServiceImpl implements GroupService {
+
+    private final GroupsRepository groupsRepository;
+    private final GroupsMembersRepository groupsMembersRepository;
+
+    private final UserRepository userRepository;
+    @Autowired
+    GroupMapper groupMapper;
+    @Autowired
+    GroupsMembersMapper groupsMembersMapper;
+
+
+
+
+    @Override
+    public GroupsResponse addPage(Groups groups) {
+        try {
+
+            Groups savedGroups=groupsRepository.saveAndFlush(groups);
+            if(groups.getGroupMembers()!=null) {
+                for (GroupMembers item : groups.getGroupMembers()) {
+                    item.setId(savedGroups.getId());
+                    groupsMembersRepository.saveAndFlush(item);
+                }
+            }
+
+            // Map to Response
+            return groupMapper.toResponse(savedGroups);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public GroupsResponse Detail(int id) {
+        try {
+            Groups page = groupsRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+            return groupMapper.toResponse(page);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+
+    @Override
+    public List<GroupsMembersResponse> ListGroups(int id) {
+        try {
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+            return groupsMembersMapper.toResponseList(user.getGroupMemberships());
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public GroupsResponse updatePage(Groups groups) {
+        Groups expage = groupsRepository.findById(groups.getId()).orElseThrow(() -> new NotFoundException(" Not Found"));
+
+        return groupMapper.toResponse(groupsRepository.saveAndFlush(groups));
+    }
+
+    @Override
+    public void addMemberPage(GroupMembers groupsMembersResponse) {
+        try {
+            groupsMembersRepository.saveAndFlush(groupsMembersResponse);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+
+    @Override
+    public Groups Delete(Groups groups) {
+        try {
+            Groups page1 = groupsRepository.findById(groups.getId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            if (page1 == null) {
+                throw new NotFoundException(" Not Found");
+            }
+
+
+            groupsRepository.delete(page1);
+            return page1;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public void DeleteMembers(GroupMembers page) {
+        try {
+            GroupMembers pageMembers = groupsMembersRepository.findByUserAndGroup(page.getUser(),page.getGroup());
+            if (pageMembers == null) {
+                throw new NotFoundException("Product Not Found");
+            }
+
+
+            groupsMembersRepository.delete(pageMembers);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+
+
+
+}
