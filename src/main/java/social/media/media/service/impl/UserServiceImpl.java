@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.model.entity.*;
+import social.media.media.model.enums.GenderEnum;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.mapper.UserMapper;
+import social.media.media.model.reponse.FriendsResponse;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.UserResponse;
 import social.media.media.repository.PostRepository;
@@ -16,6 +18,7 @@ import social.media.media.repository.UserRepository;
 import social.media.media.service.PostService;
 import social.media.media.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,6 +55,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserResponse> List20Follow() {
+        List<User> list = userRepository.findRandom20Users();
+        List<UserResponse> ListResponse=userMapper.toResponseList(list);
+
+        return ListResponse;
+    }
+
+    @Override
     public void unFollow(userFollow user) {
         try {
             userFollow friends1 = userFollowRepository.findByFollowerAndFollowing(user.getFollower(),user.getFollowing());
@@ -81,9 +92,18 @@ public class UserServiceImpl implements UserService {
         User exuser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
         exuser.setFirstName(user.getFirstName());
         exuser.setLastName(user.getLastName());
-        exuser.setPhone(user.getPhone());
-        exuser.setEmail(user.getEmail());
+        exuser.setDoB(user.getDoB());
         exuser.setAddress(user.getAddress());
+        if(user.getGender()==GenderEnum.MALE)
+        {
+        	exuser.setProfilePicture("http://res.cloudinary.com/dq21kejpj/image/upload/v1701758248/public/cz3abc8wfhtyqkjx0pnq.jpg");
+        }
+        else
+        	
+        {
+        	exuser.setProfilePicture("http://res.cloudinary.com/dq21kejpj/image/upload/v1701758417/public/lqafeuj7lx8ddendevc5.png");
+
+        }
         userRepository.saveAndFlush(exuser);
     }
 }

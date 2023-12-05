@@ -9,7 +9,9 @@ import social.media.media.model.entity.Post;
 import social.media.media.model.entity.User;
 import social.media.media.model.entity.friends;
 import social.media.media.model.entity.pictureOfPost;
+import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.reponse.*;
+import social.media.media.model.request.PostRequest;
 import social.media.media.service.PostService;
 import social.media.media.service.friendsService;
 
@@ -17,14 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/post")
+    @RequestMapping("/post")
 @RequiredArgsConstructor
 public class PostsController {
     @Autowired
     friendsService friendsService;
     @Autowired
     PostService postService;
-
+    @Autowired
+    PostMapper postMapper;
     @GetMapping("/{id}")
     public ApiResponse<List<PostResponseDTO>> getfriendlist(@PathVariable int id)
     {
@@ -42,6 +45,7 @@ public class PostsController {
                     PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
                     itemPostResponseDTO.setId(itempost.getId());
                     itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                    itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
@@ -67,6 +71,7 @@ public class PostsController {
                     itemPostResponseDTO.setId(itempost.getId());
                     itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                    itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
                     for(LikeResponse itemlike:  itempost.getListLike())
@@ -95,9 +100,9 @@ public class PostsController {
 
     }
     @PostMapping("/post")
-    public ApiResponse<PostResponse> post(@RequestBody Post post) {
-
-        PostResponse savedpost = postService.addPost(post,post.getListAnh());
+        public ApiResponse<PostResponse> post(@RequestBody PostRequest post) {
+        Post postEnity=postMapper.toEnity(post);
+        PostResponse savedpost = postService.addPost(postEnity,postEnity.getListAnh());
 
         ApiResponse apiResponse=new ApiResponse();
         apiResponse.ok(savedpost);

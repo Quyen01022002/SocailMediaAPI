@@ -37,6 +37,15 @@ public class CommentsController {
         apiResponse.ok(savedCmt);
         return apiResponse;
     }
+    @PutMapping("/update")
+    public ApiResponse<CommentsResponse> update(@RequestBody Comments cmt) {
+
+        CommentsResponse savedCmt = commentService.Update(cmt);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(savedCmt);
+        return apiResponse;
+    }
 
     @DeleteMapping("/{id}")
     public ApiResponse DeleteCmt(@PathVariable int id) {

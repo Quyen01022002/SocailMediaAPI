@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import social.media.media.model.entity.User;
 import social.media.media.model.reponse.UserResponse;
+import social.media.media.model.request.UserRequest;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public interface UserMapper {
 
     UserResponse toResponse(User userEntity);
+    User toEntity(UserRequest userEntity);
     List<UserResponse> toResponseList(List<User> user);
 
 }

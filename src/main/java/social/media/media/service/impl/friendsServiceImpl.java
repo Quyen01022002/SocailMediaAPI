@@ -36,7 +36,9 @@ public class friendsServiceImpl implements friendsService {
         List<FriendsResponse> ListFriendResponse=new ArrayList<>();
         for(friends item:list)
         {
+
             FriendsResponse fp=friendsMapper.toResponse(item);
+            fp.getFriend().setCountFriend(item.getFriend().countMutualFriends(item.getUser()));
             ListFriendResponse.add(fp);
         }
 
@@ -66,9 +68,9 @@ public class friendsServiceImpl implements friendsService {
     }
 
     @Override
-    public Void Delete(friends friends) {
+    public Void Delete(int id) {
         try {
-            friends friends1 = friendsRepository.findById(friends.getId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            friends friends1 = friendsRepository.findById(id).orElseThrow(() -> new NotFoundException("friend Not Found"));
             if (friends1 == null) {
                 throw new NotFoundException("Product Not Found");
             }
@@ -82,20 +84,20 @@ public class friendsServiceImpl implements friendsService {
     }
 
     @Override
-    public FriendsResponse acceptFriend(friends friends) {
+    public FriendsResponse acceptFriend(int id ) {
         try {
-            friends existingfriend = friendsRepository.findByIdAndStatus(friends.getId(),friends.getStatus());
+            friends existingfriend = friendsRepository.findById(id).orElseThrow(() -> new NotFoundException("friend Not Found"));
             if (existingfriend == null) {
                 throw new NotFoundException("Not Found");
             }
 
-            friends.setStatus(true);
+            existingfriend.setStatus(true);
 
             // Update
-            friendsRepository.saveAndFlush(friends);
+            friendsRepository.saveAndFlush(existingfriend);
 
             // Map to Response
-            return friendsMapper.toResponse(friends);
+            return friendsMapper.toResponse(existingfriend);
         } catch (ApplicationException ex) {
             throw ex;
         }

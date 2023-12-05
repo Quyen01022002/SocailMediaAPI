@@ -33,7 +33,7 @@ public class UserResponse {
     private String address;
     private Date createdAt;
     private Date updatedAt;
-
+    private int countFriend;
 
     private List<PostResponse> postList;
     private List<FriendsResponseDTO> friendships;

@@ -15,7 +15,7 @@ public class PostResponseDTO {
     private String contentPost;
 
     private Date timeStamp;
-
+    private UserResponsePost CreateBy;
 
     //Thêm emun status
     private String status;

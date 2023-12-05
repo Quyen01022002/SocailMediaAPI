@@ -7,6 +7,8 @@ import lombok.*;
 
 import java.util.Date;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
 @Setter
 @Getter
 @Entity
@@ -15,8 +17,6 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-
 public class friends {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +24,22 @@ public class friends {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "friend_id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private User friend;
 
     private Boolean status;
     private Date createdAt;
 
-
-
+    @PrePersist
+    public void setCreate() {
+        this.createdAt = new Date(System.currentTimeMillis());
+     
+    }
 }
+
+

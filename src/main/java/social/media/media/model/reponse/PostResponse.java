@@ -20,7 +20,7 @@ public class PostResponse {
     private String contentPost;
 
     private Date timeStamp;
-
+    private UserResponsePost CreateBy;
 
     //Thêm emun status
     private String status;

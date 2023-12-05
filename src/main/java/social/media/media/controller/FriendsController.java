@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.User;
 import social.media.media.model.entity.friends;
+import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.reponse.ApiResponse;
 import social.media.media.model.reponse.FriendsResponse;
+import social.media.media.model.reponse.FriendsResponseDTO;
 import social.media.media.service.friendsService;
 
+import java.util.ArrayList;
 import java.util.List;
 @RestController
 @RequestMapping("/friends")
@@ -18,9 +21,12 @@ import java.util.List;
 public class FriendsController {
     @Autowired
     friendsService friendsService;
+     @Autowired
+     FriendsMapper friendsMapper;
+
 
     @GetMapping("/{id}")
-    public ApiResponse<List<FriendsResponse>> getfriendlist(@PathVariable int id)
+    public ApiResponse<List<FriendsResponseDTO>> getfriendlist(@PathVariable int id)
     {
 
         try {
@@ -28,8 +34,16 @@ public class FriendsController {
             User user=new User();
             user.setId(id);
             List<FriendsResponse> list=friendsService.findByUser(user,true);
+            List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
+            for(FriendsResponse item:list)
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+                friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                friendsResponseDTO.setIdFriends(item.getId());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
             ApiResponse apiResponse=new ApiResponse();
-            apiResponse.ok(list);
+            apiResponse.ok(friendsResponseDTOList);
             return apiResponse;
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
@@ -37,7 +51,7 @@ public class FriendsController {
 
     }
     @GetMapping("/invate/{id}")
-    public ApiResponse<List<FriendsResponse>> getfriendInvitelist(@PathVariable int id)
+    public ApiResponse<List<FriendsResponseDTO>> getfriendInvitelist(@PathVariable int id)
     {
 
         try {
@@ -45,8 +59,16 @@ public class FriendsController {
             User user=new User();
             user.setId(id);
             List<FriendsResponse> list=friendsService.findByUser(user,false);
+            List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
+            for(FriendsResponse item:list)
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+                friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                friendsResponseDTO.setIdFriends(item.getId());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
             ApiResponse apiResponse=new ApiResponse();
-            apiResponse.ok(list);
+            apiResponse.ok(friendsResponseDTOList);
             return apiResponse;
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
@@ -54,12 +76,19 @@ public class FriendsController {
 
     }
     @PostMapping("/addfriend")
-    public ApiResponse<FriendsResponse> addfriend(@RequestBody friends friends)
+    public ApiResponse<FriendsResponse> addfriend(@RequestParam("userId") int userId,@RequestParam("friendsId") int friendid)
     {
 
         try {
 
-
+        	friends friends=new friends();
+        	User u1=new User();
+        	u1.setId(userId);
+        	User u2=new User();
+        	u2.setId(friendid);
+        	friends.setUser(u1);
+        	friends.setFriend(u2);
+        	friends.setStatus(false);
             FriendsResponse saved=friendsService.addFriend(friends);
             ApiResponse apiResponse=new ApiResponse();
             apiResponse.ok(saved);
@@ -69,14 +98,14 @@ public class FriendsController {
         }
 
     }
-    @PostMapping("/accept")
-    public ApiResponse<FriendsResponse> acceptFriend(@RequestBody friends friends)
+    @PostMapping("/accept/{id}")
+    public ApiResponse<FriendsResponse> acceptFriend(@PathVariable int id)
     {
 
         try {
 
 
-            FriendsResponse saved=friendsService.acceptFriend(friends);
+            FriendsResponse saved=friendsService.acceptFriend(id);
             ApiResponse apiResponse=new ApiResponse();
             apiResponse.ok(saved);
             return apiResponse;
@@ -85,11 +114,11 @@ public class FriendsController {
         }
 
     }
-    @DeleteMapping("/unfriend")
-    public ApiResponse unfriend(@RequestBody friends friends)
+    @DeleteMapping("/unfriend/{id}")
+    public ApiResponse unfriend(@PathVariable int id)
     {
         try {
-           friendsService.Delete(friends);
+           friendsService.Delete(id);
             ApiResponse apiResponse=new ApiResponse();
             apiResponse.ok();
             return apiResponse;

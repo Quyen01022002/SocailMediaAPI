@@ -13,7 +13,6 @@ import java.util.List;
 @Entity
 @Table(name ="pictureOfPost")
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "picId")

@@ -22,4 +22,6 @@ public class FriendsResponse {
 
     private Boolean status;
     private Date createdAt;
+
+
 }

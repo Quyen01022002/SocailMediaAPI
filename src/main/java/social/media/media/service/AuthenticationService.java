@@ -9,7 +9,7 @@ import social.media.media.model.request.RegisterRequest;
 import social.media.media.model.request.ResetPasswordRequest;
 
 public interface AuthenticationService {
-    public AuthenticationResponse register(RegisterRequest request);
+    public AuthenticationResponse   register(RegisterRequest request);
     public AuthenticationResponse authenticate(AuthenticationRequest request);
     ApiResponse resetPassword(ResetPasswordRequest request) throws MessagingException;
 }
