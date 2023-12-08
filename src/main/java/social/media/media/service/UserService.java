@@ -12,6 +12,7 @@ public interface UserService {
     public UserResponse profile(int id);
     public void Follow(User user);
     public List<UserResponse> List20Follow();
+    public List<UserResponse> Search(String key);
     public void unFollow(userFollow user);
     public void updateAvatar(int id,String Avatar);
     public void update(int id, User user);

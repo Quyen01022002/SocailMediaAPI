@@ -58,7 +58,7 @@ public class FriendsController {
 
             User user=new User();
             user.setId(id);
-            List<FriendsResponse> list=friendsService.findByUser(user,false);
+            List<FriendsResponse> list=friendsService.findByFriend(user,false);
             List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
             for(FriendsResponse item:list)
             {

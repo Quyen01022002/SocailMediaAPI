@@ -5,7 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.*;
+import social.media.media.model.mapper.GroupMapper;
+import social.media.media.model.mapper.GroupsMembersMapper;
 import social.media.media.model.reponse.*;
+import social.media.media.model.request.GroupsMenberRequest;
+import social.media.media.model.request.GroupsRequest;
 import social.media.media.service.GroupService;
 import social.media.media.service.PageService;
 import social.media.media.service.UserService;
@@ -20,12 +24,16 @@ public class GroupsController {
     GroupService groupService;
     @Autowired
     UserService userService;
+    @Autowired
+    GroupMapper groupMapper;
+    @Autowired
+    GroupsMembersMapper groupsMembersMapper;
 
 
     @PostMapping("/")
-    public ApiResponse<GroupsResponse> post(@RequestBody Groups groups) {
-
-        GroupsResponse savedPage = groupService.addPage(groups);
+    public ApiResponse<GroupsResponse> post(@RequestBody GroupsRequest groups) {
+        Groups groups1 = groupMapper.toEntity(groups);
+        GroupsResponse savedPage = groupService.addPage(groups1);
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(savedPage);
@@ -95,16 +103,14 @@ public class GroupsController {
     }
 
     @PostMapping("/addMembers")
-    public ApiResponse addMembers(@RequestParam("userId") int user, @RequestParam("groupId") int page) {
+    public ApiResponse addMembers(@RequestBody List<GroupsMenberRequest> user) {
         try {
-            GroupMembers groupMembers = new GroupMembers();
-            Groups g = new Groups();
-            User u = new User();
-            g.setId(page);
-            u.setId(user);
-            groupMembers.setGroup(g);
-            groupMembers.setUser(u);
-            groupService.addMemberPage(groupMembers);
+            List<GroupMembers> groupMembers =groupsMembersMapper.toEntityList(user);
+            for(GroupMembers item: groupMembers)
+            {
+                groupService.addMemberPage(item);
+
+            }
 
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok();

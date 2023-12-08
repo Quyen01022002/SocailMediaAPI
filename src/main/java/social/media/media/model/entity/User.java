@@ -1,5 +1,6 @@
 package social.media.media.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -61,15 +62,15 @@ public class User implements UserDetails {
     private Date updatedAt;
 
 
-    @OneToMany(mappedBy = "CreateBy", fetch = FetchType.EAGER)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @OneToMany(mappedBy = "CreateBy", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Post> postList;
 
-    @OneToMany(mappedBy = "CreateBy", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "CreateBy", fetch = FetchType.LAZY)
     private List<Comments> cmtList;
 
-    @OneToMany(mappedBy = "CreateBy", fetch = FetchType.EAGER)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @OneToMany(mappedBy = "createBy", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<interations> likeList;
 
     @OneToMany(mappedBy = "follower", fetch = FetchType.LAZY)
@@ -78,6 +79,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<friends> friendships;
 
     @OneToMany(mappedBy = "adminId", fetch = FetchType.LAZY)

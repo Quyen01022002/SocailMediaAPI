@@ -21,7 +21,7 @@ public class LikeResponse {
 
     private Boolean isLiked;
 
-    private UserResponse CreateBy;
+    private UserResponsePost CreateBy;
 
 
 

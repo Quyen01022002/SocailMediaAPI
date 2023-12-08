@@ -21,23 +21,23 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class InterationServiceImpl implements InterationService {
-
-    private final InerationsRepository interInerationsRepository;
+    @Autowired
+    InerationsRepository interInerationsRepository;
     @Autowired
     InterationsMapper interationsMapper;
 
     @Override
-    public LikeResponse Like(interations like) {
+    public void Like(interations like) {
         try {
-            interations liked = interInerationsRepository.findById(like.getInteractionId()).orElseThrow(() -> new NotFoundException("Like Not Found"));
+            interations liked = interInerationsRepository.findByCreateByAndPostID(like.getCreateBy(),like.getPostID());
 
             if (liked == null) {
                 interInerationsRepository.saveAndFlush(like);
             } else {
-                interInerationsRepository.delete(like);
+                interInerationsRepository.delete(liked);
             }
             // Map to Response
-            return interationsMapper.toResponse(like);
+
         } catch (ApplicationException ex) {
             throw ex;
         }

@@ -15,19 +15,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Interations")
+@RequestMapping("/interations")
 @RequiredArgsConstructor
 public class InterationsController {
     @Autowired
     InterationService interationService;
 
-    @PostMapping("/")
-    public ApiResponse<LikeResponse> post(@RequestBody interations like ) {
-
-        LikeResponse savedpost = interationService.Like(like);
+    @PostMapping("")
+    public ApiResponse post(@RequestParam("post") int postId,@RequestParam("user") int userId ) {
+        interations like=new interations();
+        Post post=new Post();
+        post.setId(postId);
+        User user=new User();
+        user.setId(userId);
+        like.setPostID(post);
+        like.setCreateBy(user);
+        interationService.Like(like);
 
         ApiResponse apiResponse=new ApiResponse();
-        apiResponse.ok(savedpost);
+        apiResponse.ok();
         return apiResponse;
     }
 

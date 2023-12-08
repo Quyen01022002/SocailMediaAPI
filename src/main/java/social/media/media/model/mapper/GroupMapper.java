@@ -5,6 +5,7 @@ import social.media.media.model.entity.Groups;
 import social.media.media.model.entity.page;
 import social.media.media.model.reponse.GroupsResponse;
 import social.media.media.model.reponse.PageResponse;
+import social.media.media.model.request.GroupsRequest;
 
 import java.util.List;
 
@@ -12,5 +13,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface GroupMapper {
     GroupsResponse toResponse(Groups Groups);
+    Groups toEntity(GroupsRequest Groups);
     List<GroupsResponse> toResponseList(List<Groups> Groups);
 }

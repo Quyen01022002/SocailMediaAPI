@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Setter
@@ -13,7 +15,6 @@ import java.util.List;
 @Entity
 @Table(name ="Groups")
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -33,4 +34,16 @@ public class Groups {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupMembers> groupMembers;
+
+    @PrePersist
+    public void setCreate() {
+        this.createdAt = new Date(System.currentTimeMillis());
+        this.updatedAt = new Date(System.currentTimeMillis());
+        this.adminId = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    }
+    @PreUpdate
+    public void setModified(){
+        this.updatedAt= new Date(System.currentTimeMillis());
+    }
 }

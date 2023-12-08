@@ -63,6 +63,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserResponse> Search(String key) {
+        List<User> list = userRepository.searchByNameOrLastNameOrPhoneOrEmail(key);
+        List<UserResponse> ListResponse=userMapper.toResponseList(list);
+
+        return ListResponse;
+    }
+
+    @Override
     public void unFollow(userFollow user) {
         try {
             userFollow friends1 = userFollowRepository.findByFollowerAndFollowing(user.getFollower(),user.getFollowing());

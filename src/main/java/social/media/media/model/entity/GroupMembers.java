@@ -31,4 +31,9 @@ public class GroupMembers {
 
     private Date createdAt;
     private Date updatedAt;
+    @PrePersist
+    public void setCreate() {
+        this.createdAt = new Date(System.currentTimeMillis());
+        this.updatedAt = new Date(System.currentTimeMillis());
+    }
 }

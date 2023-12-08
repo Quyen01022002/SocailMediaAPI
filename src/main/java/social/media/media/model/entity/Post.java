@@ -1,5 +1,6 @@
 package social.media.media.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -7,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.sql.Timestamp;
 import java.sql.Date;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class Post {
 
     private String contentPost;
 
-    private Date timeStamp;
+    private Timestamp timeStamp;
 
 
     //Thêm emun status
@@ -39,18 +41,21 @@ public class Post {
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;
 
-    @OneToMany(mappedBy = "listAnh", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "listAnh", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<pictureOfPost> listAnh;
 
-    @OneToMany(mappedBy = "postID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Comments> lisCmt;
 
-    @OneToMany(mappedBy = "postID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<interations> listLike;
 
     @PrePersist
     public void setCreate() {
-        this.timeStamp = new Date(System.currentTimeMillis());
+        this.timeStamp = new Timestamp(System.currentTimeMillis());
         this.CreateBy = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

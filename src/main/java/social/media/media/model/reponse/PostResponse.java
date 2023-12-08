@@ -11,6 +11,7 @@ import lombok.Setter;
 import social.media.media.model.entity.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 @Getter
 @Setter
@@ -19,7 +20,7 @@ public class PostResponse {
 
     private String contentPost;
 
-    private Date timeStamp;
+    private Timestamp timeStamp;
     private UserResponsePost CreateBy;
 
     //Thêm emun status

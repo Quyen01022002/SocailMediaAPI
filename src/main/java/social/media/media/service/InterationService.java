@@ -6,6 +6,6 @@ import social.media.media.model.reponse.LikeResponse;
 import social.media.media.model.reponse.PostResponse;
 
 public interface InterationService {
-    public LikeResponse Like(interations like);
+    public void Like(interations like);
 
 }

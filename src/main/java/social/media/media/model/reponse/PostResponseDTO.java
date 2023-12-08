@@ -5,6 +5,7 @@ import lombok.Setter;
 import social.media.media.model.entity.Comments;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -14,7 +15,7 @@ public class PostResponseDTO {
 
     private String contentPost;
 
-    private Date timeStamp;
+    private Timestamp timeStamp;
     private UserResponsePost CreateBy;
 
     //Thêm emun status

@@ -1,6 +1,7 @@
 package social.media.media.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,7 @@ public class interations {
 
     @ManyToOne
     @JoinColumn(name = "postID", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private Post postID;
 
     private Date timeStamp;
@@ -31,12 +33,14 @@ public class interations {
     private Boolean isLiked;
 
     @ManyToOne
-    @JoinColumn(name = "CreateBy", referencedColumnName = "id")
-    private User CreateBy;
+    @JoinColumn(name = "createBy", referencedColumnName = "id")
+    @JsonManagedReference
+    private User createBy;
     @PrePersist
     public void setCreate() {
         this.timeStamp = new Date(System.currentTimeMillis());
-        this.CreateBy = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        this.createBy = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        this.isLiked=true;
     }
 
 

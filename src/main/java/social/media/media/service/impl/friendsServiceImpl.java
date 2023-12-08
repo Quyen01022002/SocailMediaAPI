@@ -47,6 +47,22 @@ public class friendsServiceImpl implements friendsService {
     }
 
     @Override
+    public List<FriendsResponse> findByFriend(User user, Boolean Status) {
+        List<friends> list = friendsRepository.findByUserOrFriendAndStatus(user,Status);
+        List<FriendsResponse> ListFriendResponse=new ArrayList<>();
+        for(friends item:list)
+        {
+
+            FriendsResponse fp=friendsMapper.toResponse(item);
+            fp.getFriend().setCountFriend(item.getFriend().countMutualFriends(item.getUser()));
+            ListFriendResponse.add(fp);
+        }
+
+
+        return ListFriendResponse;
+    }
+
+    @Override
     public FriendsResponse addFriend(friends friends) {
         try {
 
