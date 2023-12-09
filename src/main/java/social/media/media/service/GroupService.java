@@ -14,7 +14,8 @@ import java.util.List;
 public interface GroupService {
     public GroupsResponse addPage(Groups groups);
     public GroupsResponse Detail(int id);
-    public List<GroupsMembersResponse> ListGroups(int id);
+    public List<GroupsResponse> ListGroups(int id);
+    public List<GroupsResponse> ListGroupsAdmin(int id);
     public GroupsResponse updatePage(Groups groups);
     public void addMemberPage(GroupMembers groupsMembersResponse);
     public Groups Delete(Groups groups);

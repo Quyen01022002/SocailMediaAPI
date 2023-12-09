@@ -25,7 +25,7 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String contentPost;
 
     private Timestamp timeStamp;

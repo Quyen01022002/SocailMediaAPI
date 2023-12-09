@@ -18,6 +18,7 @@ import social.media.media.repository.*;
 import social.media.media.service.GroupService;
 import social.media.media.service.PageService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -67,10 +68,26 @@ public class GroupsServiceImpl implements GroupService {
 
 
     @Override
-    public List<GroupsMembersResponse> ListGroups(int id) {
+    public List<GroupsResponse> ListGroups(int id) {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
-            return groupsMembersMapper.toResponseList(user.getGroupMemberships());
+            List<GroupsResponse> result=new ArrayList<>();
+            for(GroupMembers item:user.getGroupMemberships()) {
+
+                result.add(groupMapper.toResponse(item.getGroup()));
+            }
+            return result;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public List<GroupsResponse> ListGroupsAdmin(int id) {
+        try {
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+
+            return  groupMapper.toResponseList(user.getListGroupAdmin());
         } catch (ApplicationException ex) {
             throw ex;
         }

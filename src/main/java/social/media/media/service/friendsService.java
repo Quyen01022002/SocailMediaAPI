@@ -10,7 +10,8 @@ public interface friendsService {
     public List<FriendsResponse> findByUser(User user,Boolean Status);
     public List<FriendsResponse> findByFriend(User user,Boolean Status);
     public FriendsResponse addFriend(friends friends);
-    public Void Delete(int id);
+    public Void Delete(int user,int friend);
     public FriendsResponse acceptFriend(int id);
+    public friends isFriend(User u, int f);
 
 }

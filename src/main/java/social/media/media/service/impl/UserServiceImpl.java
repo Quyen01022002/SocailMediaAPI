@@ -7,9 +7,11 @@ import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.model.entity.*;
 import social.media.media.model.enums.GenderEnum;
+import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.mapper.UserMapper;
 import social.media.media.model.reponse.FriendsResponse;
+import social.media.media.model.reponse.FriendsResponseDTO;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.UserResponse;
 import social.media.media.repository.PostRepository;
@@ -29,13 +31,24 @@ public class UserServiceImpl implements UserService {
     private final UserFollowRepository userFollowRepository;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    FriendsMapper friendsMapper;
 
 
     @Override
     public UserResponse profile(int id) {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
-            return userMapper.toResponse(user);
+            UserResponse userResponse=userMapper.toResponse(user);
+            List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
+            for(friends item:user.getFriendships())
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+                friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
+            userResponse.setFriendships(friendsResponseDTOList);
+            return userResponse;
         } catch (ApplicationException ex) {
             throw ex;
         }

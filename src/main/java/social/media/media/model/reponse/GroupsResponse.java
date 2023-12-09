@@ -25,6 +25,6 @@ public class GroupsResponse {
     private Date updatedAt;
 
 
-    private List<GroupMembers> groupMembers;
+    private List<GroupsMembersResponse> groupMembers;
 
 }

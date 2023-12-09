@@ -85,12 +85,27 @@ public class GroupsController {
         }
 
     }
-
-    @GetMapping("/follow/{id}")
-    public ApiResponse<List<PageMembersResponse>> ListPageFollow(@PathVariable int id) {
+    @GetMapping("/admin/{id}")
+    public ApiResponse<List<GroupsResponse>> ListGroupAdmin(@PathVariable int id) {
         try {
 
-            List<GroupsMembersResponse> profile = groupService.ListGroups(id);
+            List<GroupsResponse> profile = groupService.ListGroupsAdmin(id);
+
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(profile);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+
+    @GetMapping("/follow/{id}")
+    public ApiResponse<List<GroupsResponse>> ListPageFollow(@PathVariable int id) {
+        try {
+
+            List<GroupsResponse> profile = groupService.ListGroups(id);
 
 
             ApiResponse apiResponse = new ApiResponse();

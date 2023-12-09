@@ -18,6 +18,7 @@ public interface FriendsMapper {
     FriendsResponse toResponse(friends friendsEntity);
     List<FriendsResponse> toResponseList(List<friends> friendsList);
     FriendsResponseDTO toFriendsResponseDto(UserResponse userResponse);
+    FriendsResponseDTO toFriendsResponseDto(User userResponse);
     List<FriendsResponseDTO> toListFriendsResponseDto(List<UserResponse> userResponse);
 
 }

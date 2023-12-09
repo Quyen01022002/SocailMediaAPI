@@ -10,11 +10,13 @@ import social.media.media.exception.ValidationException;
 import social.media.media.model.entity.User;
 import social.media.media.model.entity.friends;
 import social.media.media.model.entity.interations;
+import social.media.media.model.entity.notications;
 import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.reponse.ApiResponse;
 import social.media.media.model.reponse.FriendsResponse;
 import social.media.media.repository.UserRepository;
 import social.media.media.repository.friendsRepository;
+import social.media.media.service.NoticationService;
 import social.media.media.service.friendsService;
 
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class friendsServiceImpl implements friendsService {
     private final friendsRepository friendsRepository;
     @Autowired
     FriendsMapper friendsMapper;
+    @Autowired
+    NoticationService noticationService;
     @Override
     public List<FriendsResponse> findByUser(User user,Boolean Status) {
 
@@ -69,7 +73,10 @@ public class friendsServiceImpl implements friendsService {
 
             // Save
             friends friends1 = friendsRepository.save(friends);
-
+            notications notications=new notications();
+            notications.setContentNotications("Bạn Nhận được lời mời kết bạn từ "+ friends1.getUser().getFirstName()+" "+friends1.getUser().getLastName() );
+            notications.setUser(friends1.getFriend());
+            noticationService.addNotication(notications);
             // Response
             FriendsResponse friendsResponse=friendsMapper.toResponse(friends1);
 
@@ -84,15 +91,19 @@ public class friendsServiceImpl implements friendsService {
     }
 
     @Override
-    public Void Delete(int id) {
+    public Void Delete(int user,int friend) {
         try {
-            friends friends1 = friendsRepository.findById(id).orElseThrow(() -> new NotFoundException("friend Not Found"));
-            if (friends1 == null) {
-                throw new NotFoundException("Product Not Found");
+            User f1=new User();
+            f1.setId(user);
+            User f2=new User();
+            f2.setId(friend);
+
+            friends existingfriend = friendsRepository.findByUserAndFriend(f1,f2);
+            if (existingfriend == null) {
+                return  null;
             }
 
-
-            friendsRepository.delete(friends1);
+            friendsRepository.delete(existingfriend);
         } catch (ApplicationException ex) {
             throw ex;
         }
@@ -114,6 +125,22 @@ public class friendsServiceImpl implements friendsService {
 
             // Map to Response
             return friendsMapper.toResponse(existingfriend);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public friends isFriend(User u, int f) {
+        try {
+            User f1=new User();
+            f1.setId(f);
+            friends existingfriend = friendsRepository.findByUserAndFriend(u,f1);
+            if (existingfriend == null) {
+                return  null;
+            }
+            // Map to Response
+            return existingfriend;
         } catch (ApplicationException ex) {
             throw ex;
         }

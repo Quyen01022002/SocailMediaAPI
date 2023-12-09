@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
-import social.media.media.model.entity.PageMembers;
-import social.media.media.model.entity.Post;
-import social.media.media.model.entity.User;
-import social.media.media.model.entity.userFollow;
+import social.media.media.model.entity.*;
 import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.UserMapper;
 import social.media.media.model.reponse.*;
@@ -32,6 +29,8 @@ public class UserController {
     UserMapper userMapper;
     @Autowired
     FriendsMapper friendsMapper;
+    @Autowired
+    friendsService friendsService;
 
     @GetMapping("/{id}")
     public ApiResponse<UserResponseDTO> getprofile(@PathVariable int id) {
@@ -99,14 +98,32 @@ public class UserController {
         }
 
     }
-    @GetMapping("/search/{key}")
-    public ApiResponse<List<FriendsResponseDTO>> search(String key) {
+    @GetMapping("/search/{id}")
+    public ApiResponse<List<FriendsResponseDTO>> search(@RequestParam("key") String key,@PathVariable int id) {
         try {
             List<UserResponse> list = userService.Search(key);
-
+            User user=new User();
+            user.setId(id);
             List<FriendsResponseDTO> result = friendsMapper.toListFriendsResponseDto(list);
+            List<FriendsResponseDTO> resultFinal = new ArrayList<>();
+            for(FriendsResponseDTO item: result)
+            {
+
+                friends isFriend=friendsService.isFriend(user,item.getId());
+                if(isFriend!=null)
+                {
+                    item.setIsFriends(true);
+
+                }
+                else {
+                    item.setIsFriends(false);
+
+                }
+                resultFinal.add(item);
+
+            }
             ApiResponse apiResponse = new ApiResponse();
-            apiResponse.ok(result);
+            apiResponse.ok(resultFinal);
             return apiResponse;
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions

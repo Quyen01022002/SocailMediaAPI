@@ -33,9 +33,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String firstName;
-
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String lastName;
 
     @Column(unique = true)
@@ -96,6 +96,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<PageMembers> pageMemberships;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<notications> noticationsList;

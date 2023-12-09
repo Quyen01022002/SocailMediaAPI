@@ -20,5 +20,5 @@ public interface friendsRepository extends JpaRepository<friends,Integer> {
    List<friends> findByUserOrFriendAndStatus(
                                              @Param("friend") User friend,
                                              @Param("status") Boolean status);
-   public friends findByIdAndStatus (int id,Boolean Status);
+   friends findByUserAndFriend(User u,User f);
 }

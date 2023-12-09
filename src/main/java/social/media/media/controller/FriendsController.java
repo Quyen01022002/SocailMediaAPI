@@ -39,6 +39,16 @@ public class FriendsController {
             {
                 FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
                 friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                friends isFriend=friendsService.isFriend(user,item.getFriend().getId());
+                if(isFriend!=null)
+                {
+                    friendsResponseDTO.setIsFriends(true);
+
+                }
+                else {
+                    friendsResponseDTO.setIsFriends(false);
+
+                }
                 friendsResponseDTO.setIdFriends(item.getId());
                 friendsResponseDTOList.add(friendsResponseDTO);
             }
@@ -64,6 +74,7 @@ public class FriendsController {
             {
                 FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
                 friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+
                 friendsResponseDTO.setIdFriends(item.getId());
                 friendsResponseDTOList.add(friendsResponseDTO);
             }
@@ -114,11 +125,11 @@ public class FriendsController {
         }
 
     }
-    @DeleteMapping("/unfriend/{id}")
-    public ApiResponse unfriend(@PathVariable int id)
+    @DeleteMapping("/unfriend")
+    public ApiResponse unfriend(@RequestParam("userId") int userId,@RequestParam("friendsId") int friendid)
     {
         try {
-           friendsService.Delete(id);
+           friendsService.Delete(userId,friendid);
             ApiResponse apiResponse=new ApiResponse();
             apiResponse.ok();
             return apiResponse;

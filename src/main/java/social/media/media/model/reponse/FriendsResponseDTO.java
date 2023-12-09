@@ -27,6 +27,7 @@ public class FriendsResponseDTO {
 
 
     private Boolean isActived;
+    private Boolean isFriends;
     private String address;
     private Date createdAt;
     private Date updatedAt;
