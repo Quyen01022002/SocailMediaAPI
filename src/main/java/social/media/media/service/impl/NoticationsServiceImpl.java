@@ -44,11 +44,18 @@ public class NoticationsServiceImpl implements NoticationService {
         List<NoticationsResponse> ListResponse=noticationsMapper.toListResponse(list);
         return ListResponse;
     }
-
     @Override
-    public NoticationsResponse updateNotications(notications post) {
+    public List<NoticationsResponse> listNotiUnRead(int id) {
+        User user=new User();
+        user.setId(id);
+        List<notications> list = noticationsRepository.findByUserAndIsRead(user,false);
+        List<NoticationsResponse> ListResponse=noticationsMapper.toListResponse(list);
+        return ListResponse;
+    }
+    @Override
+    public NoticationsResponse updateNotications(int id) {
         try {
-            notications ExNotications = noticationsRepository.findById(post.getId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            notications ExNotications = noticationsRepository.findById(id).orElseThrow(() -> new NotFoundException("friend Not Found"));
             if (ExNotications == null) {
                return null;
             }

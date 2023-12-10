@@ -38,8 +38,15 @@ public class FriendsController {
             for(FriendsResponse item:list)
             {
                 FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
-                friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
-                friends isFriend=friendsService.isFriend(user,item.getFriend().getId());
+                if(user.getId()==item.getFriend().getId())
+                {
+                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                }
+              else {
+                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getUser());
+
+                }
+              friends isFriend=friendsService.isFriend(user,item.getFriend().getId());
                 if(isFriend!=null)
                 {
                     friendsResponseDTO.setIsFriends(true);

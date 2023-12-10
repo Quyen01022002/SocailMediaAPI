@@ -13,4 +13,5 @@ import java.util.List;
 @Repository
 public interface NoticationsRepository extends JpaRepository<notications,Integer> {
     List<notications> findByUser(User user);
+    List<notications> findByUserAndIsRead(User user,Boolean isRead);
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.*;
+import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.GroupMapper;
 import social.media.media.model.mapper.GroupsMembersMapper;
 import social.media.media.model.reponse.*;
@@ -13,8 +14,12 @@ import social.media.media.model.request.GroupsRequest;
 import social.media.media.service.GroupService;
 import social.media.media.service.PageService;
 import social.media.media.service.UserService;
+import social.media.media.service.friendsService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/group")
@@ -28,6 +33,10 @@ public class GroupsController {
     GroupMapper groupMapper;
     @Autowired
     GroupsMembersMapper groupsMembersMapper;
+    @Autowired
+    social.media.media.service.friendsService friendsService;
+    @Autowired
+    FriendsMapper friendsMapper;
 
 
     @PostMapping("/")
@@ -81,6 +90,115 @@ public class GroupsController {
             apiResponse.ok(pageDetail);
             return apiResponse;
         } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+    @GetMapping("/isfriend")
+    public ApiResponse<List<FriendsResponseDTO>> listFriendGroups(@RequestParam("groupId") int groupId,@RequestParam("userId")int id) {
+        try {
+
+            GroupsResponse pageDetail = groupService.Detail(groupId);
+            User user=new User();
+            user.setId(id);
+            List<FriendsResponse> list=friendsService.findByUser(user,true);
+            List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
+            for(FriendsResponse item:list)
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+                if(user.getId()==item.getFriend().getId())
+                {
+                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                }
+                else {
+                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getUser());
+
+                }
+                friends isFriend=friendsService.isFriend(user,item.getFriend().getId());
+                if(isFriend!=null)
+                {
+                    friendsResponseDTO.setIsFriends(true);
+
+                }
+                else {
+                    friendsResponseDTO.setIsFriends(false);
+
+                }
+                friendsResponseDTO.setIdFriends(item.getId());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
+            List<FriendsResponseDTO> list2=new ArrayList<>();
+            if (pageDetail != null && pageDetail.getGroupMembers() != null) {
+                for (GroupsMembersResponse item : pageDetail.getGroupMembers()) {
+                    if (item != null && item.getUser() != null) {
+                        list2.add(item.getUser());
+                    }
+                }
+            }
+
+            List<FriendsResponseDTO> commonElements = friendsResponseDTOList.stream()
+                    .filter(list2::contains)
+                    .collect(Collectors.toList());
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(commonElements);
+            return apiResponse;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+    @GetMapping("/notfriend")
+    public ApiResponse<List<FriendsResponseDTO>> listNotFriendGroups(@RequestParam("groupId") int groupId,@RequestParam("userId")int id) {
+        try {
+
+            GroupsResponse pageDetail = groupService.Detail(groupId);
+            User user=new User();
+            user.setId(id);
+            List<FriendsResponse> list=friendsService.findByUser(user,true);
+            List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
+            for(FriendsResponse item:list)
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+                if(user.getId()==item.getFriend().getId())
+                {
+                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                }
+                else {
+                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getUser());
+
+                }
+                friends isFriend=friendsService.isFriend(user,item.getFriend().getId());
+                if(isFriend!=null)
+                {
+                    friendsResponseDTO.setIsFriends(true);
+
+                }
+                else {
+                    friendsResponseDTO.setIsFriends(false);
+
+                }
+                friendsResponseDTO.setIdFriends(item.getId());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
+            List<FriendsResponseDTO> list2=new ArrayList<>();
+            if (pageDetail != null && pageDetail.getGroupMembers() != null) {
+                for (GroupsMembersResponse item : pageDetail.getGroupMembers()) {
+                    if (item != null && item.getUser() != null) {
+                        list2.add(item.getUser());
+                    }
+                }
+            }
+
+
+            List<FriendsResponseDTO> elementsNotInBoth = Stream.concat(friendsResponseDTOList.stream(), list2.stream())
+                    .filter(e -> !friendsResponseDTOList.contains(e) || !list2.contains(e))
+                    .collect(Collectors.toList());
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(elementsNotInBoth);
+            return apiResponse;
+        } catch (Exception ex) {
+            ex.printStackTrace();
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
 

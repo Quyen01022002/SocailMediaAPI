@@ -43,5 +43,36 @@ public class NoticationsController {
         }
 
     }
+    @GetMapping("/read/{id}")
+    public ApiResponse<List<NoticationsResponse>> getfriendUnreadlist(@PathVariable int id)
+    {
+
+        try {
+
+            List<NoticationsResponse> list=noticationService.listNotiUnRead(id);
+            ApiResponse apiResponse=new ApiResponse();
+            apiResponse.ok(list);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+    @PostMapping("/read/{id}")
+    public ApiResponse<NoticationsResponse> acceptFriend(@PathVariable int id)
+    {
+
+        try {
+
+
+            NoticationsResponse saved=noticationService.updateNotications(id);
+            ApiResponse apiResponse=new ApiResponse();
+            apiResponse.ok(saved);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
 
 }

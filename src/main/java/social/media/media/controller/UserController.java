@@ -176,6 +176,23 @@ public class UserController {
 
 
     }
+    @PatchMapping("/fcm/{id}")
+    public ApiResponse UpdateUserFCM(@PathVariable int id, @RequestBody Map<String, Object> updates) {
+
+
+        try {
+            String fcm = (String) updates.get("fcm");
+            userService.fcm(id, fcm);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+
+
+    }
 
     @PutMapping("/{id}")
     public ApiResponse UpdateUser(@PathVariable int id, @RequestBody UserRequest updatedUser) {

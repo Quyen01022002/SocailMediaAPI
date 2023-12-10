@@ -11,7 +11,8 @@ import java.util.List;
 public interface NoticationService {
     public NoticationsResponse addNotication(notications notications);
     public List<NoticationsResponse> listNotication(int id);
-    public NoticationsResponse updateNotications(notications post);
+    public List<NoticationsResponse> listNotiUnRead(int id);
+    public NoticationsResponse updateNotications(int id);
 
     public Void Delete(notications post);
 }

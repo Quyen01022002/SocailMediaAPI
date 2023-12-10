@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class UserResponsePost {
+public class    UserResponsePost {
     private int id;
     private String firstName;
 

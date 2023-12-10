@@ -45,6 +45,7 @@ public class User implements UserDetails {
 
     @Column(unique = true)
     private String email;
+    private String FCM;
 
     private Boolean isEmail;
     @Enumerated(EnumType.STRING)

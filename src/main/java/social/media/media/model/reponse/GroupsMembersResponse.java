@@ -16,5 +16,4 @@ public class GroupsMembersResponse {
     private FriendsResponseDTO user;
 
 
-
 }

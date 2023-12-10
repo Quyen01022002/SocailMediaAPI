@@ -56,7 +56,6 @@ public class friendsServiceImpl implements friendsService {
         List<FriendsResponse> ListFriendResponse=new ArrayList<>();
         for(friends item:list)
         {
-
             FriendsResponse fp=friendsMapper.toResponse(item);
             fp.getFriend().setCountFriend(item.getFriend().countMutualFriends(item.getUser()));
             ListFriendResponse.add(fp);
