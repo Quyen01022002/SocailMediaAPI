@@ -53,7 +53,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse updatePost(Post post) {
+    public PostResponse updatePost(Post post, List<pictureOfPost> listImg) {
         try {
             Post exPost = postRepository.findById(post.getId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
             if (exPost == null) {
@@ -61,8 +61,10 @@ public class PostServiceImpl implements PostService {
             }
 
 
+            exPost.setContentPost(post.getContentPost());
+            exPost.setListAnh(listImg);
             // Update
-            postRepository.saveAndFlush(post);
+            postRepository.saveAndFlush(exPost);
 
             // Map to Response
             return postMapper.toResponse(post);
@@ -72,9 +74,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Void Delete(Post post) {
+    public Void Delete(int id) {
         try {
-            Post friends1 = postRepository.findById(post.getId()).orElseThrow(() -> new NotFoundException(" Not Found"));
+            Post friends1 = postRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
             if (friends1 == null) {
                 throw new NotFoundException(" Not Found");
             }

@@ -57,6 +57,27 @@ public class GroupsServiceImpl implements GroupService {
     }
 
     @Override
+    public GroupsResponse updateGroups(Groups groups) {
+        try {
+            Groups exGroups = groupsRepository.findById(groups.getId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            if (exGroups == null) {
+                throw new NotFoundException("Not Found");
+            }
+
+
+            exGroups.setDescription(groups.getDescription());
+            exGroups.setName(groups.getName());
+            // Update
+            groupsRepository.saveAndFlush(exGroups);
+
+            // Map to Response
+            return groupMapper.toResponse(exGroups);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
     public GroupsResponse Detail(int id) {
         try {
             Groups page = groupsRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
@@ -111,16 +132,14 @@ public class GroupsServiceImpl implements GroupService {
 
 
     @Override
-    public Groups Delete(Groups groups) {
+    public void Delete(int id) {
         try {
-            Groups page1 = groupsRepository.findById(groups.getId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            Groups page1 = groupsRepository.findById(id).orElseThrow(() -> new NotFoundException("friend Not Found"));
             if (page1 == null) {
                 throw new NotFoundException(" Not Found");
             }
-
-
             groupsRepository.delete(page1);
-            return page1;
+
         } catch (ApplicationException ex) {
             throw ex;
         }

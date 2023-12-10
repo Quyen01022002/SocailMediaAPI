@@ -11,6 +11,7 @@ import social.media.media.model.mapper.GroupsMembersMapper;
 import social.media.media.model.reponse.*;
 import social.media.media.model.request.GroupsMenberRequest;
 import social.media.media.model.request.GroupsRequest;
+import social.media.media.model.request.PostRequest;
 import social.media.media.service.GroupService;
 import social.media.media.service.PageService;
 import social.media.media.service.UserService;
@@ -50,9 +51,16 @@ public class GroupsController {
     }
 
     @DeleteMapping("/members/")
-    public ApiResponse DeleteMembers(@RequestBody GroupMembers friends) {
+    public ApiResponse DeleteMembers(@RequestParam("groupID") int groupid,@RequestParam("userID") int userId) {
         try {
-            groupService.DeleteMembers(friends);
+            GroupMembers groupMembers=new GroupMembers();
+            User user=new User();
+            user.setId(userId);
+            Groups groups=new Groups();
+            groups.setId(groupid);
+            groupMembers.setGroup(groups);
+            groupMembers.setUser(user);
+            groupService.DeleteMembers(groupMembers);
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok();
             return apiResponse;
@@ -61,25 +69,6 @@ public class GroupsController {
         }
 
     }
-
-    @DeleteMapping("/")
-    public ApiResponse DeletePage(@RequestBody Groups page) {
-        try {
-            Groups isDeleted = groupService.Delete(page);
-            if (isDeleted.getGroupMembers() != null) {
-                for (GroupMembers item : isDeleted.getGroupMembers()) {
-                    groupService.DeleteMembers(item);
-                }
-            }
-            ApiResponse apiResponse = new ApiResponse();
-            apiResponse.ok();
-            return apiResponse;
-        } catch (Exception ex) {
-            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
-        }
-
-    }
-
     @GetMapping("/{id}")
     public ApiResponse<GroupsResponse> getprofile(@PathVariable int id) {
         try {
@@ -234,7 +223,28 @@ public class GroupsController {
         }
 
     }
+    @PutMapping("/update/{id}")
+    public ApiResponse<PostResponse> Updatepost(@PathVariable int id,@RequestBody GroupsRequest groupsRequest) {
+        Groups groupsEnity=groupMapper.toEntity(groupsRequest);
+        groupsEnity.setId(id);
+        GroupsResponse savedpost = groupService.updateGroups(groupsEnity);
 
+        ApiResponse apiResponse=new ApiResponse();
+        apiResponse.ok(savedpost);
+        return apiResponse;
+    }
+    @DeleteMapping("/{id}")
+    public ApiResponse DeletePage(@PathVariable int id) {
+        try {
+            groupService.Delete(id);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
     @PostMapping("/addMembers")
     public ApiResponse addMembers(@RequestBody List<GroupsMenberRequest> user) {
         try {

@@ -32,7 +32,7 @@ public class Groups {
     private Date createdAt;
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
     private List<GroupMembers> groupMembers;
 
     @PrePersist

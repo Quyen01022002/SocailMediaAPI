@@ -40,10 +40,10 @@ public class FriendsController {
                 FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
                 if(user.getId()==item.getFriend().getId())
                 {
-                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getUser());
                 }
               else {
-                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getUser());
+                    friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
 
                 }
               friends isFriend=friendsService.isFriend(user,item.getFriend().getId());

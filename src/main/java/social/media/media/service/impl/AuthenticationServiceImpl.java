@@ -60,6 +60,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .id(user.getId())
+                .lastName(user.getLastName())
+                .firstName(user.getFirstName())
+                .Avatar(user.getProfilePicture())
                 .email(user.getEmail())
                 .build();
     }

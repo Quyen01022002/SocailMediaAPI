@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PostService {
     public PostResponse addPost(Post post, List<pictureOfPost> listImg);
-    public PostResponse updatePost(Post post);
+    public PostResponse updatePost(Post post, List<pictureOfPost> listImg);
 
-    public Void Delete(Post post);
+    public Void Delete(int id);
 }

@@ -41,15 +41,15 @@ public class Post {
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;
 
-    @OneToMany(mappedBy = "listAnh", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "listAnh", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<pictureOfPost> listAnh;
 
-    @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<Comments> lisCmt;
 
-    @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<interations> listLike;
 

@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
-import social.media.media.model.entity.Post;
-import social.media.media.model.entity.User;
-import social.media.media.model.entity.friends;
-import social.media.media.model.entity.pictureOfPost;
+import social.media.media.model.entity.*;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.reponse.*;
 import social.media.media.model.request.PostRequest;
@@ -108,4 +105,27 @@ public class PostsController {
         apiResponse.ok(savedpost);
         return apiResponse;
     }
+    @PutMapping("/update")
+    public ApiResponse<PostResponse> Updatepost(@RequestBody PostRequest post) {
+        Post postEnity=postMapper.toEnity(post);
+        PostResponse savedpost = postService.updatePost(postEnity,postEnity.getListAnh());
+
+        ApiResponse apiResponse=new ApiResponse();
+        apiResponse.ok(savedpost);
+        return apiResponse;
+    }
+    @DeleteMapping("/{id}")
+    public ApiResponse DeletePage(@PathVariable int id) {
+        try {
+             postService.Delete(id);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+
 }
+
