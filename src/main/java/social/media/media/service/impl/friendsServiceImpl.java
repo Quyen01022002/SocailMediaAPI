@@ -90,14 +90,11 @@ public class friendsServiceImpl implements friendsService {
     }
 
     @Override
-    public Void Delete(int user,int friend) {
+    public Void Delete(int user) {
         try {
-            User f1=new User();
-            f1.setId(user);
-            User f2=new User();
-            f2.setId(friend);
 
-            friends existingfriend = friendsRepository.findByUserAndFriend(f1,f2);
+
+            friends existingfriend = friendsRepository.findById(user).orElseThrow(() -> new NotFoundException("friend Not Found"));
             if (existingfriend == null) {
                 return  null;
             }
@@ -136,7 +133,11 @@ public class friendsServiceImpl implements friendsService {
             f1.setId(f);
             friends existingfriend = friendsRepository.findByUserAndFriend(u,f1);
             if (existingfriend == null) {
-                return  null;
+                existingfriend = friendsRepository.findByUserAndFriend(f1,u);
+                if(existingfriend==null)
+                {
+                    return null;
+                }
             }
             // Map to Response
             return existingfriend;

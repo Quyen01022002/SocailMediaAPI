@@ -9,6 +9,7 @@ import social.media.media.model.entity.*;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.reponse.*;
 import social.media.media.model.request.PostRequest;
+import social.media.media.service.GroupService;
 import social.media.media.service.PostService;
 import social.media.media.service.friendsService;
 
@@ -24,6 +25,8 @@ public class PostsController {
     @Autowired
     PostService postService;
     @Autowired
+    GroupService groupService;
+    @Autowired
     PostMapper postMapper;
     @GetMapping("/{id}")
     public ApiResponse<List<PostResponseDTO>> getfriendlist(@PathVariable int id)
@@ -33,6 +36,7 @@ public class PostsController {
 
             User user=new User();
             user.setId(id);
+            List<GroupsResponse> profile = groupService.ListGroups(id);
             List<FriendsResponse> list=friendsService.findByUser(user,true);
             List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
             for(FriendsResponse item:list)
@@ -87,6 +91,14 @@ public class PostsController {
                 }
 
 
+            }
+            for(GroupsResponse item:profile)
+            {
+                for(PostResponseDTO itemPost:item.getListPost())
+                {
+                    postResponseDTOList.add(itemPost);
+
+                }
             }
             ApiResponse apiResponse=new ApiResponse();
             apiResponse.ok(postResponseDTOList);

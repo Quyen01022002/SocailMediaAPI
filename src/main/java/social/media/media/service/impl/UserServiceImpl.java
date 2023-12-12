@@ -41,10 +41,19 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
             UserResponse userResponse=userMapper.toResponse(user);
             List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
+
             for(friends item:user.getFriendships())
             {
                 FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
-                friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+
+                friendsResponseDTO = friendsMapper.toFriendsResponseDto(item.getFriend());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
+            for(friends item:user.getOtherfriendships())
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+
+                friendsResponseDTO = friendsMapper.toFriendsResponseDto(item.getUser());
                 friendsResponseDTOList.add(friendsResponseDTO);
             }
             userResponse.setFriendships(friendsResponseDTOList);
@@ -107,6 +116,14 @@ public class UserServiceImpl implements UserService {
 
 
     }
+
+    @Override
+    public void updateBackGround(int id, String Avatar) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+        user.setBackGroundPicture(Avatar);
+        userRepository.saveAndFlush(user);
+    }
+
     @Override
     public void fcm(int id, String fcm) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));

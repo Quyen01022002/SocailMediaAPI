@@ -38,6 +38,9 @@ public class Post {
     @JoinColumn(name = "page_id")
     private page page;
     @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Groups groups;
+    @ManyToOne
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;
 

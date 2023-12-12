@@ -80,8 +80,14 @@ public class FriendsController {
             for(FriendsResponse item:list)
             {
                 FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
-                friendsResponseDTO=friendsMapper.toFriendsResponseDto(item.getFriend());
+                if(id==item.getFriend().getId()) {
+                    friendsResponseDTO = friendsMapper.toFriendsResponseDto(item.getUser());
+                }
+                else {
 
+                    friendsResponseDTO = friendsMapper.toFriendsResponseDto(item.getFriend());
+
+                }
                 friendsResponseDTO.setIdFriends(item.getId());
                 friendsResponseDTOList.add(friendsResponseDTO);
             }
@@ -133,10 +139,10 @@ public class FriendsController {
 
     }
     @DeleteMapping("/unfriend")
-    public ApiResponse unfriend(@RequestParam("userId") int userId,@RequestParam("friendsId") int friendid)
+    public ApiResponse unfriend(@RequestParam("userId") int userId)
     {
         try {
-           friendsService.Delete(userId,friendid);
+           friendsService.Delete(userId);
             ApiResponse apiResponse=new ApiResponse();
             apiResponse.ok();
             return apiResponse;

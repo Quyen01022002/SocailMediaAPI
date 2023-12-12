@@ -8,5 +8,5 @@ import social.media.media.model.entity.*;
 @Repository
 public interface GroupsMembersRepository extends JpaRepository<GroupMembers,Integer> {
 
-    GroupMembers findByUserAndGroup(User user, Groups groups);
+    GroupMembers findByUserAndGroup(User user, Groups groups);  
 }

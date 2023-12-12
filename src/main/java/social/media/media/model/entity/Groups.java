@@ -1,6 +1,7 @@
 package social.media.media.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,7 +35,9 @@ public class Groups {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
     private List<GroupMembers> groupMembers;
-
+    @OneToMany(mappedBy = "groups", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Post> listPost;
     @PrePersist
     public void setCreate() {
         this.createdAt = new Date(System.currentTimeMillis());
