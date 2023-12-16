@@ -1,6 +1,7 @@
 package social.media.media.model.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import social.media.media.model.entity.GroupMembers;
 import social.media.media.model.entity.Groups;
 import social.media.media.model.entity.PageMembers;
@@ -16,4 +17,8 @@ public interface GroupsMembersMapper {
     GroupsMembersResponse toResponse(GroupMembers page);
     List<GroupsMembersResponse> toResponseList(List<GroupMembers> page);
     List<GroupMembers> toEntityList(List<GroupsMenberRequest> groupsMenberRequests);
+
+    @Mapping(source = "userId", target = "user.id")
+    @Mapping(source = "groupId", target = "group.id")
+    GroupMembers groupsMenberRequestToGroupMembers(GroupsMenberRequest groupsMenberRequest);
 }
