@@ -20,4 +20,8 @@ public interface GroupsMembersMapper {
     GroupsMembersResponse toResponse(GroupMembers page);
     List<GroupsMembersResponse> toResponseList(List<GroupMembers> page);
     List<GroupMembers> toEntityList(List<GroupsMenberRequest> groupsMenberRequests);
+
+    @Mapping(source = "userId", target = "user.id")
+    @Mapping(source = "groupId", target = "group.id")
+    GroupMembers groupsMenberRequestToGroupMembers(GroupsMenberRequest groupsMenberRequest);
 }

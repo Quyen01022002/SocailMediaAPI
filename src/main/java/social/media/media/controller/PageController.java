@@ -2,10 +2,12 @@ package social.media.media.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.*;
 import social.media.media.model.reponse.*;
+import social.media.media.model.request.GroupsRequest;
 import social.media.media.service.PageService;
 import social.media.media.service.PostService;
 import social.media.media.service.UserService;
@@ -116,4 +118,33 @@ public class PageController {
         }
 
     }
+    @PutMapping("/update/{id}")
+    public ApiResponse<PostResponse> UpdatePage(@PathVariable int id,@RequestBody page page) {
+        PageResponse savedPage = pageService.updatePage(page);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(savedPage);
+        return apiResponse;
+    }
+
+    @DeleteMapping("/unfollow")
+    public ApiResponse DeleteMembers(@RequestParam("groupID") int groupid,@RequestParam("userID") int userId) {
+        try {
+            PageMembers groupMembers=new PageMembers();
+            User user=new User();
+            user.setId(userId);
+            page groups = new page();
+            groups.setId(groupid);
+            groupMembers.setPage(groups);
+            groupMembers.setUser(user);
+            pageService.DeleteMembers(groupMembers);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+
 }
