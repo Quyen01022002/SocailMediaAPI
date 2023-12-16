@@ -1,6 +1,7 @@
 package social.media.media.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,7 +31,9 @@ public class Comments {
 
     private String commentContent;
 
-
+    @OneToMany(mappedBy = "reportedCommentID", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Report> reportList;
     @ManyToOne
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;

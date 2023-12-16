@@ -23,6 +23,7 @@ public class UserResponse {
     private Boolean isPhone;
 
     private String email;
+    private String fcm;
 
     private Boolean isEmail;
 

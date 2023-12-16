@@ -105,6 +105,12 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<notications> noticationsList;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<SavedPost> savedPostList;
+    @OneToMany(mappedBy = "reportedUserID", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<Report> listReports;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

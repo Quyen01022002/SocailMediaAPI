@@ -32,7 +32,7 @@ public class Post {
 
 
     //Thêm emun status
-    private String status;
+    private Boolean status;
 
     @ManyToOne
     @JoinColumn(name = "page_id")
@@ -55,6 +55,12 @@ public class Post {
     @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<interations> listLike;
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @JsonBackReference
+    private List<SavedPost> savedPostList;
+    @OneToMany(mappedBy = "reportedPostID", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @JsonBackReference
+    private List<Report> reportList;
 
     @PrePersist
     public void setCreate() {

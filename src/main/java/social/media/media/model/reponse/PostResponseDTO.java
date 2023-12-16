@@ -21,6 +21,7 @@ public class PostResponseDTO {
     //Thêm emun status
     private String status;
     private int comment_count;
+    private int savedId;
 
     private int like_count;
     private Boolean user_liked;

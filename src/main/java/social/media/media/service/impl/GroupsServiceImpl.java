@@ -160,7 +160,15 @@ public class GroupsServiceImpl implements GroupService {
         }
     }
 
+    @Override
+    public void updateAvatar(int id, String Avatar) {
 
+            Groups user = groupsRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+            user.setAvatar(Avatar);
+            groupsRepository.saveAndFlush(user);
+
+
+    }
 
 
 }

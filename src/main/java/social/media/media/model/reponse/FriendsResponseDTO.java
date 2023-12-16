@@ -20,6 +20,7 @@ public class FriendsResponseDTO {
     private Boolean isPhone;
 
     private String email;
+    private String fcm;
 
     private Boolean isEmail;
 

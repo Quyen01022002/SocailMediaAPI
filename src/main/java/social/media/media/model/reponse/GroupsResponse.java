@@ -21,6 +21,7 @@ public class GroupsResponse {
     private String name;
 
     private String description;
+    private String Avatar;
     private Date createdAt;
     private Date updatedAt;
 

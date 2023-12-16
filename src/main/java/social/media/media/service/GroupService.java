@@ -21,5 +21,6 @@ public interface GroupService {
     public void addMemberPage(GroupMembers groupsMembersResponse);
     public void Delete(int id);
     public void DeleteMembers(GroupMembers page);
+    public void updateAvatar(int id,String Avatar);
 
 }

@@ -19,6 +19,7 @@ import social.media.media.service.friendsService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,7 +50,23 @@ public class GroupsController {
         apiResponse.ok(savedPage);
         return apiResponse;
     }
+    @PatchMapping("/{id}")
+    public ApiResponse partiallyUpdateUser(@PathVariable int id, @RequestBody Map<String, Object> updates) {
 
+
+        try {
+            String Avatar = (String) updates.get("avatar");
+            groupService.updateAvatar(id, Avatar);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+
+
+    }
     @DeleteMapping("/members/")
     public ApiResponse DeleteMembers(@RequestParam("groupID") int groupid,@RequestParam("userID") int userId) {
         try {

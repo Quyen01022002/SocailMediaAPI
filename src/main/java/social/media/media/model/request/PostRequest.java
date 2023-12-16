@@ -18,7 +18,7 @@ public class PostRequest {
 
     private String contentPost;
     private int groups;
-
+    private Boolean status;
     private List<postImgResponse> listAnh;
 
 
