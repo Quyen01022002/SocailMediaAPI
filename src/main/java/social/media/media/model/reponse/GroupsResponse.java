@@ -26,5 +26,6 @@ public class GroupsResponse {
 
 
     private List<GroupsMembersResponse> groupMembers;
+    private List<PostResponseDTO> listPost;
 
 }

@@ -52,6 +52,7 @@ public class User implements UserDetails {
     private GenderEnum gender;
 
     private String profilePicture;
+    private String backGroundPicture;
 
     @Column(name = "password")
     private String password;
@@ -82,6 +83,9 @@ public class User implements UserDetails {
     @JsonIgnore
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<friends> friendships;
+    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<friends> Otherfriendships;
 
     @OneToMany(mappedBy = "adminId", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")

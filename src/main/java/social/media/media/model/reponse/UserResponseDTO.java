@@ -15,9 +15,11 @@ public class UserResponseDTO {
     private String phone;
     private String email;
     private String profilePicture;
+    private String backGroundPicture;
     private String address;
     private int countFriend;
-
+    private int idFriends;
+    private  Boolean isFriends;
     private List<PostResponseDTO> postList;
     private List<FriendsResponseDTO> friendships;
 

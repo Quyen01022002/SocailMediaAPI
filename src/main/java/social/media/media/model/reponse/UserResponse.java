@@ -27,6 +27,7 @@ public class UserResponse {
     private Boolean isEmail;
 
     private String profilePicture;
+    private String backGroundPicture;
 
 
     private Boolean isActived;

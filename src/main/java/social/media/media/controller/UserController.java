@@ -58,6 +58,7 @@ public class UserController {
                         itemPostResponseDTO.setUser_liked(false);
                     }
                 }
+
                 itemPostResponseDTO.setListAnh(itempost.getListAnh());
                 itemPostResponseDTO.setStatus(itempost.getStatus());
 
@@ -65,6 +66,7 @@ public class UserController {
             }
             UserResponseDTO responseDTO=new UserResponseDTO();
             responseDTO.setProfilePicture(profile.getProfilePicture());
+            responseDTO.setBackGroundPicture(profile.getBackGroundPicture());
             responseDTO.setId(profile.getId());
             responseDTO.setEmail(profile.getEmail());
             responseDTO.setAddress(profile.getAddress());
@@ -83,7 +85,71 @@ public class UserController {
         }
 
     }
+    @GetMapping("/")
+    public ApiResponse<UserResponseDTO> getprofileOther(@RequestParam("userId") int id,@RequestParam("friendId") int friendId) {
+        try {
 
+            UserResponse profile = userService.profile(friendId);
+            List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
+            for(PostResponse itempost:profile.getPostList())
+            {
+                PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+                itemPostResponseDTO.setId(itempost.getId());
+                itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                for(LikeResponse itemlike:  itempost.getListLike())
+                {
+                    if(itemlike.getCreateBy().getId()==id)
+                    {
+                        itemPostResponseDTO.setUser_liked(true);
+
+                    }
+                    else {
+                        itemPostResponseDTO.setUser_liked(false);
+                    }
+                }
+
+                itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                itemPostResponseDTO.setStatus(itempost.getStatus());
+
+                postResponseDTOList.add(itemPostResponseDTO);
+            }
+            UserResponseDTO responseDTO=new UserResponseDTO();
+            responseDTO.setProfilePicture(profile.getProfilePicture());
+            responseDTO.setBackGroundPicture(profile.getBackGroundPicture());
+            responseDTO.setId(profile.getId());
+            responseDTO.setEmail(profile.getEmail());
+            responseDTO.setAddress(profile.getAddress());
+            responseDTO.setFirstName(profile.getFirstName());
+            responseDTO.setFriendships(profile.getFriendships());
+            responseDTO.setCountFriend(profile.getCountFriend());
+            responseDTO.setPostList(postResponseDTOList);
+            responseDTO.setPhone(profile.getPhone());
+            responseDTO.setLastName(profile.getLastName());
+            User user=new User();
+            user.setId(id);
+            friends isFriend=friendsService.isFriend(user,friendId);
+
+            if(isFriend!=null)
+            {
+                responseDTO.setIsFriends(true);
+                responseDTO.setIdFriends(isFriend.getId());
+            }
+            else {
+                responseDTO.setIsFriends(false);
+
+            }
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(responseDTO);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
     @GetMapping("/list20follow")
     public ApiResponse<List<FriendsResponseDTO>> getlist20() {
         try {
@@ -166,6 +232,23 @@ public class UserController {
         try {
             String Avatar = (String) updates.get("avatar");
             userService.updateAvatar(id, Avatar);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+
+
+    }
+    @PatchMapping("/background/{id}")
+    public ApiResponse backgroundUpdateUser(@PathVariable int id, @RequestBody Map<String, Object> updates) {
+
+
+        try {
+            String Avatar = (String) updates.get("background");
+            userService.updateBackGround(id, Avatar);
 
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok();
