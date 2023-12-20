@@ -13,11 +13,16 @@ public interface PageService {
     public PageResponse Detail(int id);
     public List<PageMembersResponse> ListPage(int id);
     public PageResponse updatePage(page page);
+    public List<PageResponse> getPageFollow(int id);
+    public List<PageResponse> getPageAdmin(int id);
+    public List<PageMembersResponse> getFollowPage(int pageid);
     public PageResponse updateAdminPage(PageAdminRequest page);
     public void addMemberPage(PageMembers pageMembers);
     public page Delete(page page);
     public void DeleteMembers(PageMembers page);
 
     public List<PageResponse> getAllPages();
+
+    public PageMembersResponse getBoolFollow(int pageid, int userid);
 
 }
