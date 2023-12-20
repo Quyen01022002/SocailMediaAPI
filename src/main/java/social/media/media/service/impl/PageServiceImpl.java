@@ -13,6 +13,7 @@ import social.media.media.model.reponse.PageMembersResponse;
 import social.media.media.model.reponse.PageResponse;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.UserResponse;
+import social.media.media.model.request.PageAdminRequest;
 import social.media.media.repository.PageMembersRepository;
 import social.media.media.repository.PageRepository;
 import social.media.media.repository.UserFollowRepository;
@@ -82,6 +83,21 @@ public class PageServiceImpl implements PageService {
 
        return pageMapper.toResponse(pageRepository.saveAndFlush(page));
     }
+    @Override
+    public PageResponse updateAdminPage(PageAdminRequest page) {
+        try {
+            page expage = pageRepository.findById(page.getPageId()).orElseThrow(() -> new NotFoundException(" Not Found"));
+            if (expage == null){
+                throw  new NotFoundException("Not Found");
+
+            }
+            User user = userRepository.findById(page.getAdminId()).orElseThrow(() -> new NotFoundException(" Not Found"));;
+            expage.setAdminId(user);
+            return pageMapper.toResponse(pageRepository.saveAndFlush(expage));
+        } catch (ApplicationException ex){
+            throw  ex;
+        }
+    }
 
     @Override
     public void addMemberPage(PageMembers pageMembers) {
@@ -120,6 +136,16 @@ public class PageServiceImpl implements PageService {
             pageMembersRepository.delete(pageMembers);
         } catch (ApplicationException ex) {
             throw ex;
+        }
+    }
+
+    @Override
+    public List<PageResponse> getAllPages() {
+        try {
+            List<page> allPages = pageRepository.findAll(); // Lấy tất cả các trang từ repository
+            return pageMapper.toResponseList(allPages); // Chuyển đổi danh sách các trang thành danh sách PageResponse
+        } catch (Exception ex) {
+            throw new ApplicationException("Failed to retrieve all pages: " + ex.getMessage());
         }
     }
 }

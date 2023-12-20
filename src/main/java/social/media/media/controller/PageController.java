@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.*;
 import social.media.media.model.reponse.*;
+import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.model.request.GroupsRequest;
+import social.media.media.model.request.PageAdminRequest;
 import social.media.media.service.PageService;
 import social.media.media.service.PostService;
 import social.media.media.service.UserService;
@@ -128,7 +130,7 @@ public class PageController {
     }
 
     @DeleteMapping("/unfollow")
-    public ApiResponse DeleteMembers(@RequestParam("groupID") int groupid,@RequestParam("userID") int userId) {
+    public ApiResponse DeleteMembers(@RequestParam("pageId") int groupid,@RequestParam("userId") int userId) {
         try {
             PageMembers groupMembers=new PageMembers();
             User user=new User();
@@ -146,5 +148,27 @@ public class PageController {
         }
 
     }
+
+    @GetMapping("/")
+    public ApiResponse<List<PageResponse>> getAllPages() {
+        try {
+            List<PageResponse> allPages = pageService.getAllPages();
+            ApiResponse<List<PageResponse>> apiResponse = new ApiResponse<>();
+            apiResponse.ok(allPages);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Xử lý các ngoại lệ khác
+        }
+    }
+    @PutMapping("/updateAdmin/{id}")
+    public ApiResponse<PostResponse> UpdateAdminGroup(@PathVariable int id,@RequestBody PageAdminRequest groupsRequest) {
+        PageResponse savedpost = pageService.updateAdminPage(groupsRequest);
+
+        ApiResponse apiResponse=new ApiResponse();
+        apiResponse.ok(savedpost);
+        return apiResponse;
+    }
+
+
 
 }

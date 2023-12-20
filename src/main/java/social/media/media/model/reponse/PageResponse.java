@@ -25,7 +25,7 @@ public class PageResponse {
     private Date createdAt;
     private Date updatedAt;
 
-    private List<PageMembersResponse> groupMembers;
+   // private List<PageMembersResponse> groupMembers;
 
 
 
