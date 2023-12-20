@@ -29,7 +29,7 @@ public class GroupsServiceImpl implements GroupService {
 
     private final GroupsRepository groupsRepository;
     private final GroupsMembersRepository groupsMembersRepository;
-
+    private final PageRepository pageRepository;
     private final UserRepository userRepository;
     @Autowired
     GroupMapper groupMapper;
@@ -114,7 +114,7 @@ public class GroupsServiceImpl implements GroupService {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
             List<GroupsResponse> result=new ArrayList<>();
             for(GroupMembers item:user.getGroupMemberships()) {
-
+                if (item.getGroup().getAdminId().getId() != user.getId())
                 result.add(groupMapper.toResponse(item.getGroup()));
             }
             return result;

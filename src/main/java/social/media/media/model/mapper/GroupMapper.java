@@ -14,6 +14,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface GroupMapper {
+    @Mapping(source = "adminId.id", target = "adminId")
     GroupsResponse toResponse(Groups Groups);
     Groups toEntity(GroupsRequest Groups);
 
