@@ -24,8 +24,9 @@ public class PageResponse {
     private String description;
     private Date createdAt;
     private Date updatedAt;
+    private int adminId;
 
-    private List<PageMembersResponse> groupMembers;
+   // private List<PageMembersResponse> groupMembers;
 
 
 
