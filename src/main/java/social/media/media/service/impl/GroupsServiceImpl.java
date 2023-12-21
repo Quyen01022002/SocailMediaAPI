@@ -14,12 +14,14 @@ import social.media.media.model.reponse.GroupsMembersResponse;
 import social.media.media.model.reponse.GroupsResponse;
 import social.media.media.model.reponse.PageMembersResponse;
 import social.media.media.model.reponse.PageResponse;
+import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.repository.*;
 import social.media.media.service.GroupService;
 import social.media.media.service.PageService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class GroupsServiceImpl implements GroupService {
 
     private final GroupsRepository groupsRepository;
     private final GroupsMembersRepository groupsMembersRepository;
-
+    private final PageRepository pageRepository;
     private final UserRepository userRepository;
     @Autowired
     GroupMapper groupMapper;
@@ -76,6 +78,24 @@ public class GroupsServiceImpl implements GroupService {
             throw ex;
         }
     }
+    @Override
+    public GroupsResponse updateAdminGroups(GroupAdminRequest groups) {
+        try {
+            Groups exGroups = groupsRepository.findById(groups.getGroupId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            if (exGroups == null) {
+                throw new NotFoundException("Not Found");
+            }
+            User user = userRepository.findById(groups.getAdminId()).orElseThrow(() -> new NotFoundException(" Not Found"));;
+            exGroups.setAdminId(user);
+            // Update
+            groupsRepository.saveAndFlush(exGroups);
+
+            // Map to Response
+            return groupMapper.toResponse(exGroups);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
 
     @Override
     public GroupsResponse Detail(int id) {
@@ -94,7 +114,7 @@ public class GroupsServiceImpl implements GroupService {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
             List<GroupsResponse> result=new ArrayList<>();
             for(GroupMembers item:user.getGroupMemberships()) {
-
+                if (item.getGroup().getAdminId().getId() != user.getId())
                 result.add(groupMapper.toResponse(item.getGroup()));
             }
             return result;

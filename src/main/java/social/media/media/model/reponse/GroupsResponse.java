@@ -24,7 +24,7 @@ public class GroupsResponse {
     private String Avatar;
     private Date createdAt;
     private Date updatedAt;
-
+    private int adminId;
 
     private List<GroupsMembersResponse> groupMembers;
     private List<PostResponseDTO> listPost;

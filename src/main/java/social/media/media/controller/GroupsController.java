@@ -9,6 +9,7 @@ import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.GroupMapper;
 import social.media.media.model.mapper.GroupsMembersMapper;
 import social.media.media.model.reponse.*;
+import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.model.request.GroupsMenberRequest;
 import social.media.media.model.request.GroupsRequest;
 import social.media.media.model.request.PostRequest;
@@ -250,6 +251,17 @@ public class GroupsController {
         apiResponse.ok(savedpost);
         return apiResponse;
     }
+    @PutMapping("/updateAdmin/{id}")
+    public ApiResponse<PostResponse> UpdateAdminGroup(@PathVariable int id,@RequestBody GroupAdminRequest groupsRequest) {
+        GroupsResponse savedpost = groupService.updateAdminGroups(groupsRequest);
+
+        ApiResponse apiResponse=new ApiResponse();
+        apiResponse.ok(savedpost);
+        return apiResponse;
+    }
+
+
+
     @DeleteMapping("/{id}")
     public ApiResponse DeletePage(@PathVariable int id) {
         try {
