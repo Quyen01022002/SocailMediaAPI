@@ -2,16 +2,20 @@ package social.media.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import social.media.media.controller.FriendsController;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.model.entity.MessageBox;
 import social.media.media.model.entity.User;
+import social.media.media.model.entity.friends;
 import social.media.media.model.reponse.MessageBoxResponse;
 import social.media.media.repository.MessageRepository;
 import social.media.media.repository.UserRepository;
+import social.media.media.repository.friendsRepository;
 import social.media.media.service.MessageService;
 import social.media.media.service.PageService;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,9 +26,27 @@ public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final friendsRepository friendsRepositorys;
     @Override
     public MessageBox createMessage(MessageBox messageBox){
         try{
+            return messageRepository.saveAndFlush(messageBox);
+
+        }
+        catch (ApplicationException ex){
+            throw ex;
+        }
+    }
+    @Override
+    public MessageBox createFristMessage(int id){
+        try{
+            friends friend = friendsRepositorys.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+            MessageBox messageBox = new MessageBox();
+            messageBox.setUserId(friend.getUser().getId());
+            messageBox.setFriendId(friend.getFriend().getId());
+            messageBox.setContent("Bây giờ chúng ta đã là bạn bè!");
+            messageBox.setId(0);
+            messageBox.setCreatedAt(new Date(System.currentTimeMillis()));
             return messageRepository.saveAndFlush(messageBox);
 
         }
@@ -74,6 +96,7 @@ public class MessageServiceImpl implements MessageService {
                 // Thêm response vào danh sách kết quả
                 listresult.add(response);
             }
+            Collections.sort(listresult, Comparator.comparingInt(MessageBoxResponse::getId).reversed());
              return listresult;
 
         }
