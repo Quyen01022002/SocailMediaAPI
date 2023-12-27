@@ -2,10 +2,7 @@ package social.media.media.model.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import social.media.media.model.entity.Groups;
-import social.media.media.model.entity.Post;
-import social.media.media.model.entity.User;
-import social.media.media.model.entity.friends;
+import social.media.media.model.entity.*;
 import social.media.media.model.reponse.FriendsResponse;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.UserResponse;
@@ -28,6 +25,13 @@ public interface PostMapper {
             groups.setId(post.getGroups());
             entity.setGroups(groups);
         }
+        if(post.getPage()!=0)
+        {
+            page groups=new page();
+            groups.setId(post.getPage());
+            entity.setPage(groups);
+        }
+
         entity.setListAnh(INSTANCE.toEntity(post.getListAnh()));
         return entity;
     }

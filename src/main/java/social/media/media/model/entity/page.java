@@ -31,6 +31,8 @@ public class page {
     private String name;
 
     private String description;
+    private String Avatar;
+    private String BackAvatar;
     private Date createdAt;
     private Date updatedAt;
 

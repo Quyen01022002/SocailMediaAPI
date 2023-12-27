@@ -20,6 +20,8 @@ public interface PageService {
     public void addMemberPage(PageMembers pageMembers);
     public page Delete(page page);
     public void DeleteMembers(PageMembers page);
+    public void updateAvatar(int id,String Avatar);
+    public void updateBack(int id,String Avatar);
 
     public List<PageResponse> getAllPages();
 

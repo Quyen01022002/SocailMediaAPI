@@ -183,6 +183,22 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
+    public void updateAvatar(int id, String Avatar) {
+        page user = pageRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+        user.setAvatar(Avatar);
+        pageRepository.saveAndFlush(user);
+
+    }
+
+    @Override
+    public void updateBack(int id, String Avatar) {
+        page user = pageRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+        user.setBackAvatar(Avatar);
+        pageRepository.saveAndFlush(user);
+
+    }
+
+    @Override
     public List<PageResponse> getAllPages() {
         try {
             List<page> allPages = pageRepository.findAll(); // Lấy tất cả các trang từ repository

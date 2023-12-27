@@ -86,7 +86,40 @@ public class PageController {
         }
 
     }
+    @PatchMapping("/{id}")
+    public ApiResponse partiallyUpdateUser(@PathVariable int id, @RequestBody Map<String, Object> updates) {
 
+
+        try {
+            String Avatar = (String) updates.get("avatar");
+            pageService.updateAvatar(id, Avatar);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+
+
+    }
+    @PatchMapping("/back/{id}")
+    public ApiResponse partiallyBackUser(@PathVariable int id, @RequestBody Map<String, Object> updates) {
+
+
+        try {
+            String Avatar = (String) updates.get("avatar");
+            pageService.updateBack(id, Avatar);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+
+
+    }
     @GetMapping("/follow/{id}")
     public ApiResponse<List<PageMembersResponse>> ListPageFollow(@PathVariable int id) {
         //Hàm này là xem danh sách Page mà người dùng hiện tại đang theo dõi
