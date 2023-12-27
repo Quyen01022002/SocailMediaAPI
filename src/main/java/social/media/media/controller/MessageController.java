@@ -26,6 +26,14 @@ public class MessageController {
         return apiResponse;
 
     }
+    @PostMapping("/firstmessage")
+    public ApiResponse<MessageBox> postFristMessage(@RequestParam("friendshipid") int id){
+        MessageBox messageBox1 = messageService.createFristMessage(id);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(messageBox1);
+        return apiResponse;
+
+    }
 
     @GetMapping("/")
     public ApiResponse<List<MessageBox>> getMessage(@RequestParam int userId, @RequestParam int friendId){
