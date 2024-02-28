@@ -124,6 +124,17 @@ public class GroupsServiceImpl implements GroupService {
     }
 
     @Override
+    public List<GroupsResponse> ListGroupsAll() {
+        try {
+            List<GroupsResponse> result=groupMapper.toResponseList(groupsRepository.findAll());
+
+            return result;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
     public List<GroupsResponse> ListGroupsAdmin(int id) {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));

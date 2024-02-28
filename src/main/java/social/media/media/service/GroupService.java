@@ -18,6 +18,7 @@ public interface GroupService {
     public GroupsResponse updateAdminGroups(GroupAdminRequest groups);
     public GroupsResponse Detail(int id);
     public List<GroupsResponse> ListGroups(int id);
+    public List<GroupsResponse> ListGroupsAll();
     public List<GroupsResponse> ListGroupsAdmin(int id);
     public GroupsResponse updatePage(Groups groups);
     public void addMemberPage(GroupMembers groupsMembersResponse);

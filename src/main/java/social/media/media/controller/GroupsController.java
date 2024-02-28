@@ -241,6 +241,21 @@ public class GroupsController {
         }
 
     }
+    @GetMapping("/all")
+    public ApiResponse<List<GroupsResponse>> ListAll() {
+        try {
+
+            List<GroupsResponse> profile = groupService.ListGroupsAll();
+
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(profile);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
     @PutMapping("/update/{id}")
     public ApiResponse<PostResponse> Updatepost(@PathVariable int id,@RequestBody GroupsRequest groupsRequest) {
         Groups groupsEnity=groupMapper.toEntity(groupsRequest);
