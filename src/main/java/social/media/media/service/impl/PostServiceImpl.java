@@ -2,6 +2,7 @@ package social.media.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
@@ -14,6 +15,7 @@ import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.reponse.FriendsResponse;
 import social.media.media.model.reponse.PostResponse;
+import social.media.media.model.reponse.PostResponseDTO;
 import social.media.media.repository.PostIimageRepository;
 import social.media.media.repository.PostRepository;
 import social.media.media.repository.friendsRepository;
@@ -71,6 +73,13 @@ public class PostServiceImpl implements PostService {
         } catch (ApplicationException ex) {
             throw ex;
         }
+    }
+    @Override
+    public List<PostResponse> getTop10(){
+        PageRequest pageable = PageRequest.of(0, 10);
+        List<Post> result = postRepository.findTop10PostsByLikes(pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        return listPost;
     }
 
     @Override

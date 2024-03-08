@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-    @RequestMapping("/post")
+@RequestMapping("/post")
 @RequiredArgsConstructor
 public class PostsController {
     @Autowired
@@ -28,36 +28,31 @@ public class PostsController {
     GroupService groupService;
     @Autowired
     PostMapper postMapper;
+
     @GetMapping("/{id}")
-    public ApiResponse<List<PostResponseDTO>> getfriendlist(@PathVariable int id)
-    {
+    public ApiResponse<List<PostResponseDTO>> getfriendlist(@PathVariable int id) {
 
         try {
 
-            User user=new User();
+            User user = new User();
             user.setId(id);
             List<GroupsResponse> profile = groupService.ListGroups(id);
-            List<FriendsResponse> list=friendsService.findByUser(user,true);
-            List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
-            for(FriendsResponse item:list)
-            {
-                for(PostResponse itempost:item.getUser().getPostList())
-                {
-                    PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+            List<FriendsResponse> list = friendsService.findByUser(user, true);
+            List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+            for (FriendsResponse item : list) {
+                for (PostResponse itempost : item.getUser().getPostList()) {
+                    PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
                     itemPostResponseDTO.setId(itempost.getId());
                     itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
                     itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
-                    for(LikeResponse itemlike:  itempost.getListLike())
-                    {
-                        if(itemlike.getCreateBy().getId()==id)
-                        {
+                    for (LikeResponse itemlike : itempost.getListLike()) {
+                        if (itemlike.getCreateBy().getId() == id) {
                             itemPostResponseDTO.setUser_liked(true);
 
-                        }
-                        else {
+                        } else {
                             itemPostResponseDTO.setUser_liked(false);
                         }
                     }
@@ -66,19 +61,16 @@ public class PostsController {
 
                     postResponseDTOList.add(itemPostResponseDTO);
                 }
-                for(PostResponse itempost:item.getFriend().getPostList())
-                {
-                    PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+                for (PostResponse itempost : item.getFriend().getPostList()) {
+                    PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
                     itemPostResponseDTO.setId(itempost.getId());
                     itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
                     itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
-                    for(LikeResponse itemlike:  itempost.getListLike())
-                    {
-                        if(itemlike.getCreateBy().getId()==id)
-                        {
+                    for (LikeResponse itemlike : itempost.getListLike()) {
+                        if (itemlike.getCreateBy().getId() == id) {
                             itemPostResponseDTO.setUser_liked(true);
 
                         }
@@ -92,15 +84,13 @@ public class PostsController {
 
 
             }
-            for(GroupsResponse item:profile)
-            {
-                for(PostResponseDTO itemPost:item.getListPost())
-                {
+            for (GroupsResponse item : profile) {
+                for (PostResponseDTO itemPost : item.getListPost()) {
                     postResponseDTOList.add(itemPost);
 
                 }
             }
-            ApiResponse apiResponse=new ApiResponse();
+            ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok(postResponseDTOList);
             return apiResponse;
         } catch (Exception ex) {
@@ -108,36 +98,67 @@ public class PostsController {
         }
 
     }
-    @PostMapping("/post")
-        public ApiResponse<PostResponse> post(@RequestBody PostRequest post) {
-        Post postEnity=postMapper.toEnity(post);
-        PostResponse savedpost = postService.addPost(postEnity,postEnity.getListAnh());
 
-        ApiResponse apiResponse=new ApiResponse();
+    @PostMapping("/post")
+    public ApiResponse<PostResponse> post(@RequestBody PostRequest post) {
+        Post postEnity = postMapper.toEnity(post);
+        PostResponse savedpost = postService.addPost(postEnity, postEnity.getListAnh());
+
+        ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(savedpost);
         return apiResponse;
     }
+
     @PutMapping("/update")
     public ApiResponse<PostResponse> Updatepost(@RequestBody PostRequest post) {
-        Post postEnity=postMapper.toEnity(post);
-        PostResponse savedpost = postService.updatePost(postEnity,postEnity.getListAnh());
+        Post postEnity = postMapper.toEnity(post);
+        PostResponse savedpost = postService.updatePost(postEnity, postEnity.getListAnh());
 
-        ApiResponse apiResponse=new ApiResponse();
+        ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(savedpost);
         return apiResponse;
     }
+
     @DeleteMapping("/{id}")
     public ApiResponse DeletePage(@PathVariable int id) {
         try {
-             postService.Delete(id);
+            postService.Delete(id);
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok();
             return apiResponse;
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
-
     }
 
+    @GetMapping("/{id}/top10")
+    public ApiResponse<List<PostResponseDTO>> getTop10(@PathVariable int id) {
+        List<PostResponse> postResponseList = postService.getTop10();
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == id) {
+                    itemPostResponseDTO.setUser_liked(true);
+
+                }
+                itemPostResponseDTO.setUser_liked(false);
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
 }
 
