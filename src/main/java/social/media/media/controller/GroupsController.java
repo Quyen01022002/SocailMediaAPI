@@ -241,13 +241,39 @@ public class GroupsController {
         }
 
     }
-    @GetMapping("/all")
-    public ApiResponse<List<GroupsResponse>> ListAll() {
+    @GetMapping("/follow/post/{id}")
+    public ApiResponse<List<PostResponse>> ListPostFollow(@PathVariable int id) {
+        try {
+            List<PostResponseDTO> result=new ArrayList<>();
+            List<GroupsResponse> profile = groupService.ListGroups(id);
+            for(GroupsResponse item:profile)
+            {
+
+                for(PostResponseDTO itemPost:item.getListPost()) {
+                    result.add(itemPost);
+                }
+            }
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(result);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+    @GetMapping("/all/{userid}")
+    public ApiResponse<List<GroupsResponse>> ListAll(@PathVariable int userid) {
         try {
 
             List<GroupsResponse> profile = groupService.ListGroupsAll();
+            for(GroupsResponse item:profile)
+            {
+                for(GroupsMembersResponse itemMenber:item.getGroupMembers())
+                {
 
+                }
 
+            }
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok(profile);
             return apiResponse;

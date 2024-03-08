@@ -2,26 +2,24 @@ package social.media.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.model.entity.*;
 import social.media.media.model.mapper.GroupMapper;
 import social.media.media.model.mapper.GroupsMembersMapper;
-import social.media.media.model.mapper.PageMapper;
-import social.media.media.model.mapper.PageMembersMapper;
-import social.media.media.model.reponse.GroupsMembersResponse;
 import social.media.media.model.reponse.GroupsResponse;
-import social.media.media.model.reponse.PageMembersResponse;
-import social.media.media.model.reponse.PageResponse;
 import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.repository.*;
 import social.media.media.service.GroupService;
-import social.media.media.service.PageService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -107,7 +105,6 @@ public class GroupsServiceImpl implements GroupService {
         }
     }
 
-
     @Override
     public List<GroupsResponse> ListGroups(int id) {
         try {
@@ -115,9 +112,37 @@ public class GroupsServiceImpl implements GroupService {
             List<GroupsResponse> result=new ArrayList<>();
             for(GroupMembers item:user.getGroupMemberships()) {
                 if (item.getGroup().getAdminId().getId() != user.getId())
-                result.add(groupMapper.toResponse(item.getGroup()));
+                    result.add(groupMapper.toResponse(item.getGroup()));
             }
             return result;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public Page<GroupsResponse> listGroups(int id, Pageable pageable) {
+        try {
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+            List<GroupsResponse> result = new ArrayList<>();
+            for (GroupMembers item : user.getGroupMemberships()) {
+                if (item.getGroup().getAdminId().getId() != user.getId()) {
+                    result.add(groupMapper.toResponse(item.getGroup()));
+                }
+            }
+            int pageSize = pageable.getPageSize();
+            int currentPage = pageable.getPageNumber();
+            int startItem = currentPage * pageSize;
+            List<GroupsResponse> pageList;
+
+            if (result.size() < startItem) {
+                pageList = Collections.emptyList();
+            } else {
+                int toIndex = Math.min(startItem + pageSize, result.size());
+                pageList = result.subList(startItem, toIndex);
+            }
+
+            return new PageImpl<>(pageList, PageRequest.of(currentPage, pageSize), result.size());
         } catch (ApplicationException ex) {
             throw ex;
         }

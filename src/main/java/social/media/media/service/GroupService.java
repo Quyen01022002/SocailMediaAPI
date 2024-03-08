@@ -1,5 +1,7 @@
 package social.media.media.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import social.media.media.model.entity.GroupMembers;
 import social.media.media.model.entity.Groups;
 import social.media.media.model.entity.PageMembers;
@@ -18,6 +20,9 @@ public interface GroupService {
     public GroupsResponse updateAdminGroups(GroupAdminRequest groups);
     public GroupsResponse Detail(int id);
     public List<GroupsResponse> ListGroups(int id);
+
+    Page<GroupsResponse> listGroups(int id, Pageable pageable);
+
     public List<GroupsResponse> ListGroupsAll();
     public List<GroupsResponse> ListGroupsAdmin(int id);
     public GroupsResponse updatePage(Groups groups);
