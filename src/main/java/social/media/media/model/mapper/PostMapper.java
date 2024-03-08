@@ -5,6 +5,7 @@ import org.mapstruct.factory.Mappers;
 import social.media.media.model.entity.*;
 import social.media.media.model.reponse.FriendsResponse;
 import social.media.media.model.reponse.PostResponse;
+import social.media.media.model.reponse.PostResponseDTO;
 import social.media.media.model.reponse.UserResponse;
 import social.media.media.model.request.PostRequest;
 
@@ -35,4 +36,7 @@ public interface PostMapper {
         entity.setListAnh(INSTANCE.toEntity(post.getListAnh()));
         return entity;
     }
+
+    List<PostResponseDTO> toResponseDTO(List<Post> post);
+    List<PostResponse> toResponseList(List<Post> post);
 }
