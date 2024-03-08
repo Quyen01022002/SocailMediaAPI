@@ -151,4 +151,14 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.saveAndFlush(exuser);
     }
+
+    @Override
+    public Boolean checkEmail(String email){
+        try {
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(" Not Found"));
+            return true;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
 }
