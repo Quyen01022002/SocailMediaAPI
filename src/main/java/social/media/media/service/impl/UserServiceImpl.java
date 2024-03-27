@@ -151,7 +151,19 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.saveAndFlush(exuser);
     }
-
+    @Override
+    public void update2(int id, User user) {
+        User exuser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+        exuser.setFirstName(user.getFirstName());
+        exuser.setLastName(user.getLastName());
+       // exuser.setDoB(user.getDoB());
+       // exuser.setAddress(user.getAddress());
+        exuser.setProfilePicture(user.getProfilePicture());
+        exuser.setBackGroundPicture(user.getBackGroundPicture());
+        exuser.setEmail(user.getEmail());
+        exuser.setPhone(user.getPhone());
+        userRepository.saveAndFlush(exuser);
+    }
     @Override
     public Boolean checkEmail(String email){
         try {

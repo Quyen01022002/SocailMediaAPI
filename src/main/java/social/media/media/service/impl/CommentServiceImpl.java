@@ -6,16 +6,15 @@ import org.springframework.stereotype.Service;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.model.entity.Comments;
-import social.media.media.model.entity.Groups;
-import social.media.media.model.entity.interations;
+import social.media.media.model.entity.Post;
 import social.media.media.model.mapper.CommentMapper;
-import social.media.media.model.mapper.InterationsMapper;
 import social.media.media.model.reponse.CommentsResponse;
-import social.media.media.model.reponse.LikeResponse;
+import social.media.media.model.request.CommentRequest;
 import social.media.media.repository.CommentRepository;
-import social.media.media.repository.InerationsRepository;
+import social.media.media.repository.PostRepository;
 import social.media.media.service.CommentService;
-import social.media.media.service.InterationService;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +23,23 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     @Autowired
     CommentMapper commentMapper;
-
+    private final PostRepository postRepository;
 
     @Override
     public CommentsResponse Comments(Comments cmt) {
         try {
             Comments cmt2 = commentRepository.saveAndFlush(cmt);
+            return commentMapper.toResponse(cmt2);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public CommentsResponse Comments2(CommentRequest cmt) {
+        try {
+            Comments cmt1 = commentMapper.toComment(cmt);
+            Comments cmt2 = commentRepository.saveAndFlush(cmt1);
             return commentMapper.toResponse(cmt2);
         } catch (ApplicationException ex) {
             throw ex;
@@ -53,6 +63,15 @@ public class CommentServiceImpl implements CommentService {
 
 
             commentRepository.delete(page1);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    public List<CommentsResponse> getAllComment(int id) {
+        try {
+            Post post = postRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+            return commentMapper.toListCommentResponse(post.getLisCmt());
         } catch (ApplicationException ex) {
             throw ex;
         }

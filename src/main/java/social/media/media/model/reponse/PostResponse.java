@@ -24,7 +24,7 @@ public class PostResponse {
     private UserResponsePost CreateBy;
 
     //Thêm emun status
-    private String status;
+    private Boolean status;
 
     private List<postImgResponse> listAnh;
     private List<Comments> lisCmt;

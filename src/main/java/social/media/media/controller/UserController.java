@@ -9,6 +9,7 @@ import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.UserMapper;
 import social.media.media.model.reponse.*;
 import social.media.media.model.request.UserRequest;
+import social.media.media.model.request.UserRequest2;
 import social.media.media.service.PostService;
 import social.media.media.service.UserService;
 import social.media.media.service.friendsService;
@@ -295,5 +296,23 @@ public class UserController {
 
     }
 
+
+    @PutMapping("/up/{id}")
+    public ApiResponse UpdateUser2(@PathVariable int id, @RequestBody UserRequest2 updatedUser) {
+
+
+        try {
+
+            userService.update2(id, userMapper.toEntity2(updatedUser));
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+
+
+    }
 
 }
