@@ -18,6 +18,7 @@ public interface UserService {
     public void updateBackGround(int id,String Avatar);
     public void fcm(int id,String fcm);
     public void update(int id, User user);
+    public void update2(int id, User user);
 
     public Boolean checkEmail(String email);
 }

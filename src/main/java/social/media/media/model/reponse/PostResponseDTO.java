@@ -19,7 +19,7 @@ public class PostResponseDTO {
     private UserResponsePost CreateBy;
 
     //Thêm emun status
-    private String status;
+    private Boolean status;
     private int comment_count;
     private int savedId;
 
