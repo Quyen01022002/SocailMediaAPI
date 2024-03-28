@@ -27,6 +27,7 @@ public class Groups {
     @ManyToOne
     @JoinColumn(name = "adminId", referencedColumnName = "id")
     private User adminId;
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String name;
 
     private String description;

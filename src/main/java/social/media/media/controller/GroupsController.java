@@ -261,19 +261,19 @@ public class GroupsController {
         }
 
     }
-    @GetMapping("/all/{userid}")
-    public ApiResponse<List<GroupsResponse>> ListAll(@PathVariable int userid) {
+    @GetMapping("/all")
+    public ApiResponse<List<GroupsResponse>> ListAll() {
         try {
 
             List<GroupsResponse> profile = groupService.ListGroupsAll();
-            for(GroupsResponse item:profile)
-            {
-                for(GroupsMembersResponse itemMenber:item.getGroupMembers())
-                {
-
-                }
-
-            }
+//            for(GroupsResponse item:profile)
+//            {
+//                for(GroupsMembersResponse itemMenber:item.getGroupMembers())
+//                {
+//
+//                }
+//
+//            }
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok(profile);
             return apiResponse;
@@ -318,9 +318,11 @@ public class GroupsController {
     @PostMapping("/addMembers")
     public ApiResponse addMembers(@RequestBody List<GroupsMenberRequest> user) {
         try {
+
             List<GroupMembers> groupMembers =groupsMembersMapper.toEntityList(user);
             for(GroupMembers item: groupMembers)
             {
+
                 groupService.addMemberPage(item);
 
             }

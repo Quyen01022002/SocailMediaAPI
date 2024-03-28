@@ -12,7 +12,6 @@ import java.sql.Date;
 @Entity
 @Table(name ="GroupMembers")
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
