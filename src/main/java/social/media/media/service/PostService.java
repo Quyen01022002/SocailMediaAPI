@@ -17,4 +17,5 @@ public interface PostService {
     public Void Delete(int id);
 
     public List<PostResponse> getTop10();
+    public List<PostResponse> searchPost(String keyword);
 }
