@@ -1,6 +1,7 @@
 package social.media.media.model.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import social.media.media.model.entity.*;
 import social.media.media.model.reponse.FriendsResponse;
@@ -15,6 +16,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
     pictureOfPostMapper INSTANCE = Mappers.getMapper( pictureOfPostMapper.class );
+    @Mapping(source = "groups.id", target = "groupid")
     PostResponse toResponse(Post post);
     ;
     default Post toEnity(PostRequest post){

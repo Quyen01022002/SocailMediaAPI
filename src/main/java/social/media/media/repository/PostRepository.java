@@ -21,4 +21,6 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
 
         @Query("SELECT p, COUNT(l) as likeCount FROM Post p LEFT JOIN p.listLike l GROUP BY p.id, p.CreateBy, p.contentPost, p.timeStamp, p.status, p.page, p.groups ORDER BY likeCount DESC")
     List<Post> findTop10PostsByLikes(Pageable pageable);
+
+        List<Post> findByContentPostContaining(String key);
 }
