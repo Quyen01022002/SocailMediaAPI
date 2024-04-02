@@ -158,6 +158,16 @@ public class GroupsServiceImpl implements GroupService {
             throw ex;
         }
     }
+    @Override
+    public List<GroupsResponse> searchGroup(String keyword) {
+        try {
+            List<GroupsResponse> result=groupMapper.toResponseList(groupsRepository.findByNameContaining(keyword));
+
+            return result;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
 
     @Override
     public List<GroupsResponse> ListGroupsAdmin(int id) {
