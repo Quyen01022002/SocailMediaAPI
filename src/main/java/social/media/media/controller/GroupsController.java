@@ -335,4 +335,27 @@ public class GroupsController {
         }
 
     }
+
+
+    @GetMapping("/search")
+    public ApiResponse<List<GroupsResponse>> searchGroup(@RequestParam("q") String keyword) {
+        try {
+
+            List<GroupsResponse> profile = groupService.searchGroup(keyword);
+            for(GroupsResponse item:profile)
+            {
+                for(GroupsMembersResponse itemMenber:item.getGroupMembers())
+                {
+
+                }
+
+            }
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(profile);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
 }

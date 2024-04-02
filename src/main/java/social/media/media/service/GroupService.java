@@ -24,6 +24,7 @@ public interface GroupService {
     Page<GroupsResponse> listGroups(int id, Pageable pageable);
 
     public List<GroupsResponse> ListGroupsAll();
+    public List<GroupsResponse> searchGroup(String keyword);
     public List<GroupsResponse> ListGroupsAdmin(int id);
     public GroupsResponse updatePage(Groups groups);
     public void addMemberPage(GroupMembers groupsMembersResponse);
