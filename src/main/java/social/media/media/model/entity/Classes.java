@@ -8,48 +8,47 @@ import lombok.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.List;
 
-@Setter
-@Getter
 @Entity
-@Table(name ="Groups")
+@Table(name ="classes")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Groups {
+public class Classes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
     @JoinColumn(name = "adminId", referencedColumnName = "id")
-    private User adminId;
-    @Column(columnDefinition = "NVARCHAR(255)")
+    @JsonIgnore
+    private User teacher;
     private String name;
-
+    @ManyToOne
+    @JoinColumn(name = "groupId", referencedColumnName = "id")
+    @JsonIgnore
+    private Groups groups;
     private String description;
     private String Avatar;
+    private String BackAvatar;
     private Date createdAt;
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
-    private List<GroupMembers> groupMembers;
-    @OneToMany(mappedBy = "groups", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "classes", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Post> listPost;
-    @OneToMany(mappedBy = "groups", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Classes> classesList;
+    private List<ClassMembers> classMembers;
+
+
     @PrePersist
     public void setCreate() {
         this.createdAt = new Date(System.currentTimeMillis());
-        this.updatedAt = new Date(System.currentTimeMillis());
-        this.adminId = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        this.teacher = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        this.updatedAt= new Date(System.currentTimeMillis());
     }
+
     @PreUpdate
     public void setModified(){
         this.updatedAt= new Date(System.currentTimeMillis());

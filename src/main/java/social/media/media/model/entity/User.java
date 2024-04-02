@@ -7,12 +7,16 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import social.media.media.model.enums.GenderEnum;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import social.media.media.model.enums.RoleEnum;
+import social.media.media.repository.UserLevelRepository;
+import social.media.media.service.UserLevelService;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -57,12 +61,18 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    private RoleEnum role;
+
     private Boolean isActived;
     private String address;
     private Date createdAt;
     private Date DoB;
     private Date updatedAt;
+    @Column(name = "point", columnDefinition = "bigint default 0")
+    private long point;
 
+    @OneToOne(mappedBy = "userlevel", cascade = CascadeType.ALL)
+    private UserLevel userLevel;
 
     @OneToMany(mappedBy = "CreateBy", fetch = FetchType.LAZY)
     @JsonBackReference
@@ -101,7 +111,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<PageMembers> pageMemberships;
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<ClassMembers> classMembers;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<notications> noticationsList;
@@ -111,7 +123,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "reportedUserID", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Report> listReports;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(email));
@@ -160,9 +171,22 @@ public class User implements UserDetails {
     public void setCreate() {
         this.createdAt = new Date(System.currentTimeMillis());
         this.updatedAt = new Date(System.currentTimeMillis());
+        this.point=0;
     }
+    @Transient
+    UserLevelService userLevelService;
     @PreUpdate
     public void setModified(){
+
         this.updatedAt= new Date(System.currentTimeMillis());
+        List<UserLevel> list=userLevelService.findAll();
+        for(int i=0;i<=list.size();i++)
+        {
+            if(point>=list.get(i).getMinPoints()&&point<=list.get(i).getMaxPoints())
+            {
+                this.userLevel=list.get(i++);
+            }
+
+        }
     }
 }

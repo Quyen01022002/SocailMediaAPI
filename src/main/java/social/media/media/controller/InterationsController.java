@@ -8,8 +8,7 @@ import social.media.media.model.entity.Post;
 import social.media.media.model.entity.User;
 import social.media.media.model.entity.interations;
 import social.media.media.model.reponse.*;
-import social.media.media.service.InterationService;
-import social.media.media.service.friendsService;
+import social.media.media.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,10 @@ import java.util.List;
 public class InterationsController {
     @Autowired
     InterationService interationService;
+    @Autowired
+    UserService userLevelService;
+    @Autowired
+    PostService postService;
 
     @PostMapping("")
     public ApiResponse post(@RequestParam("post") int postId,@RequestParam("user") int userId ) {
@@ -30,8 +33,9 @@ public class InterationsController {
         user.setId(userId);
         like.setPostID(post);
         like.setCreateBy(user);
+        PostResponse createPost=postService.findOne(postId);
         interationService.Like(like);
-
+        userLevelService.updatePoint(createPost.getCreateBy().getId(),5);
         ApiResponse apiResponse=new ApiResponse();
         apiResponse.ok();
         return apiResponse;

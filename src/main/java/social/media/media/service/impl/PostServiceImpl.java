@@ -74,6 +74,13 @@ public class PostServiceImpl implements PostService {
             throw ex;
         }
     }
+
+    @Override
+    public PostResponse findOne(int postId) {
+        Post exPost = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("friend Not Found"));
+        return postMapper.toResponse(exPost);
+    }
+
     @Override
     public List<PostResponse> getTop10(){
         PageRequest pageable = PageRequest.of(0, 10);

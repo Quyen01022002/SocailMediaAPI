@@ -118,6 +118,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updatePoint(int id, int point) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+        user.setPoint(user.getPoint()+point);
+        userRepository.saveAndFlush(user);
+
+    }
+
+    @Override
     public void updateBackGround(int id, String Avatar) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
         user.setBackGroundPicture(Avatar);

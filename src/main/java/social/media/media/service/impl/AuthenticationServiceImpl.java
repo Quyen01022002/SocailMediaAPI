@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import social.media.media.exception.UserExistException;
 import social.media.media.model.entity.User;
 import social.media.media.model.enums.StatusEnum;
 import social.media.media.model.reponse.ApiResponse;
@@ -20,9 +19,6 @@ import social.media.media.repository.UserRepository;
 import social.media.media.security.JwtService;
 import social.media.media.service.AuthenticationService;
 import social.media.media.util.EmailService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = User.builder()
                 .email(request.getEmail())
                 .phone(request.getPhone())
+                .role(request.getRoleEnum())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         repository.save(user);
@@ -56,11 +53,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         User user= repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+            var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .id(user.getId())
                 .lastName(user.getLastName())
+                .roleEnum(user.getRole())
                 .firstName(user.getFirstName())
                 .Avatar(user.getProfilePicture())
                 .email(user.getEmail())

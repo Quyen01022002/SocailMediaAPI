@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import social.media.media.model.enums.RoleEnum;
 
 @Data
 @Builder
@@ -14,6 +15,7 @@ public class AuthenticationResponse {
     private String email;
     private String firstName;
     private String lastName;
+    private RoleEnum roleEnum;
     private String Avatar;
     private int id;
 }

@@ -13,6 +13,7 @@ import java.util.List;
 public interface PostService {
     public PostResponse addPost(Post post, List<pictureOfPost> listImg);
     public PostResponse updatePost(Post post, List<pictureOfPost> listImg);
+    public PostResponse findOne(int postId);
 
     public Void Delete(int id);
 
