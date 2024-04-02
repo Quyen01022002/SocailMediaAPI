@@ -22,6 +22,7 @@ public class PostResponseDTO {
     private Boolean status;
     private int comment_count;
     private int savedId;
+    private int groupid;
 
     private int like_count;
     private Boolean user_liked;

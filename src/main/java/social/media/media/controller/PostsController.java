@@ -48,6 +48,7 @@ public class PostsController {
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                    itemPostResponseDTO.setGroupid(itempost.getGroupid());
                     for (LikeResponse itemlike : itempost.getListLike()) {
                         if (itemlike.getCreateBy().getId() == id) {
                             itemPostResponseDTO.setUser_liked(true);
@@ -69,6 +70,7 @@ public class PostsController {
                     itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                    itemPostResponseDTO.setGroupid(itempost.getGroupid());
                     for (LikeResponse itemlike : itempost.getListLike()) {
                         if (itemlike.getCreateBy().getId() == id) {
                             itemPostResponseDTO.setUser_liked(true);
@@ -143,6 +145,7 @@ public class PostsController {
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
             for (LikeResponse itemlike : itempost.getListLike()) {
                 if (itemlike.getCreateBy().getId() == id) {
                     itemPostResponseDTO.setUser_liked(true);
@@ -174,6 +177,7 @@ public class PostsController {
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
             for (LikeResponse itemlike : itempost.getListLike()) {
                 if (itemlike.getCreateBy().getId() == userid) {
                     itemPostResponseDTO.setUser_liked(true);
