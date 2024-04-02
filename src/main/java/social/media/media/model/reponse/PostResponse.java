@@ -22,6 +22,7 @@ public class PostResponse {
 
     private Timestamp timeStamp;
     private UserResponsePost CreateBy;
+    private int groupid;
 
     //Thêm emun status
     private Boolean status;

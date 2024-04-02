@@ -88,6 +88,12 @@ public class PostServiceImpl implements PostService {
         List<PostResponse> listPost = postMapper.toResponseList(result);
         return listPost;
     }
+    @Override
+    public List<PostResponse> searchPost(String keyword){
+        List<Post> result = postRepository.findByContentPostContaining(keyword);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        return listPost;
+    }
 
     @Override
     public Void Delete(int id) {
