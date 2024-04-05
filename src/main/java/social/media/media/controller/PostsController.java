@@ -52,7 +52,7 @@ public class PostsController {
                     for (LikeResponse itemlike : itempost.getListLike()) {
                         if (itemlike.getCreateBy().getId() == id) {
                             itemPostResponseDTO.setUser_liked(true);
-
+                            break;
                         } else {
                             itemPostResponseDTO.setUser_liked(false);
                         }
@@ -74,7 +74,7 @@ public class PostsController {
                     for (LikeResponse itemlike : itempost.getListLike()) {
                         if (itemlike.getCreateBy().getId() == id) {
                             itemPostResponseDTO.setUser_liked(true);
-
+                            break;
                         }
                         itemPostResponseDTO.setUser_liked(false);
                     }
@@ -149,7 +149,7 @@ public class PostsController {
             for (LikeResponse itemlike : itempost.getListLike()) {
                 if (itemlike.getCreateBy().getId() == id) {
                     itemPostResponseDTO.setUser_liked(true);
-
+                    break;
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
@@ -181,7 +181,7 @@ public class PostsController {
             for (LikeResponse itemlike : itempost.getListLike()) {
                 if (itemlike.getCreateBy().getId() == userid) {
                     itemPostResponseDTO.setUser_liked(true);
-
+                    break;
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }

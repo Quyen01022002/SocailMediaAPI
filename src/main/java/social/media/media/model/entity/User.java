@@ -179,14 +179,14 @@ public class User implements UserDetails {
     public void setModified(){
 
         this.updatedAt= new Date(System.currentTimeMillis());
-        List<UserLevel> list=userLevelService.findAll();
-        for(int i=0;i<=list.size();i++)
-        {
-            if(point>=list.get(i).getMinPoints()&&point<=list.get(i).getMaxPoints())
-            {
-                this.userLevel=list.get(i++);
-            }
-
-        }
+//        List<UserLevel> list=userLevelService.findAll();
+//        for(int i=0;i<=list.size();i++)
+//        {
+//            if(point>=list.get(i).getMinPoints()&&point<=list.get(i).getMaxPoints())
+//            {
+//                this.userLevel=list.get(i++);
+//            }
+//
+//        }
     }
 }

@@ -35,7 +35,7 @@ public class InterationsController {
         like.setCreateBy(user);
         PostResponse createPost=postService.findOne(postId);
         interationService.Like(like);
-        userLevelService.updatePoint(createPost.getCreateBy().getId(),5);
+       // userLevelService.updatePoint(createPost.getCreateBy().getId(),5);
         ApiResponse apiResponse=new ApiResponse();
         apiResponse.ok();
         return apiResponse;
