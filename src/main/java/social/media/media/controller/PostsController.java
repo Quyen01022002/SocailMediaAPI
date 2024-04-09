@@ -3,6 +3,10 @@ package social.media.media.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.*;
@@ -19,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
+@Controller
 public class PostsController {
     @Autowired
     friendsService friendsService;
@@ -121,6 +126,33 @@ public class PostsController {
         return apiResponse;
     }
 
+    @GetMapping("/get/{iduser}/{id}")
+    public ApiResponse<PostResponse> getpost(@PathVariable int id, @PathVariable int iduser) {
+
+        PostResponse itempost = postService.findOne(id);
+        PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+        itemPostResponseDTO.setId(itempost.getId());
+        itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+        itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+        itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+        itemPostResponseDTO.setContentPost(itempost.getContentPost());
+        itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+        itemPostResponseDTO.setGroupid(itempost.getGroupid());
+        for (LikeResponse itemlike : itempost.getListLike()) {
+            if (itemlike.getCreateBy().getId() == id) {
+                itemPostResponseDTO.setUser_liked(true);
+                break;
+            }
+            itemPostResponseDTO.setUser_liked(false);
+        }
+        itemPostResponseDTO.setListAnh(itempost.getListAnh());
+        itemPostResponseDTO.setStatus(itempost.getStatus());
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(itemPostResponseDTO);
+        return apiResponse;
+    }
+
+
     @DeleteMapping("/{id}")
     public ApiResponse DeletePage(@PathVariable int id) {
         try {
@@ -195,5 +227,39 @@ public class PostsController {
         apiResponse.ok(postResponseDTOList);
         return apiResponse;
     }
+
+
+//    @MessageMapping("/hottop10")
+//    @SendTo("/topic/top10")
+//    public ApiResponse<List<PostResponseDTO>> getTop10WS(@PathVariable int id) {
+//        // Lấy danh sách top 10 từ cơ sở dữ liệu
+//        List<PostResponse> top10Posts = postService.getTop10();
+//        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+//        for (PostResponse itempost : top10Posts) {
+//            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+//            itemPostResponseDTO.setId(itempost.getId());
+//            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+//            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+//            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+//            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+//            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+//            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+//            for (LikeResponse itemlike : itempost.getListLike()) {
+//                if (itemlike.getCreateBy().getId() == id) {
+//                    itemPostResponseDTO.setUser_liked(true);
+//                    break;
+//                }
+//                itemPostResponseDTO.setUser_liked(false);
+//            }
+//            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+//            itemPostResponseDTO.setStatus(itempost.getStatus());
+//
+//            postResponseDTOList.add(itemPostResponseDTO);
+//        }
+//
+//        ApiResponse apiResponse = new ApiResponse();
+//        apiResponse.ok(postResponseDTOList);
+//        return apiResponse;
+//    }
 }
 
