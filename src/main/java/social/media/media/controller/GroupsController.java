@@ -242,7 +242,7 @@ public class GroupsController {
 
     }
     @GetMapping("/follow/post/{id}")
-    public ApiResponse<List<PostResponse>> ListPostFollow(@PathVariable int id) {
+    public ApiResponse<List<PostResponseDTO>> ListPostFollow(@PathVariable int id) {
         try {
             List<PostResponseDTO> result=new ArrayList<>();
             List<GroupsResponse> profile = groupService.ListGroups(id);
@@ -250,6 +250,7 @@ public class GroupsController {
             {
 
                 for(PostResponseDTO itemPost:item.getListPost()) {
+
                     result.add(itemPost);
                 }
             }

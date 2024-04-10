@@ -139,7 +139,7 @@ public class PostsController {
         itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
         itemPostResponseDTO.setGroupid(itempost.getGroupid());
         for (LikeResponse itemlike : itempost.getListLike()) {
-            if (itemlike.getCreateBy().getId() == id) {
+            if (itemlike.getCreateBy().getId() == iduser) {
                 itemPostResponseDTO.setUser_liked(true);
                 break;
             }

@@ -12,7 +12,11 @@ import social.media.media.exception.NotFoundException;
 import social.media.media.model.entity.*;
 import social.media.media.model.mapper.GroupMapper;
 import social.media.media.model.mapper.GroupsMembersMapper;
+import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.reponse.GroupsResponse;
+import social.media.media.model.reponse.LikeResponse;
+import social.media.media.model.reponse.PostResponse;
+import social.media.media.model.reponse.PostResponseDTO;
 import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.repository.*;
 import social.media.media.service.GroupService;
@@ -34,7 +38,8 @@ public class GroupsServiceImpl implements GroupService {
     @Autowired
     GroupsMembersMapper groupsMembersMapper;
 
-
+@Autowired
+    PostMapper postMapper;
 
 
     @Override
@@ -111,8 +116,39 @@ public class GroupsServiceImpl implements GroupService {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
             List<GroupsResponse> result=new ArrayList<>();
             for(GroupMembers item:user.getGroupMemberships()) {
-                if (item.getGroup().getAdminId().getId() != user.getId())
-                    result.add(groupMapper.toResponse(item.getGroup()));
+                if (item.getGroup().getAdminId().getId() != user.getId()) {
+                    GroupsResponse groupsResponse = new GroupsResponse();
+                    groupsResponse = groupMapper.toResponse(item.getGroup());
+                    Groups groups = groupsRepository.findById(item.getGroup().getId()).orElseThrow(() -> new NotFoundException(" Not Found"));
+                    List<PostResponse> responseList = postMapper.toResponseList(groups.getListPost());
+                    List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+                    for (PostResponse itempost : responseList) {
+                        PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+                        itemPostResponseDTO.setId(itempost.getId());
+                        itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                        itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                        itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                        itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                        itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                        itemPostResponseDTO.setGroupid(itempost.getGroupid());
+                        for (LikeResponse itemlike : itempost.getListLike()) {
+                            if (itemlike.getCreateBy().getId() == id) {
+                                itemPostResponseDTO.setUser_liked(true);
+                                break;
+                            }
+                            itemPostResponseDTO.setUser_liked(false);
+                        }
+                        itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                        itemPostResponseDTO.setStatus(itempost.getStatus());
+
+                        postResponseDTOList.add(itemPostResponseDTO);
+                    }
+
+                    groupsResponse.setListPost(postResponseDTOList);
+
+
+                    result.add(groupsResponse);
+                }
             }
             return result;
         } catch (ApplicationException ex) {
