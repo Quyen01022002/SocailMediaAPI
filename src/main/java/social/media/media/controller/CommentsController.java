@@ -5,13 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.Comments;
-import social.media.media.model.entity.PageMembers;
-import social.media.media.model.entity.User;
-import social.media.media.model.entity.page;
 import social.media.media.model.reponse.*;
 import social.media.media.model.request.CommentRequest;
 import social.media.media.service.CommentService;
-import social.media.media.service.PageService;
 import social.media.media.service.UserService;
 
 import java.util.List;

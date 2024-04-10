@@ -7,19 +7,23 @@ import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.model.entity.Comments;
 import social.media.media.model.entity.Post;
+import social.media.media.model.entity.User;
+import social.media.media.model.entity.notications;
 import social.media.media.model.mapper.CommentMapper;
 import social.media.media.model.reponse.CommentsResponse;
 import social.media.media.model.request.CommentRequest;
 import social.media.media.repository.CommentRepository;
 import social.media.media.repository.PostRepository;
 import social.media.media.service.CommentService;
+import social.media.media.service.NoticationService;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-
+    @Autowired
+    NoticationService noticationService;
     private final CommentRepository commentRepository;
     @Autowired
     CommentMapper commentMapper;
@@ -40,6 +44,12 @@ public class CommentServiceImpl implements CommentService {
         try {
             Comments cmt1 = commentMapper.toComment(cmt);
             Comments cmt2 = commentRepository.saveAndFlush(cmt1);
+            notications notications=new notications();
+            notications.setContentNotications("Bài viết của bạn vừa nhận một bình luận mới" );
+            User user=new User();
+            user.setId(cmt.getUser_id());
+            notications.setUser(user);
+            noticationService.addNotication(notications);
             return commentMapper.toResponse(cmt2);
         } catch (ApplicationException ex) {
             throw ex;

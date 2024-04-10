@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import social.media.media.model.entity.Save;
 import social.media.media.model.entity.User;
 import social.media.media.model.enums.StatusEnum;
 import social.media.media.model.reponse.ApiResponse;
@@ -18,6 +19,7 @@ import social.media.media.model.request.ResetPasswordRequest;
 import social.media.media.repository.UserRepository;
 import social.media.media.security.JwtService;
 import social.media.media.service.AuthenticationService;
+import social.media.media.service.PageService;
 import social.media.media.util.EmailService;
 
 @Service
@@ -28,6 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final PageService pageService;
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .email(request.getEmail())
@@ -37,6 +40,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
+        Save save=new Save();
+        save.setAdminId(user);
+        pageService.addPage(save);
         return AuthenticationResponse.builder()
                 .email(user.getEmail())
                 .id(user.getId())

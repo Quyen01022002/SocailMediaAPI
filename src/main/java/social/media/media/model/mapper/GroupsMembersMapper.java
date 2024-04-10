@@ -1,13 +1,10 @@
 package social.media.media.model.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import social.media.media.model.entity.GroupMembers;
 import social.media.media.model.entity.Groups;
-import social.media.media.model.entity.PageMembers;
 import social.media.media.model.entity.User;
 import social.media.media.model.reponse.GroupsMembersResponse;
-import social.media.media.model.reponse.PageMembersResponse;
 import social.media.media.model.request.GroupsMenberRequest;
 
 import java.util.ArrayList;

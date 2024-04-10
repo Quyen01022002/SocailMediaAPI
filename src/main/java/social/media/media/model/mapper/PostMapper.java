@@ -4,10 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import social.media.media.model.entity.*;
-import social.media.media.model.reponse.FriendsResponse;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.PostResponseDTO;
-import social.media.media.model.reponse.UserResponse;
 import social.media.media.model.request.PostRequest;
 
 import java.util.List;
@@ -30,7 +28,7 @@ public interface PostMapper {
         }
         if(post.getPage()!=0)
         {
-            page groups=new page();
+            Save groups=new Save();
             groups.setId(post.getPage());
             entity.setPage(groups);
         }

@@ -27,7 +27,7 @@ public class GroupsServiceImpl implements GroupService {
 
     private final GroupsRepository groupsRepository;
     private final GroupsMembersRepository groupsMembersRepository;
-    private final PageRepository pageRepository;
+    private final SaveRepository pageRepository;
     private final UserRepository userRepository;
     @Autowired
     GroupMapper groupMapper;

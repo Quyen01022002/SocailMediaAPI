@@ -2,14 +2,12 @@ package social.media.media.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.sql.Timestamp;
-import java.sql.Date;
 import java.util.List;
 
 @Setter
@@ -35,15 +33,17 @@ public class Post {
     private Boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "page_id")
-    private page page;
+    @JoinColumn(name = "saved_id")
+    private Save page;
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Groups groups;
     @ManyToOne
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;
-
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<SaveItem> pageMemberships;
     @OneToMany(mappedBy = "listAnh", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<pictureOfPost> listAnh;

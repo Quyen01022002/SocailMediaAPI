@@ -1,25 +1,27 @@
 package social.media.media.model.reponse;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import social.media.media.model.entity.PageMembers;
-import social.media.media.model.entity.User;
-import social.media.media.model.entity.page;
+import social.media.media.model.entity.Post;
+import social.media.media.model.entity.Save;
 
 import java.sql.Date;
-import java.util.List;
 
 @Getter
 @Setter
 public class PageMembersResponse {
+
     private int id;
-    private FriendsResponseDTO user;
-    private PageResponse page;
+
+
+    private PostResponse post;
+
+    private SaveResponse page;
+
     private Date createdAt;
     private Date updatedAt;
+
 
 
 }

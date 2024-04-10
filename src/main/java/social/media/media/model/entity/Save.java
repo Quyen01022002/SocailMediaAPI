@@ -13,13 +13,13 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name ="page")
+@Table(name ="Saves")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class page {
+public class Save {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -28,25 +28,16 @@ public class page {
     @JoinColumn(name = "adminId", referencedColumnName = "id")
     @JsonIgnore
     private User adminId;
-    private String name;
-
-    private String description;
-    private String Avatar;
-    private String BackAvatar;
     private Date createdAt;
     private Date updatedAt;
 
     @OneToMany(mappedBy = "page", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<PageMembers> groupMembers;
-    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Post> listPost;
+    private List<SaveItem> groupMembers;
 
     @PrePersist
     public void setCreate() {
         this.createdAt = new Date(System.currentTimeMillis());
-        this.adminId = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         this.updatedAt= new Date(System.currentTimeMillis());
     }
 

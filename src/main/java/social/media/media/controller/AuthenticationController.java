@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
+import social.media.media.model.entity.Save;
 import social.media.media.model.reponse.ApiResponse;
 import social.media.media.model.reponse.AuthenticationResponse;
 import social.media.media.model.reponse.PostResponse;
@@ -14,7 +15,9 @@ import social.media.media.model.request.AuthenticationRequest;
 import social.media.media.model.request.RegisterRequest;
 import social.media.media.model.request.ResetPasswordRequest;
 import social.media.media.service.AuthenticationService;
+import social.media.media.service.PageService;
 import social.media.media.service.UserService;
+import social.media.media.service.impl.SaveServiceImpl;
 import social.media.media.util.EmailService;
 
 import java.text.DecimalFormat;
@@ -28,8 +31,10 @@ public class AuthenticationController {
     private final AuthenticationService service;
     private final EmailService emailService;
     private final UserService userService;
+    private final PageService pageService;
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+
         return ResponseEntity.ok(service.register(request));
     }
     @GetMapping("/sendEmail")

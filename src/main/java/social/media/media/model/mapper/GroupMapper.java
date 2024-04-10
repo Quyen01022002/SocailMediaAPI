@@ -3,9 +3,7 @@ package social.media.media.model.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import social.media.media.model.entity.Groups;
-import social.media.media.model.entity.page;
 import social.media.media.model.reponse.GroupsResponse;
-import social.media.media.model.reponse.PageResponse;
 import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.model.request.GroupsRequest;
 

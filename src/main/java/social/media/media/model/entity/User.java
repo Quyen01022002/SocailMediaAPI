@@ -5,21 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import social.media.media.model.enums.GenderEnum;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import social.media.media.model.enums.RoleEnum;
-import social.media.media.repository.UserLevelRepository;
 import social.media.media.service.UserLevelService;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -102,15 +97,13 @@ public class User implements UserDetails {
     private List<Groups> ListGroupAdmin;
     @OneToMany(mappedBy = "adminId", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private List<page> ListPageAdmin;
+    private List<Save> ListPageAdmin;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<GroupMembers> groupMemberships;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private List<PageMembers> pageMemberships;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<ClassMembers> classMembers;

@@ -1,8 +1,6 @@
 package social.media.media.service;
 
-import social.media.media.model.entity.PageMembers;
 import social.media.media.model.entity.Report;
-import social.media.media.model.entity.page;
 import social.media.media.model.reponse.*;
 
 import java.util.List;
