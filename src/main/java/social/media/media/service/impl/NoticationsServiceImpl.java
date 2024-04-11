@@ -42,6 +42,7 @@ public class NoticationsServiceImpl implements NoticationService {
         user.setId(id);
         List<notications> list = noticationsRepository.findByUser(user);
         List<NoticationsResponse> ListResponse=noticationsMapper.toListResponse(list);
+
         return ListResponse;
     }
     @Override
