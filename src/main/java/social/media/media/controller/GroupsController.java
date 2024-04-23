@@ -18,9 +18,7 @@ import social.media.media.service.PageService;
 import social.media.media.service.UserService;
 import social.media.media.service.friendsService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -241,8 +239,8 @@ public class GroupsController {
         }
 
     }
-    @GetMapping("/follow/post/{id}")
-    public ApiResponse<List<PostResponseDTO>> ListPostFollow(@PathVariable int id) {
+    @GetMapping("/follow/post/{id}/{pagenumber}")
+    public ApiResponse<List<PostResponseDTO>> ListPostFollow(@PathVariable int id, @PathVariable int pagenumber) {
         try {
             List<PostResponseDTO> result=new ArrayList<>();
             List<GroupsResponse> profile = groupService.ListGroups(id);
@@ -250,12 +248,31 @@ public class GroupsController {
             {
 
                 for(PostResponseDTO itemPost:item.getListPost()) {
-
                     result.add(itemPost);
                 }
             }
+            Collections.sort(result, Comparator.comparing(PostResponseDTO::getTimeStamp).reversed());
+            List<PostResponseDTO> resultResp=new ArrayList<>();
+            if (pagenumber > result.size()/6){
+
+            }
+            else if (pagenumber < result.size()/6 && pagenumber*6 < result.size()-6)
+            {
+                for (int i= pagenumber*6; i< pagenumber*6+6; i++){
+                    resultResp.add(result.get(i));
+                }
+            }
+            else if (pagenumber < result.size()/6 && (pagenumber*6+6) >= result.size()){
+                for (int i= pagenumber*6; i< result.size(); i++){
+                    resultResp.add(result.get(i));
+                }
+            }
+            else {
+resultResp.addAll(result);
+            }
+
             ApiResponse apiResponse = new ApiResponse();
-            apiResponse.ok(result);
+            apiResponse.ok(resultResp);
             return apiResponse;
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
