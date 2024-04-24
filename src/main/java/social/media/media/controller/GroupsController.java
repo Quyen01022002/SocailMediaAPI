@@ -268,7 +268,7 @@ public class GroupsController {
                 }
             }
             else {
-resultResp.addAll(result);
+            resultResp.addAll(result);
             }
 
             ApiResponse apiResponse = new ApiResponse();
