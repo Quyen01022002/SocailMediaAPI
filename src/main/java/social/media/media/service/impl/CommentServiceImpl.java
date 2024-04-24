@@ -14,6 +14,7 @@ import social.media.media.model.reponse.CommentsResponse;
 import social.media.media.model.request.CommentRequest;
 import social.media.media.repository.CommentRepository;
 import social.media.media.repository.PostRepository;
+import social.media.media.repository.UserRepository;
 import social.media.media.service.CommentService;
 import social.media.media.service.NoticationService;
 
@@ -25,6 +26,7 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     NoticationService noticationService;
     private final CommentRepository commentRepository;
+    private  final UserRepository userRepository;
     @Autowired
     CommentMapper commentMapper;
     private final PostRepository postRepository;
@@ -82,6 +84,15 @@ public class CommentServiceImpl implements CommentService {
         try {
             Post post = postRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
             return commentMapper.toListCommentResponse(post.getLisCmt());
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+    public List<CommentsResponse> getAllMyComment(int id) {
+        try {
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+            List<Comments> listcmt = commentRepository.findAllByCreateBy(id);
+            return commentMapper.toListCommentResponse(listcmt);
         } catch (ApplicationException ex) {
             throw ex;
         }

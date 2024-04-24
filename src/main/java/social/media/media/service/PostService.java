@@ -1,10 +1,8 @@
 package social.media.media.service;
 
-import social.media.media.model.entity.Post;
-import social.media.media.model.entity.User;
-import social.media.media.model.entity.friends;
-import social.media.media.model.entity.pictureOfPost;
+import social.media.media.model.entity.*;
 import social.media.media.model.reponse.FriendsResponse;
+import social.media.media.model.reponse.IntactionResponse;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.PostResponseDTO;
 
@@ -19,4 +17,5 @@ public interface PostService {
 
     public List<PostResponse> getTop10();
     public List<PostResponse> searchPost(String keyword);
+    public List<IntactionResponse> getAllMyLike(int userid);
 }

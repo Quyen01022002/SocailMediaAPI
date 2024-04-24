@@ -48,7 +48,7 @@ public class Post {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<SaveItem> pageMemberships;
     @OneToMany(mappedBy = "listAnh", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-    @JsonBackReference
+    //@JsonBackReference
     private List<pictureOfPost> listAnh;
 
     @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)

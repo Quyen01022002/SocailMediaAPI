@@ -7,18 +7,15 @@ import org.springframework.stereotype.Service;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.exception.ValidationException;
-import social.media.media.model.entity.Post;
-import social.media.media.model.entity.User;
-import social.media.media.model.entity.friends;
-import social.media.media.model.entity.pictureOfPost;
+import social.media.media.model.entity.*;
 import social.media.media.model.mapper.FriendsMapper;
+import social.media.media.model.mapper.InterationsMapper;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.reponse.FriendsResponse;
+import social.media.media.model.reponse.IntactionResponse;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.PostResponseDTO;
-import social.media.media.repository.PostIimageRepository;
-import social.media.media.repository.PostRepository;
-import social.media.media.repository.friendsRepository;
+import social.media.media.repository.*;
 import social.media.media.service.PostService;
 import social.media.media.service.friendsService;
 
@@ -31,10 +28,15 @@ import java.util.Map;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+
+    private final InerationsRepository inerationsRepository;
+    private final UserRepository userRepository;
     @Autowired
     PostMapper postMapper;
     @Autowired
     PostIimageRepository postIimageRepository;
+    @Autowired
+    InterationsMapper interationsMapper;
 
     @Override
     public PostResponse addPost(Post post, List<pictureOfPost> listImg) {
@@ -93,6 +95,13 @@ public class PostServiceImpl implements PostService {
         List<Post> result = postRepository.findByContentPostContaining(keyword);
         List<PostResponse> listPost = postMapper.toResponseList(result);
         return listPost;
+    }
+    @Override
+    public List<IntactionResponse> getAllMyLike(int userid){
+        User user = userRepository.findById(userid).orElseThrow(() -> new NotFoundException(" Not Found"));
+
+        List<interations> result = inerationsRepository.findAllByCreateByOrderByTimeStampDesc(user);
+        return interationsMapper.toLResponse(result);
     }
 
     @Override
