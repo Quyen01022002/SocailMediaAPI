@@ -45,7 +45,7 @@ public class Post {
     private User CreateBy;
 
     @OneToMany(mappedBy = "listAnh", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-    @JsonBackReference
+    //@JsonBackReference
     private List<pictureOfPost> listAnh;
 
     @OneToMany(mappedBy = "postID", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)

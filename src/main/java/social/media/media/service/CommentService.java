@@ -15,5 +15,6 @@ public interface CommentService {
     public void Delete(int id);
 
     public List<CommentsResponse> getAllComment(int id);
+    public List<CommentsResponse> getAllMyComment(int id);
 
 }

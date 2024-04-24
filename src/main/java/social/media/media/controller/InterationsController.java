@@ -41,4 +41,28 @@ public class InterationsController {
         return apiResponse;
     }
 
+
+    @GetMapping("/{userid}/activity")
+    public ApiResponse<List<IntactionResponse>> getAllActiviy(@PathVariable int userid) {
+        try
+        {
+            List<IntactionResponse> activityResponse = postService.getAllMyLike(userid);
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(activityResponse);
+        return apiResponse;
+    }
+    catch(Exception ex)
+    {
+        throw new ApplicationException(ex.getMessage());
+    }
+    }
+
+
+
+
+
+
+
 }

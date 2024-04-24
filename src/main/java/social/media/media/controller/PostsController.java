@@ -13,6 +13,7 @@ import social.media.media.model.entity.*;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.reponse.*;
 import social.media.media.model.request.PostRequest;
+import social.media.media.service.CommentService;
 import social.media.media.service.GroupService;
 import social.media.media.service.PostService;
 import social.media.media.service.friendsService;
@@ -33,6 +34,8 @@ public class PostsController {
     GroupService groupService;
     @Autowired
     PostMapper postMapper;
+    @Autowired
+    CommentService commentService;
 
     @GetMapping("/{id}")
     public ApiResponse<List<PostResponseDTO>> getfriendlist(@PathVariable int id) {
@@ -227,7 +230,6 @@ public class PostsController {
         apiResponse.ok(postResponseDTOList);
         return apiResponse;
     }
-
 
 //    @MessageMapping("/hottop10")
 //    @SendTo("/topic/top10")

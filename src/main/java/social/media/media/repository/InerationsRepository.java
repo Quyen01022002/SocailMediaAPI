@@ -13,4 +13,6 @@ import java.util.List;
 public interface InerationsRepository extends JpaRepository<interations,Integer> {
     interations findByCreateByAndPostID(User createBy, Post postID);
 
+    List<interations> findAllByCreateByOrderByTimeStampDesc(User user);
+
 }

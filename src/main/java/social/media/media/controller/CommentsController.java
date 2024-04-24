@@ -81,5 +81,17 @@ public class CommentsController {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
     }
+    @GetMapping("/{iduser}/getAllComment")
+    public ApiResponse<List<CommentsResponse>> getAllMyComment(@PathVariable int iduser){
+        try {
+
+            List<CommentsResponse> profile = commentService.getAllMyComment(iduser);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(profile);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
 
 }
