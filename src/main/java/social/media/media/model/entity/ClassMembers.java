@@ -27,7 +27,6 @@ public class ClassMembers {
     @ManyToOne
     @JoinColumn(name = "classes_id")
     private Classes classes;
-
     private Date createdAt;
     private Date updatedAt;
 

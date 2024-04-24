@@ -36,7 +36,9 @@ public class Classes {
     private String BackAvatar;
     private Date createdAt;
     private Date updatedAt;
-
+    @OneToMany(mappedBy = "classes", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Post> listPost;
     @OneToMany(mappedBy = "classes", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ClassMembers> classMembers;

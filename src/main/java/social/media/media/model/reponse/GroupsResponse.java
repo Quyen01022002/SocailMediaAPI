@@ -17,7 +17,6 @@ import java.util.List;
 public class GroupsResponse {
     private int id;
 
-
     private String name;
 
     private String description;

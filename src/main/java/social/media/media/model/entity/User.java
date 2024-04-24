@@ -98,7 +98,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "adminId", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Save> ListPageAdmin;
-
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<Classes> ListTeacher;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<GroupMembers> groupMemberships;

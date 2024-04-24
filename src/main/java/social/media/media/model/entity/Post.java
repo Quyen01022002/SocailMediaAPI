@@ -39,6 +39,9 @@ public class Post {
     @JoinColumn(name = "group_id")
     private Groups groups;
     @ManyToOne
+    @JoinColumn(name = "class_id")
+    private Classes classes;
+    @ManyToOne
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
