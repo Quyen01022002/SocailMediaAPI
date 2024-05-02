@@ -111,6 +111,10 @@ public class User implements UserDetails {
     private List<ClassMembers> classMembers;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<MessageMembers> messagesMembersList;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<notications> noticationsList;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")

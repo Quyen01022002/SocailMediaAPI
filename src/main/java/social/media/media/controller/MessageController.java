@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.model.entity.MessageBox;
+import social.media.media.model.mapper.MessageMapper;
 import social.media.media.model.reponse.ApiResponse;
-import social.media.media.model.reponse.MessageBoxResponse;
+import social.media.media.model.reponse.MessageBoxReponse;
 import social.media.media.service.MessageService;
 
 import java.util.List;
@@ -17,40 +18,17 @@ public class MessageController {
 
     @Autowired
     MessageService messageService;
+    @Autowired
+    MessageMapper messageMapper;
 
-    @PostMapping("/")
-    public ApiResponse<MessageBox> post(@RequestBody MessageBox messageBox){
-        MessageBox messageBox1 = messageService.createMessage(messageBox);
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.ok(messageBox1);
-        return apiResponse;
 
-    }
-    @PostMapping("/firstmessage")
-    public ApiResponse<MessageBox> postFristMessage(@RequestParam("friendshipid") int id){
-        MessageBox messageBox1 = messageService.createFristMessage(id);
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.ok(messageBox1);
-        return apiResponse;
-
-    }
-
-    @GetMapping("/")
-    public ApiResponse<List<MessageBox>> getMessage(@RequestParam int userId, @RequestParam int friendId){
-        List<MessageBox> list = messageService.getMessages(userId,friendId);
-
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.ok(list);
-        return apiResponse;
-
-    }
 
     @GetMapping("/{id}")
-    public ApiResponse<List<MessageBoxResponse>> getBoxMessList(@PathVariable int id){
-        List<MessageBoxResponse> list = messageService.getBoxMessList(id);
-
+    public ApiResponse<List<MessageBoxReponse>> getBoxMessList(@PathVariable int id){
+        List<MessageBox> list = messageService.getMessages(id);
+        List<MessageBoxReponse> messageBoxReponseList=messageMapper.toListReponse(list);
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.ok(list);
+        apiResponse.ok(messageBoxReponseList);
         return apiResponse;
     }
 }

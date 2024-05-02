@@ -25,11 +25,16 @@ public interface PostMapper {
             Groups groups=new Groups();
             groups.setId(post.getGroups());
             entity.setGroups(groups);
+        } if(post.getClasses()!=0)
+        {
+            Classes classes=new Classes();
+            classes.setId(post.getClasses());
+            entity.setClasses(classes);
         }
-        if(post.getPage()!=0)
+        if(post.getClasses()!=0)
         {
             Save groups=new Save();
-            groups.setId(post.getPage());
+            groups.setId(post.getClasses());
             entity.setPage(groups);
         }
 

@@ -10,6 +10,7 @@ import social.media.media.model.reponse.*;
 import social.media.media.model.request.*;
 import social.media.media.service.ClassService;
 import social.media.media.service.GroupService;
+import social.media.media.service.MessageService;
 import social.media.media.service.UserService;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class ClassController {
     ClassService classService;
     @Autowired
     UserService userService;
+    @Autowired
+    MessageService messageService;
     @Autowired
     ClassMapper classMapper;
     @Autowired
@@ -82,8 +85,34 @@ public class ClassController {
     }
 
 
+    @DeleteMapping("/members/{classMemberId}")
+    public ApiResponse DeleteMembers(@PathVariable int classMemberId) {
+        try {
 
+            classService.DeleteMembers(classMemberId);
+            System.out.println(classMemberId);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
 
+    }
 
+    @GetMapping("/{id}")
+    public ApiResponse<ClassResponse> getprofile(@PathVariable int id) {
+        try {
+
+            ClassResponse pageDetail = classService.Detail(id);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(pageDetail);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
 
 }

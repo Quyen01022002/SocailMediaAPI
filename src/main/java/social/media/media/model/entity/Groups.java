@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name ="Groups")
+@Table(name ="groups_table")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
