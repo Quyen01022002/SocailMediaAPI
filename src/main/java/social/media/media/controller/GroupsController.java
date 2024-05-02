@@ -253,16 +253,16 @@ public class GroupsController {
             }
             Collections.sort(result, Comparator.comparing(PostResponseDTO::getTimeStamp).reversed());
             List<PostResponseDTO> resultResp=new ArrayList<>();
-            if (pagenumber > result.size()/6){
+            if (pagenumber*6 > result.size()){
 
             }
-            else if (pagenumber < result.size()/6 && pagenumber*6 < result.size()-6)
+            else if (pagenumber*6 < result.size() && pagenumber*6 < result.size()-6)
             {
                 for (int i= pagenumber*6; i< pagenumber*6+6; i++){
                     resultResp.add(result.get(i));
                 }
             }
-            else if (pagenumber < result.size()/6 && (pagenumber*6+6) >= result.size()){
+            else if (pagenumber*6 < result.size() && (pagenumber*6+6) >= result.size()){
                 for (int i= pagenumber*6; i< result.size(); i++){
                     resultResp.add(result.get(i));
                 }
