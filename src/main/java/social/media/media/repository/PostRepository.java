@@ -23,4 +23,19 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
     List<Post> findTop10PostsByLikes(Pageable pageable);
 
         List<Post> findByContentPostContaining(String key);
+
+
+    @Query("SELECT p FROM Post p " +
+            "JOIN p.classes c " +
+            "WHERE c.teacher.id = :adminId " +
+            "ORDER BY SIZE(p.listLike) DESC")
+    List<Post> findTop10ByTeacherIdOrderByLikesDesc(@Param("adminId") int adminId, Pageable pageable);
+
+    @Query("SELECT p FROM Post p " +
+            "JOIN p.classes c " +
+            "JOIN c.classMembers cm " +
+            "WHERE cm.user.id = :userId " +
+            "ORDER BY p.timeStamp DESC")
+    List<Post> findPostsByUserId(@Param("userId") int userId, Pageable pageable);
+
 }

@@ -2,6 +2,7 @@ package social.media.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
@@ -79,7 +80,7 @@ public class CommentServiceImpl implements CommentService {
             throw ex;
         }
     }
-
+@Override
     public List<CommentsResponse> getAllComment(int id) {
         try {
             Post post = postRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
@@ -88,6 +89,7 @@ public class CommentServiceImpl implements CommentService {
             throw ex;
         }
     }
+    @Override
     public List<CommentsResponse> getAllMyComment(int id) {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
@@ -97,4 +99,15 @@ public class CommentServiceImpl implements CommentService {
             throw ex;
         }
     }
+    @Override
+    public List<CommentsResponse> getAllMyCommentClasses(int id, int pagenumber) {
+        try {
+            PageRequest pageable = PageRequest.of(pagenumber, 6);
+            List<Comments> listcmt = commentRepository.findAllCommentsByAdminId(id, pageable);
+            return commentMapper.toListCommentResponse(listcmt);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
 }
