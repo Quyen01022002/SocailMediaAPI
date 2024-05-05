@@ -21,6 +21,7 @@ public interface ClassService {
 //    public List<GroupsResponse> ListGroupsAll();
 //    public List<GroupsResponse> searchGroup(String keyword);
     public List<ClassResponse> ListGroupsAdmin(int id);
+    public List<ClassResponse> ListClassMembers(int id);
 
 //    public GroupsResponse updatePage(Groups groups);
     public void addMemberClass(ClassMembers groupsMembersResponse);

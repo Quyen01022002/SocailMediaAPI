@@ -25,6 +25,12 @@ public class MessageBox {
     @JoinColumn(name = "classId")
     @OneToOne
     private Classes classes;
+    @JoinColumn(name = "userId")
+    @ManyToOne
+    private User user;
+    @JoinColumn(name = "userId1")
+    @ManyToOne
+    private User user1;
     private String name;
     private String Avatar;
     @OneToMany(mappedBy = "messageBox", cascade = CascadeType.ALL)

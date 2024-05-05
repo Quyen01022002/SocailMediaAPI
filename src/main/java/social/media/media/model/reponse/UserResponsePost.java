@@ -8,13 +8,14 @@ import java.util.List;
 
 @Getter
 @Setter
-public class    UserResponsePost {
+public class  UserResponsePost {
     private int id;
     private String firstName;
 
     private String lastName;
 
     private String phone;
+    private String fcm;
 
 
     private String email;

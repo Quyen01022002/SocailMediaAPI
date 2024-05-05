@@ -19,10 +19,8 @@ public class MessageBoxReponse {
     private int id;
     private String name;
     private String Avatar;
-
-    private List<MessageMembers> messageMembersList;
-
-    private List<Message> messagesList;
+    private List<MessageMembersReponse> messageMembersList;
+    private List<MessageReponse> messagesList;
 
 
 }

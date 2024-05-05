@@ -94,6 +94,22 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
+    public List<ClassResponse> ListClassMembers(int id) {
+        try {
+            User u=new User();
+            u.setId(id);
+            List<ClassMembers> classMembers = classMembersRepository.findByUser(u);
+            List<Classes> responseList=new ArrayList<>();
+               for (ClassMembers cm : classMembers) {
+                 responseList.add(cm.getClasses());
+               }
+            return  classMapper.toResponseList(responseList);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+
+    @Override
     public void addMemberClass(ClassMembers groupsMembersResponse) {
         try {
             classMembersRepository.saveAndFlush(groupsMembersResponse);

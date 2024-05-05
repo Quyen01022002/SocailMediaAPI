@@ -44,7 +44,7 @@ public class User implements UserDetails {
 
     @Column(unique = true)
     private String email;
-    private String FCM;
+    private String fcm;
 
     private Boolean isEmail;
     @Enumerated(EnumType.STRING)
@@ -71,6 +71,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "CreateBy", fetch = FetchType.LAZY)
     @JsonBackReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Post> postList;
 
     @OneToMany(mappedBy = "CreateBy", fetch = FetchType.LAZY)

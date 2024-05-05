@@ -27,12 +27,14 @@ public class Save {
     @ManyToOne
     @JoinColumn(name = "adminId", referencedColumnName = "id")
     @JsonIgnore
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private User adminId;
     private Date createdAt;
     private Date updatedAt;
 
     @OneToMany(mappedBy = "page", cascade = CascadeType.ALL)
     @JsonIgnore
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<SaveItem> groupMembers;
 
     @PrePersist

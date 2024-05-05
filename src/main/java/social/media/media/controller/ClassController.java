@@ -68,12 +68,42 @@ public class ClassController {
         }
 
     }
+    @PatchMapping("/{id}")
+    public ApiResponse partiallyUpdateUser(@PathVariable int id, @RequestBody Map<String, Object> updates) {
 
+
+        try {
+            String Avatar = (String) updates.get("avatar");
+            classService.updateAvatar(id, Avatar);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+
+
+    }
     @GetMapping("/teacher/{id}")
     public ApiResponse<List<ClassResponse>> ListGroupAdmin(@PathVariable int id) {
         try {
 
             List<ClassResponse> profile = classService.ListGroupsAdmin(id);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(profile);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+    @GetMapping("/members/{id}")
+    public ApiResponse<List<ClassResponse>> ListMembers(@PathVariable int id) {
+        try {
+
+            List<ClassResponse> profile = classService.ListClassMembers(id);
 
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok(profile);

@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Setter
 @Getter
@@ -32,10 +33,10 @@ public class Message {
     @Column(columnDefinition = "NVARCHAR(200)")
     private String content;
 
-    private Date createdAt;
+    private Timestamp createdAt;
     @PrePersist
     public void setCreate() {
-        this.createdAt = new Date(System.currentTimeMillis());
+        this.createdAt = new Timestamp(System.currentTimeMillis());
         this.user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     }

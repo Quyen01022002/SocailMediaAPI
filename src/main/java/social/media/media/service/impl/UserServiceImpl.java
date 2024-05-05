@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void fcm(int id, String fcm) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
-        user.setFCM(fcm);
+        user.setFcm(fcm);
         userRepository.saveAndFlush(user);
 
 
