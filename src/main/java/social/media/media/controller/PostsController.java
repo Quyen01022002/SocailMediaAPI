@@ -199,6 +199,68 @@ public class PostsController {
         return apiResponse;
     }
 
+    @GetMapping("/teacher/{id}/top10")
+    public ApiResponse<List<PostResponseDTO>> getTop10onTeacher(@PathVariable int id) {
+        List<PostResponse> postResponseList = postService.getTop10Teacher(id);
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == id) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_liked(false);
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
+
+    @GetMapping("/classes/{userid}/{pagenumber}")
+    public ApiResponse<List<PostResponseDTO>> getPostOfClassHaveUser(@PathVariable int userid, @PathVariable int pagenumber) {
+        List<PostResponse> postResponseList = postService.getPostClass(userid,pagenumber);
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == userid) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_liked(false);
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
+
 
     @GetMapping("/{userid}/search")
     public ApiResponse<List<PostResponseDTO>> getSearchResultPost(@PathVariable int userid, @RequestParam("q") String keyword) {
