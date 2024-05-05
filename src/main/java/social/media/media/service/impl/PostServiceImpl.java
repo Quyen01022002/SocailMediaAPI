@@ -91,6 +91,13 @@ public class PostServiceImpl implements PostService {
         return listPost;
     }
     @Override
+    public List<PostResponse> getTop10Teacher(int adminId){
+        PageRequest pageable = PageRequest.of(0, 10);
+        List<Post> result = postRepository.findTop10ByTeacherIdOrderByLikesDesc(adminId,pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        return listPost;
+    }
+    @Override
     public List<PostResponse> searchPost(String keyword){
         List<Post> result = postRepository.findByContentPostContaining(keyword);
         List<PostResponse> listPost = postMapper.toResponseList(result);
@@ -118,5 +125,12 @@ public class PostServiceImpl implements PostService {
             throw ex;
         }
         return null;
+    }
+    @Override
+    public List<PostResponse> getPostClass(int userid, int pagenumber){
+        PageRequest pageable = PageRequest.of(pagenumber, 6);
+        List<Post> result = postRepository.findPostsByUserId(userid, pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        return listPost;
     }
 }

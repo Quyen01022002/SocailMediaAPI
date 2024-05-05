@@ -16,6 +16,8 @@ public interface PostService {
     public Void Delete(int id);
 
     public List<PostResponse> getTop10();
+    public List<PostResponse> getTop10Teacher(int adminId);
     public List<PostResponse> searchPost(String keyword);
     public List<IntactionResponse> getAllMyLike(int userid);
+    public List<PostResponse> getPostClass(int userid, int pagenumber);
 }
