@@ -20,8 +20,10 @@ import social.media.media.service.PostService;
 import social.media.media.service.friendsService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -132,5 +134,36 @@ public class PostServiceImpl implements PostService {
         List<Post> result = postRepository.findPostsByUserId(userid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
         return listPost;
+    }
+
+    @Override
+    public List<PostResponse> getTop5OnMonth(int userid){
+        PageRequest pageable = PageRequest.of(0, 5);
+        List<Post> result = postRepository.findTop5PostsByAdminIdAndCurrentMonth(userid, pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        return listPost;
+    }
+
+    @Override
+    public String getPostCountStringByMonthAndAdminId(int adminId) {
+        List<Map<String, Object>> postCounts = postRepository.findPostCountByMonthAndAdminId(adminId);
+
+        // Tạo một danh sách chứa số lượng bài viết của từng tháng, mặc định là 0
+        Long[] postCountArray = new Long[12]; // 12 tháng trong năm
+        Arrays.fill(postCountArray, 0L);
+
+        // Đặt số lượng bài viết thực tế vào vị trí tương ứng của tháng trong mảng
+        for (Map<String, Object> map : postCounts) {
+            int month = (int) map.get("month"); // Lấy giá trị month
+            Long postCount = ((Number) map.get("postCount")).longValue(); // Chuyển đổi từ Integer sang Long
+            postCountArray[month - 1] = postCount; // Tháng bắt đầu từ 1, mảng bắt đầu từ 0
+        }
+
+        // Chuyển mảng số lượng bài viết thành chuỗi kết quả, ngăn cách bằng dấu phẩy
+        String postCountString = Arrays.stream(postCountArray)
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+
+        return postCountString;
     }
 }

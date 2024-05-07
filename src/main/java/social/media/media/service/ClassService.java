@@ -28,5 +28,6 @@ public interface ClassService {
 //    public void Delete(int id);
     public void DeleteMembers(int page);
     public void updateAvatar(int id,String Avatar);
+    public String loadThongke(int userid);
 
 }

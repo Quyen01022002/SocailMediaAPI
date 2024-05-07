@@ -7,6 +7,7 @@ import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.PostResponseDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostService {
     public PostResponse addPost(Post post, List<pictureOfPost> listImg);
@@ -20,4 +21,6 @@ public interface PostService {
     public List<PostResponse> searchPost(String keyword);
     public List<IntactionResponse> getAllMyLike(int userid);
     public List<PostResponse> getPostClass(int userid, int pagenumber);
+    public List<PostResponse> getTop5OnMonth(int userid);
+    public String getPostCountStringByMonthAndAdminId(int adminId);
 }

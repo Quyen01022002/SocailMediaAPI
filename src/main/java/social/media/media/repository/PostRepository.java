@@ -12,6 +12,7 @@ import social.media.media.model.entity.Report;
 import social.media.media.model.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Integer> {
@@ -37,5 +38,22 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             "WHERE cm.user.id = :userId " +
             "ORDER BY p.timeStamp DESC")
     List<Post> findPostsByUserId(@Param("userId") int userId, Pageable pageable);
+
+
+    @Query("SELECT p FROM Post p " +
+            "JOIN p.classes c " +
+            "WHERE c.teacher.id = :adminId " +
+            "AND MONTH(p.timeStamp) = MONTH(CURRENT_DATE) " + // Lọc theo tháng hiện tại
+            "AND YEAR(p.timeStamp) = YEAR(CURRENT_DATE) " +   // Lọc theo năm hiện tại
+            "ORDER BY SIZE(p.listLike) DESC")
+    List<Post> findTop5PostsByAdminIdAndCurrentMonth(@Param("adminId") int adminId, Pageable pageable);
+
+    @Query("SELECT MONTH(p.timeStamp) AS month, COUNT(p) AS postCount " +
+            "FROM Post p " +
+            "JOIN p.classes c " +
+            "WHERE c.teacher.id = :adminId " +
+            "AND YEAR(p.timeStamp) = YEAR(CURRENT_DATE) " +   // Lọc theo năm hiện tại
+            "GROUP BY MONTH(p.timeStamp)")
+    List<Map<String, Object>> findPostCountByMonthAndAdminId(@Param("adminId") int adminId);
 
 }

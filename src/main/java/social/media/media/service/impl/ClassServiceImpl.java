@@ -156,4 +156,14 @@ public class ClassServiceImpl implements ClassService {
 
 
     }
+
+    @Override
+    public String loadThongke(int userid){
+        int countClass = classRepository.countClassesByAdminId(userid);
+        int countPostInClass = classRepository.countPostsByAdminId(userid);
+        int countPostWithoutCmt = classRepository.countPostsByAdminIdWithoutComments(userid);
+        int countPostWithCmt = countPostInClass - countPostWithoutCmt;
+        String rs = countClass + "," + countPostInClass+"," +countPostWithoutCmt+","+countPostWithCmt;
+        return rs;
+    }
 }

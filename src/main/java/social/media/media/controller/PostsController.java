@@ -261,6 +261,36 @@ public class PostsController {
         return apiResponse;
     }
 
+    @GetMapping("/classes/top5/{userid}")
+    public ApiResponse<List<PostResponseDTO>> getTop5OnMonth(@PathVariable int userid) {
+        List<PostResponse> postResponseList = postService.getTop5OnMonth(userid);
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == userid) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_liked(false);
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
 
     @GetMapping("/{userid}/search")
     public ApiResponse<List<PostResponseDTO>> getSearchResultPost(@PathVariable int userid, @RequestParam("q") String keyword) {
@@ -325,5 +355,15 @@ public class PostsController {
 //        apiResponse.ok(postResponseDTOList);
 //        return apiResponse;
 //    }
+
+
+    @GetMapping("/classes/countYear/{userid}")
+    public ApiResponse<String> getCountOnYear(@PathVariable int userid) {
+
+        String rs = postService.getPostCountStringByMonthAndAdminId(userid);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(rs);
+        return apiResponse;
+    }
 }
 

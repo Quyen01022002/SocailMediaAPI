@@ -145,4 +145,19 @@ public class ClassController {
 
     }
 
+    @GetMapping("/thongke/{userid}")
+    public ApiResponse<String> loadThongke(@PathVariable int userid) {
+        try {
+
+            String rs = classService.loadThongke(userid);
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(rs);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+
 }
