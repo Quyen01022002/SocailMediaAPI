@@ -38,6 +38,11 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Groups groups;
+
+    @ManyToOne
+    @JoinColumn(name = "sector_id")
+    private Sector sectors;
+
     @ManyToOne
     @JoinColumn(name = "class_id")
     private Classes classes;
