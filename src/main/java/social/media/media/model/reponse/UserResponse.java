@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import social.media.media.model.entity.*;
+import social.media.media.model.enums.RoleEnum;
 
 import java.sql.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class UserResponse {
 
     private String profilePicture;
     private String backGroundPicture;
-
+    private RoleEnum role;
 
     private Boolean isActived;
     private String address;

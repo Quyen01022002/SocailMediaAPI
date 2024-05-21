@@ -77,7 +77,60 @@ public class UserController {
             responseDTO.setPostList(postResponseDTOList);
             responseDTO.setPhone(profile.getPhone());
             responseDTO.setLastName(profile.getLastName());
+            responseDTO.setRole(profile.getRole());
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(responseDTO);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
 
+    }
+    @GetMapping("/checkemailrole/{email}")
+    public ApiResponse<UserResponseDTO> getuserbyEmail(@PathVariable String email) {
+        try {
+
+            UserResponse profile = userService.profileByEmail(email);
+            List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
+            for(PostResponse itempost:profile.getPostList())
+            {
+                PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+                itemPostResponseDTO.setId(itempost.getId());
+                itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                for(LikeResponse itemlike:  itempost.getListLike())
+                {
+                    if(itemlike.getCreateBy().getId()==profile.getId())
+                    {
+                        itemPostResponseDTO.setUser_liked(true);
+
+                    }
+                    else {
+                        itemPostResponseDTO.setUser_liked(false);
+                    }
+                }
+
+                itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                itemPostResponseDTO.setStatus(itempost.getStatus());
+
+                postResponseDTOList.add(itemPostResponseDTO);
+            }
+            UserResponseDTO responseDTO=new UserResponseDTO();
+            responseDTO.setProfilePicture(profile.getProfilePicture());
+            responseDTO.setBackGroundPicture(profile.getBackGroundPicture());
+            responseDTO.setId(profile.getId());
+            responseDTO.setEmail(profile.getEmail());
+            responseDTO.setAddress(profile.getAddress());
+            responseDTO.setFirstName(profile.getFirstName());
+            responseDTO.setFriendships(profile.getFriendships());
+            responseDTO.setCountFriend(profile.getCountFriend());
+            responseDTO.setPostList(postResponseDTOList);
+            responseDTO.setPhone(profile.getPhone());
+            responseDTO.setLastName(profile.getLastName());
+            responseDTO.setRole(profile.getRole());
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok(responseDTO);
             return apiResponse;
@@ -130,6 +183,7 @@ public class UserController {
             responseDTO.setPostList(postResponseDTOList);
             responseDTO.setPhone(profile.getPhone());
             responseDTO.setLastName(profile.getLastName());
+            responseDTO.setRole(profile.getRole());
             User user=new User();
             user.setId(id);
             friends isFriend=friendsService.isFriend(user,friendId);

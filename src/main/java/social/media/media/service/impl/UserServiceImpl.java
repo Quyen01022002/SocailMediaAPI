@@ -62,6 +62,32 @@ public class UserServiceImpl implements UserService {
             throw ex;
         }
     }
+    public UserResponse profileByEmail(String email) {
+        try {
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(" Not Found"));
+            UserResponse userResponse=userMapper.toResponse(user);
+            List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
+
+            for(friends item:user.getFriendships())
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+
+                friendsResponseDTO = friendsMapper.toFriendsResponseDto(item.getFriend());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
+            for(friends item:user.getOtherfriendships())
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+
+                friendsResponseDTO = friendsMapper.toFriendsResponseDto(item.getUser());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
+            userResponse.setFriendships(friendsResponseDTOList);
+            return userResponse;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
 
     @Override
     public void Follow(User user) {
