@@ -208,6 +208,21 @@ public class GroupsController {
         }
 
     }
+    @GetMapping("/department/admin/{id}")
+    public ApiResponse<GroupsResponse> GroupByMeAdmin(@PathVariable int id) {
+        try {
+
+            List<GroupsResponse> profile = groupService.ListGroupsAdmin(id);
+
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(profile);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
     @GetMapping("/admin/{id}")
     public ApiResponse<List<GroupsResponse>> ListGroupAdmin(@PathVariable int id) {
         try {

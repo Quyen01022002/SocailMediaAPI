@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface UserService {
     public UserResponse profile(int id);
+    public UserResponse profileByEmail(String email);
     public void Follow(User user);
     public List<UserResponse> List20Follow();
     public List<UserResponse> Search(String key);
