@@ -2,6 +2,7 @@ package social.media.media.repository;
 
 
 import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -55,5 +56,9 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             "AND YEAR(p.timeStamp) = YEAR(CURRENT_DATE) " +   // Lọc theo năm hiện tại
             "GROUP BY MONTH(p.timeStamp)")
     List<Map<String, Object>> findPostCountByMonthAndAdminId(@Param("adminId") int adminId);
+
+
+    @Query("SELECT p FROM Post p WHERE p.groups.id = :groupId ORDER BY p.timeStamp DESC")
+    List<Post> findAllByGroupIdOrderByTimestampDesc(@Param("groupId") int groupId, Pageable pageable);
 
 }
