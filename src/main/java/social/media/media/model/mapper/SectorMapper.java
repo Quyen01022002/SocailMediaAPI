@@ -9,6 +9,7 @@ import social.media.media.model.reponse.SectorMemberResponse;
 import social.media.media.model.reponse.SectorResponse;
 import social.media.media.model.request.SectorMemberRequest;
 import social.media.media.model.request.SectorRequest;
+import social.media.media.model.request.SectorRequest2;
 
 import java.util.List;
 
@@ -35,4 +36,7 @@ public interface SectorMapper {
     SectorMemberResponse toMemberResponse(SectorMembers sectorMembers);
 
     List<SectorMemberResponse> toListMemberResponse (List<SectorMembers> membersList);
+
+    @Mapping(source = "groupid", target = "groupId.id")
+    Sector from2toSector (SectorRequest2 sectorRequest2);
 }

@@ -11,6 +11,7 @@ import social.media.media.model.reponse.SectorMemberResponse;
 import social.media.media.model.reponse.SectorResponse;
 import social.media.media.model.request.SectorMemberRequest;
 import social.media.media.model.request.SectorRequest;
+import social.media.media.model.request.SectorRequest2;
 import social.media.media.service.SectorService;
 
 import java.util.List;
@@ -39,8 +40,8 @@ public class SectorController {
 
 
     @PutMapping("/update")
-    public ApiResponse<SectorResponse> updateSector(@RequestBody Sector sector){
-
+    public ApiResponse<SectorResponse> updateSector(@RequestBody SectorRequest2 sectorRequest2){
+        Sector sector = sectorMapper.from2toSector(sectorRequest2);
         SectorResponse savedSector = sectorService.updateSector(sector);
 
         ApiResponse apiResponse = new ApiResponse();
@@ -82,24 +83,24 @@ public class SectorController {
     public ApiResponse<SectorMembers> addTeacherSector(@RequestBody SectorMemberRequest sectorMemberRequest){
 
         SectorMembers rs = sectorService.addTeacherSector(sectorMemberRequest);
-
-
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.ok(rs);
-        return apiResponse;
-    }
-    @PutMapping("/update/teacher/")
-    public ApiResponse<SectorMembers> updateTeacherSector(@RequestBody SectorMembers sectorMember){
-
-        SectorMembers rs = sectorService.updateTeacherSector(sectorMember);
-
+        SectorMemberResponse rss = sectorMapper.toMemberResponse(rs);
 
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.ok(rs);
+        apiResponse.ok(rss);
+        return apiResponse;
+    }
+    @PutMapping("/update/teacher/{id}")
+    public ApiResponse<SectorMemberResponse> updateTeacherSector(@PathVariable int id,@RequestBody SectorMemberRequest sectorMember){
+
+        SectorMembers rs = sectorService.updateTeacherSector(id,sectorMember);
+SectorMemberResponse rss = sectorMapper.toMemberResponse(rs);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(rss);
         return apiResponse;
     }
 
-    @DeleteMapping("/update/teacher/{idteachersector}")
+    @DeleteMapping("/del/teacher/{idteachersector}")
     public ApiResponse deleteTeacherSector(@PathVariable int idteachersector){
 
         sectorService.deleteTeacherSector(idteachersector);

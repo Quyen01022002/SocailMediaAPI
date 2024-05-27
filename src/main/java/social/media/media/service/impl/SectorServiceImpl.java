@@ -83,9 +83,14 @@ private final SectorMembersRepository sectorMembersRepository;
 
 
     @Override
-    public SectorMembers updateTeacherSector(SectorMembers sectorMember){
-        SectorMembers rs = sectorMembersRepository.saveAndFlush(sectorMember);
-        return rs;
+    public SectorMembers updateTeacherSector(int id, SectorMemberRequest sectorMemberRequest){
+        SectorMembers rs = sectorMembersRepository.findById(id).orElseThrow(() -> new NotFoundException("friend Not Found"));
+        User user = userRepository.findById(sectorMemberRequest.getUserid()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+        Sector sector = sectorRepository.findById(sectorMemberRequest.getSectorid()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+        rs.setUser(user);
+        rs.setSectors(sector);
+        SectorMembers rss = sectorMembersRepository.saveAndFlush(rs);
+        return rss;
     }
     @Override
     public SectorResponse getSector(int sectorid){
