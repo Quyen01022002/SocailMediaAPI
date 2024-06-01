@@ -1,5 +1,6 @@
 package social.media.media.model.request;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import social.media.media.model.entity.Comments;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
 public class PostRequest {
 
 

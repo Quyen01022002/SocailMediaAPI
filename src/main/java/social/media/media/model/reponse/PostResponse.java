@@ -6,6 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import social.media.media.model.entity.*;
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
 import java.util.List;
 @Getter
 @Setter
+@Builder
 public class PostResponse {
     private int id;
 

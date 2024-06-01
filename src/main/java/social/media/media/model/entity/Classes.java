@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import lombok.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -25,6 +26,7 @@ public class Classes {
     @ManyToOne
     @JoinColumn(name = "adminId", referencedColumnName = "id")
     @JsonIgnore
+    @Future
     private User teacher;
     private String name;
     @ManyToOne
