@@ -13,10 +13,7 @@ import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.model.request.GroupsMenberRequest;
 import social.media.media.model.request.GroupsRequest;
 import social.media.media.model.request.PostRequest;
-import social.media.media.service.GroupService;
-import social.media.media.service.PageService;
-import social.media.media.service.UserService;
-import social.media.media.service.friendsService;
+import social.media.media.service.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,6 +25,9 @@ import java.util.stream.Stream;
 public class GroupsController {
     @Autowired
     GroupService groupService;
+
+    @Autowired
+    PostService postService;
     @Autowired
     UserService userService;
     @Autowired
@@ -208,6 +208,21 @@ public class GroupsController {
         }
 
     }
+    @GetMapping("/department/admin/{id}")
+    public ApiResponse<GroupsResponse> GroupByMeAdmin(@PathVariable int id) {
+        try {
+
+            List<GroupsResponse> profile = groupService.ListGroupsAdmin(id);
+
+
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(profile);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
     @GetMapping("/admin/{id}")
     public ApiResponse<List<GroupsResponse>> ListGroupAdmin(@PathVariable int id) {
         try {
@@ -375,5 +390,40 @@ public class GroupsController {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
 
+    }
+
+
+    @GetMapping("/{groupId}/allpost")
+    public ApiResponse<List<PostResponseDTO>> getPostsByGroupId(@PathVariable int groupId,
+                                        @RequestParam int page, @RequestParam int userid) {
+        List<PostResponse> postResponseList = groupService.loadPost(groupId, page, userid);
+
+
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == userid) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_liked(false);
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
     }
 }

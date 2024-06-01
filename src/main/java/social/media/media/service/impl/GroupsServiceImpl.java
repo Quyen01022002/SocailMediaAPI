@@ -30,6 +30,7 @@ import java.util.List;
 public class GroupsServiceImpl implements GroupService {
 
     private final GroupsRepository groupsRepository;
+    private final PostRepository postRepository;
     private final GroupsMembersRepository groupsMembersRepository;
     private final SaveRepository pageRepository;
     private final UserRepository userRepository;
@@ -270,6 +271,14 @@ public class GroupsServiceImpl implements GroupService {
             groupsRepository.saveAndFlush(user);
 
 
+    }
+
+    @Override
+    public List<PostResponse> loadPost(int groupid, int page, int userid){
+        PageRequest pageable = PageRequest.of(page, 6);
+        List<Post> result = postRepository.findAllByGroupIdOrderByTimestampDesc(groupid, pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        return listPost;
     }
 
 
