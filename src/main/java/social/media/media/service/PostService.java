@@ -18,9 +18,12 @@ public interface PostService {
 
     public List<PostResponse> getTop10();
     public List<PostResponse> getTop10Teacher(int adminId);
-    public List<PostResponse> searchPost(String keyword);
+    public List<PostResponse> searchPost(String keyword, int pagenumber);
     public List<IntactionResponse> getAllMyLike(int userid);
     public List<PostResponse> getPostClass(int userid, int pagenumber);
     public List<PostResponse> getTop5OnMonth(int userid);
     public String getPostCountStringByMonthAndAdminId(int adminId);
+
+
+    public List<PostResponseDTO> getPostOfAllGroupFollow(int iduser, int pagenumber);
 }

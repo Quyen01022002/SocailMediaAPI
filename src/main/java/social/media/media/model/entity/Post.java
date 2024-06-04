@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import social.media.media.model.enums.StatusCmtPostEnum;
+import social.media.media.model.enums.StatusViewPostEnum;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -46,6 +48,13 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "class_id")
     private Classes classes;
+
+    @Enumerated(EnumType.STRING)
+    private StatusViewPostEnum statusViewPostEnum;
+
+    @Enumerated(EnumType.STRING)
+    private StatusCmtPostEnum statusCmtPostEnum;
+
     @ManyToOne
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;

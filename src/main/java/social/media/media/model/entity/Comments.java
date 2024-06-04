@@ -37,5 +37,7 @@ public class Comments {
     @ManyToOne
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;
+    
+    private Boolean isAnwser;
 
 }
