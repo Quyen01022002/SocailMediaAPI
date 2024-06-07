@@ -109,5 +109,18 @@ public class CommentServiceImpl implements CommentService {
             throw ex;
         }
     }
+    @Override
+    public CommentsResponse setAnswer(int cmtid){
+        try {
+            Comments comments= commentRepository.findById(cmtid).orElseThrow(() -> new NotFoundException(" Not Found"));
+            comments.setIsAnwser(true);
+            Comments cmt2 = commentRepository.saveAndFlush(comments);
+            return commentMapper.toResponse(cmt2);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+
+
+    }
 
 }

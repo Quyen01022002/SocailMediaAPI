@@ -17,5 +17,6 @@ public interface CommentService {
     public List<CommentsResponse> getAllComment(int id);
     public List<CommentsResponse> getAllMyComment(int id);
     public List<CommentsResponse> getAllMyCommentClasses(int id, int pagenumber);
-
+    public CommentsResponse setAnswer(int cmtid);
 }
+
