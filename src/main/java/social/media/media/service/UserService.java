@@ -5,12 +5,14 @@ import social.media.media.model.entity.User;
 import social.media.media.model.entity.userFollow;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.UserResponse;
+import social.media.media.model.request.ResetPasswordRequest;
 
 import java.util.List;
 
 public interface UserService {
     public UserResponse profile(int id);
     public UserResponse profileByEmail(String email);
+    public UserResponse profileByEmailAndPw(ResetPasswordRequest resetPasswordRequest);
     public void Follow(User user);
     public List<UserResponse> List20Follow();
     public List<UserResponse> Search(String key);
