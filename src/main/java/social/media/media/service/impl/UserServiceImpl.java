@@ -2,6 +2,7 @@ package social.media.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
@@ -14,6 +15,7 @@ import social.media.media.model.reponse.FriendsResponse;
 import social.media.media.model.reponse.FriendsResponseDTO;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.UserResponse;
+import social.media.media.model.request.ResetPasswordRequest;
 import social.media.media.repository.PostRepository;
 import social.media.media.repository.UserFollowRepository;
 import social.media.media.repository.UserRepository;
@@ -26,7 +28,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserFollowRepository userFollowRepository;
     @Autowired
@@ -84,6 +86,36 @@ public class UserServiceImpl implements UserService {
             }
             userResponse.setFriendships(friendsResponseDTOList);
             return userResponse;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+    public UserResponse profileByEmailAndPw(ResetPasswordRequest resetPasswordRequest) {
+        try {
+
+            User user = userRepository.findByEmail(resetPasswordRequest.getEmail()).orElseThrow(() -> new NotFoundException(" Not Found"));
+            if (passwordEncoder.matches(resetPasswordRequest.getNewPassword(), user.getPassword()))
+            {UserResponse userResponse=userMapper.toResponse(user);
+            List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
+
+            for(friends item:user.getFriendships())
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+
+                friendsResponseDTO = friendsMapper.toFriendsResponseDto(item.getFriend());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
+            for(friends item:user.getOtherfriendships())
+            {
+                FriendsResponseDTO friendsResponseDTO=new FriendsResponseDTO();
+
+                friendsResponseDTO = friendsMapper.toFriendsResponseDto(item.getUser());
+                friendsResponseDTOList.add(friendsResponseDTO);
+            }
+            userResponse.setFriendships(friendsResponseDTOList);
+            return userResponse;}
+            else return null;
+
         } catch (ApplicationException ex) {
             throw ex;
         }

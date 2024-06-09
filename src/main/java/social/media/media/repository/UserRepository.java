@@ -12,6 +12,7 @@ import java.util.Optional;import io.lettuce.core.dynamic.annotation.Param;
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
     Optional<User> findByEmail(String username);
+    Optional<User> findByEmailAndPassword(String email, String password);
     @Query(value = "SELECT u FROM User u ORDER BY RAND()")
     List<User> findRandom20Users();
     @Query("SELECT u FROM User u WHERE LOWER(u.firstName) LIKE LOWER(concat('%', :keyword, '%')) " +
