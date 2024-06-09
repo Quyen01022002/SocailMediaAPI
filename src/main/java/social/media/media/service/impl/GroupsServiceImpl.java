@@ -13,10 +13,7 @@ import social.media.media.model.entity.*;
 import social.media.media.model.mapper.GroupMapper;
 import social.media.media.model.mapper.GroupsMembersMapper;
 import social.media.media.model.mapper.PostMapper;
-import social.media.media.model.reponse.GroupsResponse;
-import social.media.media.model.reponse.LikeResponse;
-import social.media.media.model.reponse.PostResponse;
-import social.media.media.model.reponse.PostResponseDTO;
+import social.media.media.model.reponse.*;
 import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.repository.*;
 import social.media.media.service.GroupService;
@@ -39,7 +36,7 @@ public class GroupsServiceImpl implements GroupService {
     @Autowired
     GroupsMembersMapper groupsMembersMapper;
 
-@Autowired
+    @Autowired
     PostMapper postMapper;
 
 
@@ -47,8 +44,8 @@ public class GroupsServiceImpl implements GroupService {
     public GroupsResponse addPage(Groups groups) {
         try {
 
-            Groups savedGroups=groupsRepository.saveAndFlush(groups);
-            if(groups.getGroupMembers()!=null) {
+            Groups savedGroups = groupsRepository.saveAndFlush(groups);
+            if (groups.getGroupMembers() != null) {
                 for (GroupMembers item : groups.getGroupMembers()) {
                     item.setId(savedGroups.getId());
                     groupsMembersRepository.saveAndFlush(item);
@@ -82,6 +79,7 @@ public class GroupsServiceImpl implements GroupService {
             throw ex;
         }
     }
+
     @Override
     public GroupsResponse updateAdminGroups(GroupAdminRequest groups) {
         try {
@@ -89,7 +87,8 @@ public class GroupsServiceImpl implements GroupService {
             if (exGroups == null) {
                 throw new NotFoundException("Not Found");
             }
-            User user = userRepository.findById(groups.getAdminId()).orElseThrow(() -> new NotFoundException(" Not Found"));;
+            User user = userRepository.findById(groups.getAdminId()).orElseThrow(() -> new NotFoundException(" Not Found"));
+            ;
             exGroups.setAdminId(user);
             // Update
             groupsRepository.saveAndFlush(exGroups);
@@ -115,8 +114,8 @@ public class GroupsServiceImpl implements GroupService {
     public List<GroupsResponse> ListGroups(int id) {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
-            List<GroupsResponse> result=new ArrayList<>();
-            for(GroupMembers item:user.getGroupMemberships()) {
+            List<GroupsResponse> result = new ArrayList<>();
+            for (GroupMembers item : user.getGroupMemberships()) {
                 if (item.getGroup().getAdminId().getId() != user.getId()) {
                     GroupsResponse groupsResponse = new GroupsResponse();
                     groupsResponse = groupMapper.toResponse(item.getGroup());
@@ -188,17 +187,18 @@ public class GroupsServiceImpl implements GroupService {
     @Override
     public List<GroupsResponse> ListGroupsAll() {
         try {
-            List<GroupsResponse> result=groupMapper.toResponseList(groupsRepository.findAll());
+            List<GroupsResponse> result = groupMapper.toResponseList(groupsRepository.findAll());
 
             return result;
         } catch (ApplicationException ex) {
             throw ex;
         }
     }
+
     @Override
     public List<GroupsResponse> searchGroup(String keyword) {
         try {
-            List<GroupsResponse> result=groupMapper.toResponseList(groupsRepository.findByNameContaining(keyword));
+            List<GroupsResponse> result = groupMapper.toResponseList(groupsRepository.findByNameContaining(keyword));
 
             return result;
         } catch (ApplicationException ex) {
@@ -211,7 +211,7 @@ public class GroupsServiceImpl implements GroupService {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
 
-            return  groupMapper.toResponseList(user.getListGroupAdmin());
+            return groupMapper.toResponseList(user.getListGroupAdmin());
         } catch (ApplicationException ex) {
             throw ex;
         }
@@ -251,7 +251,7 @@ public class GroupsServiceImpl implements GroupService {
     @Override
     public void DeleteMembers(GroupMembers page) {
         try {
-            GroupMembers pageMembers = groupsMembersRepository.findByUserAndGroup(page.getUser(),page.getGroup());
+            GroupMembers pageMembers = groupsMembersRepository.findByUserAndGroup(page.getUser(), page.getGroup());
             if (pageMembers == null) {
                 throw new NotFoundException("Product Not Found");
             }
@@ -266,15 +266,22 @@ public class GroupsServiceImpl implements GroupService {
     @Override
     public void updateAvatar(int id, String Avatar) {
 
-            Groups user = groupsRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
-            user.setAvatar(Avatar);
-            groupsRepository.saveAndFlush(user);
+        Groups user = groupsRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
+        user.setAvatar(Avatar);
+        groupsRepository.saveAndFlush(user);
 
 
     }
 
     @Override
-    public List<PostResponse> loadPost(int groupid, int page, int userid){
+    public List<GroupsResponse> Search(String keyword) {
+
+        List<Groups> list = groupsRepository.searchByName(keyword);
+        return groupMapper.toResponseList(list);
+    }
+
+    @Override
+    public List<PostResponse> loadPost(int groupid, int page, int userid) {
         PageRequest pageable = PageRequest.of(page, 6);
         List<Post> result = postRepository.findAllByGroupIdOrderByTimestampDesc(groupid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);

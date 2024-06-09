@@ -426,4 +426,5 @@ public class GroupsController {
         apiResponse.ok(postResponseDTOList);
         return apiResponse;
     }
+
 }

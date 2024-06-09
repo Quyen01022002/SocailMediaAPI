@@ -27,7 +27,7 @@ public interface GroupService {
     public void Delete(int id);
     public void DeleteMembers(GroupMembers page);
     public void updateAvatar(int id,String Avatar);
-
+    public List<GroupsResponse> Search(String keyword);
     public List<PostResponse> loadPost(int groupid, int page, int userid);
 
 }
