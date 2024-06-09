@@ -2,14 +2,17 @@ package social.media.media.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.*;
 import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.UserMapper;
 import social.media.media.model.reponse.*;
+import social.media.media.model.request.ResetPasswordRequest;
 import social.media.media.model.request.UserRequest;
 import social.media.media.model.request.UserRequest2;
+import social.media.media.service.AuthenticationService;
 import social.media.media.service.PostService;
 import social.media.media.service.UserService;
 import social.media.media.service.friendsService;
@@ -32,6 +35,8 @@ public class UserController {
     FriendsMapper friendsMapper;
     @Autowired
     friendsService friendsService;
+    @Autowired
+    AuthenticationService service;
 
     @GetMapping("/{id}")
     public ApiResponse<UserResponseDTO> getprofile(@PathVariable int id) {
@@ -86,6 +91,60 @@ public class UserController {
         }
 
     }
+    @PostMapping("/{id}/checkoldPassword")
+    public ApiResponse<UserResponseDTO> getuserbyEmailAndPw(@PathVariable int id, @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        try {
+
+                UserResponse profile = userService.profileByEmailAndPw(resetPasswordRequest);
+            List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
+            for(PostResponse itempost:profile.getPostList())
+            {
+                PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+                itemPostResponseDTO.setId(itempost.getId());
+                itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                for(LikeResponse itemlike:  itempost.getListLike())
+                {
+                    if(itemlike.getCreateBy().getId()==profile.getId())
+                    {
+                        itemPostResponseDTO.setUser_liked(true);
+
+                    }
+                    else {
+                        itemPostResponseDTO.setUser_liked(false);
+                    }
+                }
+
+                itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                itemPostResponseDTO.setStatus(itempost.getStatus());
+
+                postResponseDTOList.add(itemPostResponseDTO);
+            }
+            UserResponseDTO responseDTO=new UserResponseDTO();
+            responseDTO.setProfilePicture(profile.getProfilePicture());
+            responseDTO.setBackGroundPicture(profile.getBackGroundPicture());
+            responseDTO.setId(profile.getId());
+            responseDTO.setEmail(profile.getEmail());
+            responseDTO.setAddress(profile.getAddress());
+            responseDTO.setFirstName(profile.getFirstName());
+            responseDTO.setFriendships(profile.getFriendships());
+            responseDTO.setCountFriend(profile.getCountFriend());
+            responseDTO.setPostList(postResponseDTOList);
+            responseDTO.setPhone(profile.getPhone());
+            responseDTO.setLastName(profile.getLastName());
+            responseDTO.setRole(profile.getRole());
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(responseDTO);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+
     @GetMapping("/checkemailrole/{email}")
     public ApiResponse<UserResponseDTO> getuserbyEmail(@PathVariable String email) {
         try {
@@ -362,6 +421,16 @@ public class UserController {
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok();
             return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+
+
+    }
+    @PutMapping("/{id}/changePw")
+    public ResponseEntity<ApiResponse> UpdatePw(@PathVariable int id, @RequestBody ResetPasswordRequest request) {
+        try {
+            return ResponseEntity.ok(service.resetPassword(request));
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage());
         }

@@ -103,4 +103,21 @@ public class CommentsController {
         }
     }
 
+    @PutMapping("/setAnswer/{cmtid}")
+    public ApiResponse<CommentsResponse> setAnswer (@PathVariable int cmtid){
+
+        CommentsResponse commentsResponse = commentService.setAnswer(cmtid);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(commentsResponse);
+        return apiResponse;
+    }
+    @PutMapping("/setAnswerToCmt/{cmtid}")
+    public ApiResponse<CommentsResponse> setAnswerToCmt (@PathVariable int cmtid){
+
+        CommentsResponse commentsResponse = commentService.setAnswerToCmt(cmtid);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(commentsResponse);
+        return apiResponse;
+    }
+
 }

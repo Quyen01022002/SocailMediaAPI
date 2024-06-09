@@ -293,8 +293,8 @@ public class PostsController {
     }
 
     @GetMapping("/{userid}/search")
-    public ApiResponse<List<PostResponseDTO>> getSearchResultPost(@PathVariable int userid, @RequestParam("q") String keyword) {
-        List<PostResponse> postResponseList = postService.searchPost(keyword);
+    public ApiResponse<List<PostResponseDTO>> getSearchResultPost(@PathVariable int userid, @RequestParam("q") String keyword, @RequestParam("pagenumber") int pagenumber) {
+        List<PostResponse> postResponseList = postService.searchPost(keyword, pagenumber);
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
         for (PostResponse itempost : postResponseList) {
             PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
@@ -363,6 +363,19 @@ public class PostsController {
         String rs = postService.getPostCountStringByMonthAndAdminId(userid);
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(rs);
+        return apiResponse;
+    }
+
+
+
+    @GetMapping("/allgroup/{iduser}")
+    public ApiResponse<List<PostResponseDTO>> getPostAllGroupFollow(@PathVariable int iduser, @RequestParam("pagenumber") int pagenumber){
+
+        List<PostResponseDTO> postResponseDTOList = postService.getPostOfAllGroupFollow(iduser,pagenumber);
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
         return apiResponse;
     }
 }

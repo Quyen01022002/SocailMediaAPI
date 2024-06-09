@@ -8,13 +8,11 @@ import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.exception.ValidationException;
 import social.media.media.model.entity.*;
+import social.media.media.model.enums.StatusViewPostEnum;
 import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.InterationsMapper;
 import social.media.media.model.mapper.PostMapper;
-import social.media.media.model.reponse.FriendsResponse;
-import social.media.media.model.reponse.IntactionResponse;
-import social.media.media.model.reponse.PostResponse;
-import social.media.media.model.reponse.PostResponseDTO;
+import social.media.media.model.reponse.*;
 import social.media.media.repository.*;
 import social.media.media.service.PostService;
 import social.media.media.service.friendsService;
@@ -44,9 +42,8 @@ public class PostServiceImpl implements PostService {
     public PostResponse addPost(Post post, List<pictureOfPost> listImg) {
         try {
 
-            Post savedPost=postRepository.saveAndFlush(post);
-            for(pictureOfPost item:listImg)
-            {
+            Post savedPost = postRepository.saveAndFlush(post);
+            for (pictureOfPost item : listImg) {
                 item.setListAnh(savedPost);
                 postIimageRepository.saveAndFlush(item);
             }
@@ -86,27 +83,32 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> getTop10(){
+    public List<PostResponse> getTop10() {
         PageRequest pageable = PageRequest.of(0, 10);
         List<Post> result = postRepository.findTop10PostsByLikes(pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
         return listPost;
     }
+
     @Override
-    public List<PostResponse> getTop10Teacher(int adminId){
+    public List<PostResponse> getTop10Teacher(int adminId) {
         PageRequest pageable = PageRequest.of(0, 10);
-        List<Post> result = postRepository.findTop10ByTeacherIdOrderByLikesDesc(adminId,pageable);
+        List<Post> result = postRepository.findTop10ByTeacherIdOrderByLikesDesc(adminId, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
         return listPost;
     }
+
     @Override
-    public List<PostResponse> searchPost(String keyword){
-        List<Post> result = postRepository.findByContentPostContaining(keyword);
+    public List<PostResponse> searchPost(String keyword, int pagenumber) {
+        PageRequest pageable = PageRequest.of(pagenumber, 10);
+        StatusViewPostEnum statusViewPostEnum = StatusViewPostEnum.ONLYME;
+        List<Post> result = postRepository.findByContentPostContaining(keyword, statusViewPostEnum, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
         return listPost;
     }
+
     @Override
-    public List<IntactionResponse> getAllMyLike(int userid){
+    public List<IntactionResponse> getAllMyLike(int userid) {
         User user = userRepository.findById(userid).orElseThrow(() -> new NotFoundException(" Not Found"));
 
         List<interations> result = inerationsRepository.findAllByCreateByOrderByTimeStampDesc(user);
@@ -128,8 +130,9 @@ public class PostServiceImpl implements PostService {
         }
         return null;
     }
+
     @Override
-    public List<PostResponse> getPostClass(int userid, int pagenumber){
+    public List<PostResponse> getPostClass(int userid, int pagenumber) {
         PageRequest pageable = PageRequest.of(pagenumber, 6);
         List<Post> result = postRepository.findPostsByUserId(userid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
@@ -137,7 +140,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> getTop5OnMonth(int userid){
+    public List<PostResponse> getTop5OnMonth(int userid) {
         PageRequest pageable = PageRequest.of(0, 5);
         List<Post> result = postRepository.findTop5PostsByAdminIdAndCurrentMonth(userid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
@@ -165,5 +168,39 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.joining(","));
 
         return postCountString;
+    }
+
+    @Override
+    public List<PostResponseDTO> getPostOfAllGroupFollow(int iduser, int pagenumber) {
+        PageRequest pageable = PageRequest.of(pagenumber, 6);
+        List<Post> list = postRepository.findAllPostsFromFollowedGroups(iduser, StatusViewPostEnum.ONLYME, pageable);
+        List<PostResponse> postResponseList = postMapper.toResponseList(list);
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == iduser) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                } else {
+                    itemPostResponseDTO.setUser_liked(false);
+                }
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+
+
+        return postResponseDTOList;
     }
 }

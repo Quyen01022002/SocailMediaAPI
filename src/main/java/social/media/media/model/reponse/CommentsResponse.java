@@ -25,6 +25,7 @@ public class CommentsResponse {
 
     private UserResponse CreateBy;
 
+    private Boolean isAnwser;
 
 
 

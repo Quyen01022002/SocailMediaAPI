@@ -11,6 +11,7 @@ import social.media.media.model.entity.Groups;
 import social.media.media.model.entity.Post;
 import social.media.media.model.entity.Report;
 import social.media.media.model.entity.User;
+import social.media.media.model.enums.StatusViewPostEnum;
 
 import java.util.List;
 import java.util.Map;
@@ -21,10 +22,14 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
     List<Report> findReportedPostsByGroup(@Param("group") Groups group);
     List<Post> findByGroupsAndStatus(Groups group,Boolean Status);
 
-        @Query("SELECT p, COUNT(l) as likeCount FROM Post p LEFT JOIN p.listLike l GROUP BY p.id, p.CreateBy, p.contentPost, p.timeStamp, p.status, p.classes, p.groups ORDER BY likeCount DESC")
+    @Query("SELECT p, COUNT(l) as likeCount FROM Post p LEFT JOIN p.listLike l " +
+            "WHERE p.statusViewPostEnum = 'ALLUSER' " +
+            "GROUP BY p.id, p.CreateBy, p.contentPost, p.timeStamp, p.status, p.classes, p.groups " +
+            "ORDER BY likeCount DESC")
     List<Post> findTop10PostsByLikes(Pageable pageable);
 
-        List<Post> findByContentPostContaining(String key);
+    @Query("SELECT p FROM Post p WHERE p.contentPost LIKE %:key% AND p.statusViewPostEnum <> :statusViewPostEnum")
+    List<Post> findByContentPostContaining(@Param("key") String key, @Param("statusViewPostEnum") StatusViewPostEnum statusViewPostEnum, Pageable pageable);
 
 
     @Query("SELECT p FROM Post p " +
@@ -61,4 +66,7 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
     @Query("SELECT p FROM Post p WHERE p.groups.id = :groupId ORDER BY p.timeStamp DESC")
     List<Post> findAllByGroupIdOrderByTimestampDesc(@Param("groupId") int groupId, Pageable pageable);
 
+
+    @Query("SELECT p FROM Post p WHERE p.groups.id IN (SELECT gm.group.id FROM GroupMembers gm WHERE gm.user.id = :userId) AND p.statusViewPostEnum <> :statusViewPostEnum ORDER BY p.timeStamp DESC")
+    List<Post> findAllPostsFromFollowedGroups(int userId, StatusViewPostEnum statusViewPostEnum, Pageable pageable);
 }
