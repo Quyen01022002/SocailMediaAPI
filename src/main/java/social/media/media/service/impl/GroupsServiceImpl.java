@@ -13,6 +13,7 @@ import social.media.media.model.entity.*;
 import social.media.media.model.mapper.GroupMapper;
 import social.media.media.model.mapper.GroupsMembersMapper;
 import social.media.media.model.mapper.PostMapper;
+import social.media.media.model.mapper.UserMapper;
 import social.media.media.model.reponse.*;
 import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.repository.*;
@@ -38,6 +39,8 @@ public class GroupsServiceImpl implements GroupService {
 
     @Autowired
     PostMapper postMapper;
+    @Autowired
+    UserMapper userMapper;
 
 
     @Override
@@ -285,6 +288,16 @@ public class GroupsServiceImpl implements GroupService {
         PageRequest pageable = PageRequest.of(page, 6);
         List<Post> result = postRepository.findAllByGroupIdOrderByTimestampDesc(groupid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
+        return listPost;
+    }
+    @Override
+    public List<PostResponse> loadPostOfAllGroupFollow(int pagenumber, int userid) {
+        PageRequest pageable = PageRequest.of(pagenumber, 2);
+        List<Post> result = postRepository.findPostsByUserGroups(userid, pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
         return listPost;
     }
 

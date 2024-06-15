@@ -43,5 +43,6 @@ public interface PostMapper {
     }
 
     List<PostResponseDTO> toResponseDTO(List<Post> post);
+
     List<PostResponse> toResponseList(List<Post> post);
 }

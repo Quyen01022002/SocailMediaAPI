@@ -12,6 +12,7 @@ import social.media.media.model.enums.StatusViewPostEnum;
 import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.InterationsMapper;
 import social.media.media.model.mapper.PostMapper;
+import social.media.media.model.mapper.UserMapper;
 import social.media.media.model.reponse.*;
 import social.media.media.repository.*;
 import social.media.media.service.PostService;
@@ -37,6 +38,8 @@ public class PostServiceImpl implements PostService {
     PostIimageRepository postIimageRepository;
     @Autowired
     InterationsMapper interationsMapper;
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public PostResponse addPost(Post post, List<pictureOfPost> listImg) {
@@ -79,7 +82,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse findOne(int postId) {
         Post exPost = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("friend Not Found"));
-        return postMapper.toResponse(exPost);
+        PostResponse postResponse = postMapper.toResponse(exPost);
+        postResponse.setCreateBy(userMapper.toResponsePost(exPost.getCreateBy()));
+        return postResponse;
     }
 
     @Override
@@ -87,6 +92,9 @@ public class PostServiceImpl implements PostService {
         PageRequest pageable = PageRequest.of(0, 10);
         List<Post> result = postRepository.findTop10PostsByLikes(pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
         return listPost;
     }
 
@@ -136,6 +144,9 @@ public class PostServiceImpl implements PostService {
         PageRequest pageable = PageRequest.of(pagenumber, 6);
         List<Post> result = postRepository.findPostsByUserId(userid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
         return listPost;
     }
 

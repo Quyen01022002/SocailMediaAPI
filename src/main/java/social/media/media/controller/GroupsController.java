@@ -261,7 +261,6 @@ public class GroupsController {
             List<GroupsResponse> profile = groupService.ListGroups(id);
             for(GroupsResponse item:profile)
             {
-
                 for(PostResponseDTO itemPost:item.getListPost()) {
                     result.add(itemPost);
                 }
@@ -397,6 +396,39 @@ public class GroupsController {
     public ApiResponse<List<PostResponseDTO>> getPostsByGroupId(@PathVariable int groupId,
                                         @RequestParam int page, @RequestParam int userid) {
         List<PostResponse> postResponseList = groupService.loadPost(groupId, page, userid);
+
+
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == userid) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_liked(false);
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
+
+    @GetMapping("/follow/posts/{userid}/{pagenumber}")
+    public ApiResponse<List<PostResponseDTO>> ListPostFollow2(@PathVariable int userid, @PathVariable int pagenumber) {
+        List<PostResponse> postResponseList = groupService.loadPostOfAllGroupFollow(pagenumber, userid);
 
 
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();

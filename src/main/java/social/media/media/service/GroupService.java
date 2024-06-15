@@ -29,5 +29,6 @@ public interface GroupService {
     public void updateAvatar(int id,String Avatar);
     public List<GroupsResponse> Search(String keyword);
     public List<PostResponse> loadPost(int groupid, int page, int userid);
+    public List<PostResponse> loadPostOfAllGroupFollow(int pagenumber, int userid);
 
 }
