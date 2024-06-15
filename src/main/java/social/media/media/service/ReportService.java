@@ -12,5 +12,6 @@ public interface ReportService {
     public PostResponse DuyetPost(int id);
     public List<ReportReponse> listReportPost(int report);
     public List<PostResponseDTO> listPosstWaiting(int groupid);
+    public Report searchByIdUserReporterAndPost(int idreporter, int postid);
 
 }
