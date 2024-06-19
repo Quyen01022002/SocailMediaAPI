@@ -8,6 +8,7 @@ import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
 import social.media.media.exception.ValidationException;
 import social.media.media.model.entity.*;
+import social.media.media.model.enums.StatusCmtPostEnum;
 import social.media.media.model.enums.StatusViewPostEnum;
 import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.InterationsMapper;
@@ -45,6 +46,8 @@ public class PostServiceImpl implements PostService {
     public PostResponse addPost(Post post, List<pictureOfPost> listImg) {
         try {
 
+            post.setStatusViewPostEnum(StatusViewPostEnum.ALLUSER);
+            post.setStatusCmtPostEnum(StatusCmtPostEnum.ALLUSER);
             Post savedPost = postRepository.saveAndFlush(post);
             for (pictureOfPost item : listImg) {
                 item.setListAnh(savedPost);
@@ -206,7 +209,8 @@ public class PostServiceImpl implements PostService {
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
-
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.xml.stream.events.Comment;
 import java.sql.Date;
 import java.util.List;
 
@@ -39,5 +40,20 @@ public class Comments {
     private User CreateBy;
     
     private Boolean isAnwser;
+
+    @ManyToOne
+    @JoinColumn(name = "replyCmtId", referencedColumnName = "commentId")
+    private Comments commentReply;
+
+    @OneToMany(mappedBy = "commentReply", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Comments> commentsReplyList;
+
+
+    @PrePersist
+    public void setCreate(){
+        this.timeStamp = new Date(System.currentTimeMillis());
+        //this.isAnwser = false;
+    }
 
 }

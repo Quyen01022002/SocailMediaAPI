@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import social.media.media.model.entity.*;
+import social.media.media.model.enums.StatusCmtPostEnum;
+import social.media.media.model.enums.StatusViewPostEnum;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -33,7 +35,8 @@ public class PostResponse {
     private List<Comments> lisCmt;
     private List<LikeResponse> listLike;
 
-
+    private StatusViewPostEnum statusViewPostEnum;
+    private StatusCmtPostEnum statusCmtPostEnum;
 
 
 }

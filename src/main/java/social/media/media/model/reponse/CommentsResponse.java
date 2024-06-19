@@ -8,6 +8,7 @@ import social.media.media.model.entity.Post;
 import social.media.media.model.entity.User;
 
 import java.sql.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +28,8 @@ public class CommentsResponse {
 
     private Boolean isAnwser;
 
+    private List<CommentsResponse> commentsReplyList;
 
+    private int cmtReply;
 
 }
