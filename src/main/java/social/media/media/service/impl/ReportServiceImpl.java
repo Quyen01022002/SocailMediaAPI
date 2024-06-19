@@ -13,10 +13,7 @@ import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.PostResponseDTO;
 import social.media.media.model.reponse.ReportReponse;
 
-import social.media.media.repository.PostIimageRepository;
-import social.media.media.repository.PostRepository;
-import social.media.media.repository.ReportRepository;
-import social.media.media.repository.SavedPostRepository;
+import social.media.media.repository.*;
 import social.media.media.service.ReportService;
 import social.media.media.service.SavedPostService;
 
@@ -36,6 +33,8 @@ public class ReportServiceImpl implements ReportService {
     PostRepository postRepository;
     @Autowired
     ReportRepository reportRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public ReportReponse reportUser(Report report) {
@@ -138,9 +137,19 @@ public class ReportServiceImpl implements ReportService {
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
-
-
-
         return postResponseDTOList;
+    }
+    @Override
+    public Report searchByIdUserReporterAndPost(int idreporter, int postid){
+       try {
+           List<Report> report = reportRepository.findByUserIdAndPostId(idreporter,postid);
+           if (report.size() == 0)
+               return null;
+           else return report.get(0);
+       }
+catch (Exception e)
+{
+    throw  e;
+}
     }
 }
