@@ -417,6 +417,8 @@ public class GroupsController {
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
 
             postResponseDTOList.add(itemPostResponseDTO);
         }
@@ -450,7 +452,8 @@ public class GroupsController {
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
-
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 

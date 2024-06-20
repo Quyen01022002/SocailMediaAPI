@@ -12,6 +12,7 @@ import social.media.media.model.entity.User;
 import social.media.media.model.entity.notications;
 import social.media.media.model.mapper.CommentMapper;
 import social.media.media.model.reponse.CommentsResponse;
+import social.media.media.model.request.CommentReplyRequest;
 import social.media.media.model.request.CommentRequest;
 import social.media.media.repository.CommentRepository;
 import social.media.media.repository.PostRepository;
@@ -134,6 +135,23 @@ public class CommentServiceImpl implements CommentService {
         }
 
 
+    }
+
+    @Override
+    public CommentsResponse replyComment(int cmtid, CommentReplyRequest commentReplyRequest){
+        try {
+            Comments comments= commentRepository.findById(cmtid).orElseThrow(() -> new NotFoundException(" Not Found commnt to reply"));
+            User user= userRepository.findById(commentReplyRequest.getUserid()).orElseThrow(() -> new NotFoundException(" Not Found replier user"));
+            Comments cmtreply = new Comments();
+            cmtreply.setCommentReply(comments);
+            cmtreply.setCommentContent(commentReplyRequest.getCmtReply());
+            cmtreply.setCreateBy(user);
+            cmtreply.setPostID(comments.getPostID());
+            Comments cmt2 = commentRepository.saveAndFlush(cmtreply);
+            return commentMapper.toResponse(cmt2);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
     }
 
 }

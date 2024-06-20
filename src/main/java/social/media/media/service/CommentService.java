@@ -4,6 +4,7 @@ import social.media.media.model.entity.Comments;
 import social.media.media.model.entity.interations;
 import social.media.media.model.reponse.CommentsResponse;
 import social.media.media.model.reponse.LikeResponse;
+import social.media.media.model.request.CommentReplyRequest;
 import social.media.media.model.request.CommentRequest;
 
 import java.util.List;
@@ -20,5 +21,7 @@ public interface CommentService {
 
     public CommentsResponse setAnswer(int cmtid);
     public CommentsResponse setAnswerToCmt(int cmtid);
+
+    public CommentsResponse replyComment(int cmtid, CommentReplyRequest commentReplyRequest);
 }
 

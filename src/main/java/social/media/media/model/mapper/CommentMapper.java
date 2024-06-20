@@ -13,6 +13,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
+    @Mapping(source = "commentReply.commentId", target = "cmtReply")
     CommentsResponse toResponse(Comments cmt);
 List<CommentsResponse> toListCommentResponse (List<Comments> lis);
     @Mapping(source = "user_id", target = "CreateBy.id")

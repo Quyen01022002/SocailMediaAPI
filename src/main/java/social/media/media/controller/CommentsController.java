@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.Comments;
 import social.media.media.model.reponse.*;
+import social.media.media.model.request.CommentReplyRequest;
 import social.media.media.model.request.CommentRequest;
 import social.media.media.service.CommentService;
 import social.media.media.service.UserService;
@@ -118,6 +119,18 @@ public class CommentsController {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(commentsResponse);
         return apiResponse;
+    }
+
+
+    // Comment reply
+    @PostMapping("/{cmtid}/reply")
+    public ApiResponse<CommentsResponse> reply(@PathVariable int cmtid, @RequestBody CommentReplyRequest commentReplyRequest ){
+        CommentsResponse commentsResponse = commentService.replyComment(cmtid, commentReplyRequest);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(commentsResponse);
+        return apiResponse;
+
+
     }
 
 }

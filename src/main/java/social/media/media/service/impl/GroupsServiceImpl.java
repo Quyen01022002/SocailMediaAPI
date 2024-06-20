@@ -288,6 +288,9 @@ public class GroupsServiceImpl implements GroupService {
         PageRequest pageable = PageRequest.of(page, 6);
         List<Post> result = postRepository.findAllByGroupIdOrderByTimestampDesc(groupid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
         return listPost;
     }
     @Override

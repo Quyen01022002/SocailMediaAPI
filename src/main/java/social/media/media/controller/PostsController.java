@@ -67,7 +67,8 @@ public class PostsController {
                     }
                     itemPostResponseDTO.setListAnh(itempost.getListAnh());
                     itemPostResponseDTO.setStatus(itempost.getStatus());
-
+                    itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
                     postResponseDTOList.add(itemPostResponseDTO);
                 }
                 for (PostResponse itempost : item.getFriend().getPostList()) {
@@ -88,7 +89,8 @@ public class PostsController {
                     }
                     itemPostResponseDTO.setListAnh(itempost.getListAnh());
                     itemPostResponseDTO.setStatus(itempost.getStatus());
-
+                    itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
                     postResponseDTOList.add(itemPostResponseDTO);
                 }
 
@@ -150,6 +152,8 @@ public class PostsController {
         }
         itemPostResponseDTO.setListAnh(itempost.getListAnh());
         itemPostResponseDTO.setStatus(itempost.getStatus());
+        itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+        itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(itemPostResponseDTO);
         return apiResponse;
@@ -190,7 +194,8 @@ public class PostsController {
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
-
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -221,7 +226,8 @@ public class PostsController {
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
-
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -252,7 +258,8 @@ public class PostsController {
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
-
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -283,7 +290,8 @@ public class PostsController {
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
-
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -314,7 +322,8 @@ public class PostsController {
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
-
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
