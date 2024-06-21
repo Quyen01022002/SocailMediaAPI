@@ -133,7 +133,7 @@ public class ReportController {
     @PostMapping("/users/{userid}")
     public ApiResponse reportUser(@PathVariable int userid, @RequestBody ReportRequest reportRequest) {
         try {
-
+            if (reportService.searchByIdUserReporterAndUser(reportRequest.getCreateById(),userid)== null)
             {
             User user = new User();
             user.setId(userid);
@@ -147,6 +147,12 @@ public class ReportController {
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.ok("Báo cáo thành công");
             return apiResponse;}
+            else
+            {
+                ApiResponse apiResponse = new ApiResponse();
+                apiResponse.ok("Đã báo cáo rồi!");
+                return apiResponse;
+            }
         } catch (Exception ex) {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
