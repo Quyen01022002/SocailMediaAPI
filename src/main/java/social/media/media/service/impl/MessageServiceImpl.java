@@ -44,6 +44,7 @@ public class MessageServiceImpl implements MessageService {
 
             }        }
         for(MessageMembers messageMembers:messageMembersList){
+            messageMembers.getMessageBox().setAvatar(messageMembers.getMessageBox().getClasses().getAvatar());
             messageBoxList.add(messageMembers.getMessageBox());
         }
 
