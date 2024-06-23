@@ -13,5 +13,6 @@ public interface ReportService {
     public List<ReportReponse> listReportPost(int report);
     public List<PostResponseDTO> listPosstWaiting(int groupid);
     public Report searchByIdUserReporterAndPost(int idreporter, int postid);
+    public Report searchByIdUserReporterAndUser(int idreporter, int userid);
 
 }

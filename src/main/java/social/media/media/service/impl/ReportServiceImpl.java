@@ -152,4 +152,18 @@ catch (Exception e)
     throw  e;
 }
     }
+
+    @Override
+    public Report searchByIdUserReporterAndUser(int idreporter, int userid){
+        try {
+            List<Report> report = reportRepository.findByUserIdAndUserId(idreporter,userid);
+            if (report.size() == 0)
+                return null;
+            else return report.get(0);
+        }
+        catch (Exception e)
+        {
+            throw  e;
+        }
+    }
 }

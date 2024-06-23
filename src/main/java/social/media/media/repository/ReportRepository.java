@@ -16,6 +16,8 @@ public interface ReportRepository extends JpaRepository<Report,Integer> {
 
     @Query("SELECT r FROM Report r WHERE r.reporterID.id = :userId AND r.reportedPostID.id = :postId")
     List<Report> findByUserIdAndPostId(@Param("userId") int userId, @Param("postId") int postId);
+    @Query("SELECT r FROM Report r WHERE r.reporterID.id = :userId AND r.reportedUserID.id = : userId2")
+    List<Report> findByUserIdAndUserId(@Param("userId") int userId, @Param("userId") int userId2);
 
 
 }
