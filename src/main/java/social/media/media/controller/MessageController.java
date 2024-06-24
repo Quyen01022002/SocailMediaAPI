@@ -10,7 +10,6 @@ import social.media.media.model.reponse.MessageBoxReponse;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.request.MessageBoxRequest;
 import social.media.media.model.request.MessageRequest;
-import social.media.media.model.request.PostRequest;
 import social.media.media.service.MessageService;
 
 import java.util.List;

@@ -12,7 +12,6 @@ import social.media.media.model.reponse.*;
 import social.media.media.model.request.GroupAdminRequest;
 import social.media.media.model.request.GroupsMenberRequest;
 import social.media.media.model.request.GroupsRequest;
-import social.media.media.model.request.PostRequest;
 import social.media.media.service.*;
 
 import java.util.*;

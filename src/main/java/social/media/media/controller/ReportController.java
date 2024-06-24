@@ -13,7 +13,6 @@ import social.media.media.model.reponse.ApiResponse;
 import social.media.media.model.reponse.PostResponse;
 import social.media.media.model.reponse.PostResponseDTO;
 import social.media.media.model.reponse.ReportReponse;
-import social.media.media.model.request.PostRequest;
 import social.media.media.model.request.ReportRequest;
 import social.media.media.service.GroupService;
 import social.media.media.service.PostService;

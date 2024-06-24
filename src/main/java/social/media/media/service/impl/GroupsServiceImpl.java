@@ -124,6 +124,9 @@ public class GroupsServiceImpl implements GroupService {
                     groupsResponse = groupMapper.toResponse(item.getGroup());
                     Groups groups = groupsRepository.findById(item.getGroup().getId()).orElseThrow(() -> new NotFoundException(" Not Found"));
                     List<PostResponse> responseList = postMapper.toResponseList(groups.getListPost());
+                    for (int i=0; i< responseList.size(); i++){
+                        responseList.get(i).setCreateBy(userMapper.toResponsePost(groups.getListPost().get(i).getCreateBy()));
+                    }
                     List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
                     for (PostResponse itempost : responseList) {
                         PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
@@ -143,7 +146,8 @@ public class GroupsServiceImpl implements GroupService {
                         }
                         itemPostResponseDTO.setListAnh(itempost.getListAnh());
                         itemPostResponseDTO.setStatus(itempost.getStatus());
-
+                        itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                        itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
                         postResponseDTOList.add(itemPostResponseDTO);
                     }
 
