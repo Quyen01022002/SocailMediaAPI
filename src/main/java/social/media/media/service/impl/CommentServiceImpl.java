@@ -114,7 +114,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentsResponse setAnswer(int cmtid){
         try {
             Comments comments= commentRepository.findById(cmtid).orElseThrow(() -> new NotFoundException(" Not Found"));
-            comments.setIsAnwser(true);
+            comments.setAnwser(true);
             Comments cmt2 = commentRepository.saveAndFlush(comments);
             return commentMapper.toResponse(cmt2);
         } catch (ApplicationException ex) {
@@ -127,7 +127,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentsResponse setAnswerToCmt(int cmtid){
         try {
             Comments comments= commentRepository.findById(cmtid).orElseThrow(() -> new NotFoundException(" Not Found"));
-            comments.setIsAnwser(false);
+            comments.setAnwser(false);
             Comments cmt2 = commentRepository.saveAndFlush(comments);
             return commentMapper.toResponse(cmt2);
         } catch (ApplicationException ex) {

@@ -39,7 +39,7 @@ public class Comments {
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;
     
-    private Boolean isAnwser;
+    private boolean isAnwser;
 
     @ManyToOne
     @JoinColumn(name = "replyCmtId", referencedColumnName = "commentId")
@@ -53,7 +53,7 @@ public class Comments {
     @PrePersist
     public void setCreate(){
         this.timeStamp = new Date(System.currentTimeMillis());
-        //this.isAnwser = false;
+        this.isAnwser = false;
     }
 
 }
