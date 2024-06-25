@@ -114,6 +114,8 @@ public class PostsController {
     @PostMapping("/post")
     public ApiResponse<PostResponse> post(@RequestBody PostRequest post) {
         Post postEnity = postMapper.toEnity(post);
+        postEnity.setStatusCmtPostEnum(post.getStatusCmtPostEnum());
+        postEnity.setStatusViewPostEnum(post.getStatusViewPostEnum());
         PostResponse savedpost = postService.addPost(postEnity, postEnity.getListAnh());
 
         ApiResponse apiResponse = new ApiResponse();
@@ -385,6 +387,30 @@ public class PostsController {
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
+
+
+    @GetMapping("/getPostReply/{idteacher}/{pagenumber}")
+    public ApiResponse<List<PostResponseDTO>> getPostReply(@PathVariable int idteacher, @PathVariable int pagenumber){
+
+        List<PostResponseDTO> postResponseDTOList = postService.getPostReply(idteacher,pagenumber);
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+
+    }
+
+
+    @PostMapping("/{postid}/notSectorMe")
+    public ApiResponse notSectorMe (@PathVariable int postid){
+
+        PostResponse postResponse = postService.notSectorMe(postid);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok();
         return apiResponse;
     }
 }

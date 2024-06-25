@@ -299,7 +299,7 @@ public class GroupsServiceImpl implements GroupService {
     }
     @Override
     public List<PostResponse> loadPostOfAllGroupFollow(int pagenumber, int userid) {
-        PageRequest pageable = PageRequest.of(pagenumber, 2);
+        PageRequest pageable = PageRequest.of(pagenumber, 6);
         List<Post> result = postRepository.findPostsByUserGroups(userid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
         for (int i=0; i< result.size(); i++){

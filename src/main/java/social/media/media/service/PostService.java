@@ -26,4 +26,7 @@ public interface PostService {
 
 
     public List<PostResponseDTO> getPostOfAllGroupFollow(int iduser, int pagenumber);
+    public List<PostResponseDTO> getPostReply(int iduser, int pagenumber);
+
+    public PostResponse notSectorMe(int postid);
 }

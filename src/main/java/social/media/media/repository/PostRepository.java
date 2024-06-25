@@ -75,4 +75,7 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             "SELECT gm.group.id FROM GroupMembers gm WHERE gm.user.id = :userId) " +
             "ORDER BY p.timeStamp DESC")
     List<Post> findPostsByUserGroups(@Param("userId") int userId, Pageable pageable);
+
+
+    List<Post> findAllByUserReplyId(int userId, Pageable pageable);
 }
