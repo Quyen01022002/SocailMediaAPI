@@ -4,6 +4,7 @@ import social.media.media.model.entity.Post;
 import social.media.media.model.entity.User;
 import social.media.media.model.entity.userFollow;
 import social.media.media.model.reponse.PostResponse;
+import social.media.media.model.reponse.UserProgress;
 import social.media.media.model.reponse.UserResponse;
 import social.media.media.model.request.ResetPasswordRequest;
 
@@ -23,6 +24,8 @@ public interface UserService {
     public void fcm(int id,String fcm);
     public void update(int id, User user);
     public void update2(int id, User user);
+    public List<UserProgress> loadListTeacherProgressInGroup(int iduser, int groupid);
+    public List<UserProgress> loadListTeacherProgressInSector(int iduser, int groupid, int sector);
 
     public Boolean checkEmail(String email);
 }

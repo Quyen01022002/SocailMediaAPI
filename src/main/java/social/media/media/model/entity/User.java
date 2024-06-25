@@ -75,6 +75,11 @@ public class User implements UserDetails {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Post> postList;
 
+    @OneToMany(mappedBy = "UserReply", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<Post> postListReply;
+
     @OneToMany(mappedBy = "CreateBy", fetch = FetchType.LAZY)
     private List<Comments> cmtList;
 

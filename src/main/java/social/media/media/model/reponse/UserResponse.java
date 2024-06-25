@@ -39,6 +39,7 @@ public class UserResponse {
     private int countFriend;
 
     private List<PostResponse> postList;
+    private List<PostResponse> postListReply;
     private List<FriendsResponseDTO> friendships;
 
 

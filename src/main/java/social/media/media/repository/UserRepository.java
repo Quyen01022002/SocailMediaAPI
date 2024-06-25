@@ -21,6 +21,15 @@ public interface UserRepository extends JpaRepository<User,Integer> {
             "OR LOWER(u.email) LIKE LOWER(concat('%', :keyword, '%'))")
     List<User> searchByNameOrLastNameOrPhoneOrEmail(@Param("keyword") String keyword);
 
+    @Query("SELECT DISTINCT sm.user FROM SectorMembers sm " +
+            "JOIN sm.sectors s " +
+            "JOIN s.groupId g " +
+            "WHERE g.id = :groupId")
+    List<User> findDistinctUserRepliesNotCreatorsByGroupId(@Param("groupId") int groupId);
 
-
+    @Query("SELECT DISTINCT sm.user FROM SectorMembers sm " +
+            "JOIN sm.sectors s " +
+            "WHERE s.id = :sectorId")
+    List<User> findDistinctUserRepliesNotCreatorsByGroupIdAndSectorId(@Param("sectorId") int sectorId
+    );
 }
