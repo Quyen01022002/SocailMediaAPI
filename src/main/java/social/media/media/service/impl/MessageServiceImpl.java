@@ -32,7 +32,7 @@ public class MessageServiceImpl implements MessageService {
             {
                 if(messageBox.getUser1()!=null) {
                     messageBox.setAvatar(messageBox.getUser1().getProfilePicture());
-                    messageBox.setName(messageBox.getUser1().getFirstName() + messageBox.getUser1().getLastName());
+                    messageBox.setName(messageBox.getUser1().getFirstName()+ " " + messageBox.getUser1().getLastName());
                 }
                 messageBoxList.add(messageBox);
             }

@@ -118,6 +118,9 @@ public class PostServiceImpl implements PostService {
         PageRequest pageable = PageRequest.of(0, 10);
         List<Post> result = postRepository.findTop10ByTeacherIdOrderByLikesDesc(adminId, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
         return listPost;
     }
 
@@ -158,6 +161,26 @@ public class PostServiceImpl implements PostService {
     public List<PostResponse> getPostClass(int userid, int pagenumber) {
         PageRequest pageable = PageRequest.of(pagenumber, 6);
         List<Post> result = postRepository.findPostsByUserId(userid, pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
+        return listPost;
+    }
+    @Override
+    public List<PostResponse> getMyPost(int userid, int pagenumber) {
+        PageRequest pageable = PageRequest.of(pagenumber, 50);
+        List<Post> result = postRepository.findPostsByCreateById(userid, pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
+        return listPost;
+    }
+    @Override
+    public List<PostResponse> getOtherPost(int userid, int pagenumber) {
+        PageRequest pageable = PageRequest.of(pagenumber, 50);
+        List<Post> result = postRepository.findPostsByCreateByIdOther(userid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
         for (int i=0; i< result.size(); i++){
             listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
@@ -285,5 +308,42 @@ public class PostServiceImpl implements PostService {
         } catch (ApplicationException ex) {
             throw ex;
         }
+
     }
+    @Override
+    public List<PostResponseDTO> getPostNotReply(int teacherid) {
+        //PageRequest pageable = PageRequest.of(pagenumber, 6);
+        List<Post> list = postRepository.findPostsByUserReplyWithUnansweredComments(teacherid);
+        List<PostResponse> postResponseList = postMapper.toResponseList(list);
+        for (int i=0; i< list.size(); i++){
+            postResponseList.get(i).setCreateBy(userMapper.toResponsePost(list.get(i).getCreateBy()));
+        }
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == teacherid) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                } else {
+                    itemPostResponseDTO.setUser_liked(false);
+                }
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        return postResponseDTOList;
+    }
+
 }

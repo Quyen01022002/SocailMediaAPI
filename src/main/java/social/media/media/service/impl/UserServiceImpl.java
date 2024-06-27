@@ -398,4 +398,76 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+    @Override
+    public UserProgress loadListTeacherProgress(int iduser){
+        try {
+            User user = userRepository.findById(iduser).orElseThrow(() -> new NotFoundException(" Not Found"));
+                UserProgress userProgress = new UserProgress();
+                UserResponse profile = userMapper.toResponse(user);
+                for (int i=0; i< user.getPostList().size(); i++){
+                    profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
+                }
+                List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
+                for(PostResponse itempost:profile.getPostList())
+                {
+                    PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+                    itemPostResponseDTO.setId(itempost.getId());
+                    itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                    itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                    itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                    itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                    itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                    for(LikeResponse itemlike:  itempost.getListLike())
+                    {
+                        if(itemlike.getCreateBy().getId()==iduser)
+                        {
+                            itemPostResponseDTO.setUser_liked(true);
+
+                        }
+                        else {
+                            itemPostResponseDTO.setUser_liked(false);
+                        }
+                    }
+
+                    itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                    itemPostResponseDTO.setStatus(itempost.getStatus());
+                    itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                    itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    postResponseDTOList.add(itemPostResponseDTO);
+                }
+                UserResponseDTO responseDTO=new UserResponseDTO();
+                responseDTO.setProfilePicture(profile.getProfilePicture());
+                responseDTO.setBackGroundPicture(profile.getBackGroundPicture());
+                responseDTO.setId(profile.getId());
+                responseDTO.setEmail(profile.getEmail());
+                responseDTO.setAddress(profile.getAddress());
+                responseDTO.setFirstName(profile.getFirstName());
+                responseDTO.setFriendships(profile.getFriendships());
+                responseDTO.setCountFriend(profile.getCountFriend());
+                responseDTO.setPostList(postResponseDTOList);
+                responseDTO.setPhone(profile.getPhone());
+                responseDTO.setLastName(profile.getLastName());
+                responseDTO.setRole(profile.getRole());
+                userProgress.setUserResponse(responseDTO);
+                userProgress.setCountAllPostReply(profile.getPostListReply().size());
+                int count = 0;
+                if (profile.getPostListReply().size()!=0){
+                    for (PostResponse postResponse : profile.getPostListReply()){
+                        if (postResponse.getLisCmt().size()!=0){
+                            for (Comments comments : postResponse.getLisCmt()){
+                                if (comments.isAnwser() == true){
+                                    count ++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                userProgress.setCountPostReplied(count);
+            return userProgress;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+
+    }
 }

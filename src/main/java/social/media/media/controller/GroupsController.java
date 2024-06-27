@@ -474,8 +474,8 @@ public class GroupsController {
     }
 
     @GetMapping("/{groupid}/{sectorid}/loadProgress/{iduser}")
-    public ApiResponse<List<UserProgress>> loadProgressInSector(@PathVariable int groupid, @PathVariable int sectorid, @PathVariable int iduser){
-        List<UserProgress> userProgressList = userService.loadListTeacherProgressInSector(iduser,groupid, sectorid);
+    public ApiResponse<List<UserProgress>> loadProgressInSector(@PathVariable int groupid, @PathVariable int sectorid, @PathVariable int iduser) {
+        List<UserProgress> userProgressList = userService.loadListTeacherProgressInSector(iduser, groupid, sectorid);
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(userProgressList);

@@ -26,6 +26,6 @@ public interface UserService {
     public void update2(int id, User user);
     public List<UserProgress> loadListTeacherProgressInGroup(int iduser, int groupid);
     public List<UserProgress> loadListTeacherProgressInSector(int iduser, int groupid, int sector);
-
+    public UserProgress loadListTeacherProgress(int iduser);
     public Boolean checkEmail(String email);
 }

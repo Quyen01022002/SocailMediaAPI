@@ -413,5 +413,15 @@ public class PostsController {
         apiResponse.ok();
         return apiResponse;
     }
+
+    @GetMapping("/teacher/{teacherid}/notReply/")
+    public ApiResponse<List<PostResponseDTO>> loadPostNotReply(@PathVariable int teacherid){
+        List<PostResponseDTO> postResponseDTOList = postService.getPostNotReply(teacherid);
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
 }
 
