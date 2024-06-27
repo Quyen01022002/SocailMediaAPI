@@ -16,4 +16,9 @@ public interface MessageRepository extends JpaRepository<MessageBox,Integer> {
     MessageBox findByUserAndUser1(User u, User u1);
     List<MessageBox> findByUserOrUser1(User user, User user1);
 
+    @Query("SELECT mb FROM MessageBox mb " +
+            "WHERE (mb.user.id = :userid OR mb.user1.id = :userid) " +
+            "AND mb.classes IS NULL")
+    List<MessageBox> findByUserOrUser1AndClassIsNull(@Param("userid") int userid);
+
 }

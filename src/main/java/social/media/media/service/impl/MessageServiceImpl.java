@@ -26,7 +26,7 @@ public class MessageServiceImpl implements MessageService {
         user.setId(idUser);
         List<MessageMembers> messageMembersList=messageMembersRepository.findByUser(user);
         List<MessageBox> messageBoxList=new ArrayList<>();
-        List<MessageBox> messageBoxList2=messageRepository.findByUserOrUser1(user,user);
+        List<MessageBox> messageBoxList2=messageRepository.findByUserOrUser1AndClassIsNull(idUser);
         for(MessageBox messageBox:messageBoxList2){
             if(messageBox.getUser().getId()==idUser)
             {
