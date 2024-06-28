@@ -68,6 +68,9 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(" Not Found"));
             UserResponse userResponse=userMapper.toResponse(user);
+            for (int i=0; i< user.getPostList().size(); i++){
+                userResponse.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
+            }
             List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
 
             for(friends item:user.getFriendships())

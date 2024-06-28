@@ -423,5 +423,15 @@ public class PostsController {
         apiResponse.ok(postResponseDTOList);
         return apiResponse;
     }
+
+    @GetMapping("/postReporteds/group/{groupid}/{pagenumber}")
+    public ApiResponse<List<PostResponseDTO>> loadPostReported(@PathVariable int groupid, @PathVariable int pagenumber){
+        List<PostResponseDTO> postResponseDTOList = postService.loadPostReportedInGroup(pagenumber, groupid);
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
 }
 
