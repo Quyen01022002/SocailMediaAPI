@@ -26,7 +26,7 @@ public class CommentsResponse {
 
     private UserResponse CreateBy;
 
-    private Boolean isAnwser;
+    private boolean isAnwser;
 
     private List<CommentsResponse> commentsReplyList;
 

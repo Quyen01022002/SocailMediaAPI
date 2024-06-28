@@ -37,6 +37,12 @@ public interface PostMapper {
             groups.setId(post.getClasses());
             entity.setPage(groups);
         }
+        if(post.getSector()!= 0)
+        {
+            Sector sector = new Sector();
+            sector.setId(post.getSector());
+            entity.setSectors(sector);
+        }
 
         entity.setListAnh(INSTANCE.toEntity(post.getListAnh()));
         return entity;

@@ -11,10 +11,7 @@ import social.media.media.model.enums.GenderEnum;
 import social.media.media.model.mapper.FriendsMapper;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.mapper.UserMapper;
-import social.media.media.model.reponse.FriendsResponse;
-import social.media.media.model.reponse.FriendsResponseDTO;
-import social.media.media.model.reponse.PostResponse;
-import social.media.media.model.reponse.UserResponse;
+import social.media.media.model.reponse.*;
 import social.media.media.model.request.ResetPasswordRequest;
 import social.media.media.repository.PostRepository;
 import social.media.media.repository.UserFollowRepository;
@@ -241,5 +238,236 @@ public class UserServiceImpl implements UserService {
         } catch (ApplicationException ex) {
             throw ex;
         }
+    }
+
+
+    @Override
+    public List<UserProgress> loadListTeacherProgressInGroup(int userid, int groupid){
+        try {
+            List<User> userList = userRepository.findDistinctUserRepliesNotCreatorsByGroupId(groupid);
+            List<UserProgress> userProgressList =new ArrayList<>();
+            for (User user: userList){
+                UserProgress userProgress = new UserProgress();
+                UserResponse profile = userMapper.toResponse(user);
+                for (int i=0; i< user.getPostList().size(); i++){
+                    profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
+                }
+                List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
+                for(PostResponse itempost:profile.getPostList())
+                {
+                    PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+                    itemPostResponseDTO.setId(itempost.getId());
+                    itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                    itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                    itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                    itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                    itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                    for(LikeResponse itemlike:  itempost.getListLike())
+                    {
+                        if(itemlike.getCreateBy().getId()==userid)
+                        {
+                            itemPostResponseDTO.setUser_liked(true);
+
+                        }
+                        else {
+                            itemPostResponseDTO.setUser_liked(false);
+                        }
+                    }
+
+                    itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                    itemPostResponseDTO.setStatus(itempost.getStatus());
+                    itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                    itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    postResponseDTOList.add(itemPostResponseDTO);
+                }
+                UserResponseDTO responseDTO=new UserResponseDTO();
+                responseDTO.setProfilePicture(profile.getProfilePicture());
+                responseDTO.setBackGroundPicture(profile.getBackGroundPicture());
+                responseDTO.setId(profile.getId());
+                responseDTO.setEmail(profile.getEmail());
+                responseDTO.setAddress(profile.getAddress());
+                responseDTO.setFirstName(profile.getFirstName());
+                responseDTO.setFriendships(profile.getFriendships());
+                responseDTO.setCountFriend(profile.getCountFriend());
+                responseDTO.setPostList(postResponseDTOList);
+                responseDTO.setPhone(profile.getPhone());
+                responseDTO.setLastName(profile.getLastName());
+                responseDTO.setRole(profile.getRole());
+
+
+
+                userProgress.setUserResponse(responseDTO);
+                userProgress.setCountAllPostReply(profile.getPostListReply().size());
+                int count = 0;
+                if (profile.getPostListReply().size()!=0){
+                    for (PostResponse postResponse : profile.getPostListReply()){
+                        if (postResponse.getLisCmt().size()!=0){
+                            for (Comments comments : postResponse.getLisCmt()){
+                                if (comments.isAnwser() == true){
+                                    count ++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                userProgress.setCountPostReplied(count);
+                userProgressList.add(userProgress);
+            }
+            return userProgressList;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+    @Override
+    public List<UserProgress> loadListTeacherProgressInSector(int iduser,int groupid, int sectorid){
+        try {
+            List<User> userList = userRepository.findDistinctUserRepliesNotCreatorsByGroupIdAndSectorId( sectorid);
+            List<UserProgress> userProgressList =new ArrayList<>();
+            for (User user: userList){
+                UserProgress userProgress = new UserProgress();
+                UserResponse profile = userMapper.toResponse(user);
+                for (int i=0; i< user.getPostList().size(); i++){
+                    profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
+                }
+                List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
+                for(PostResponse itempost:profile.getPostList())
+                {
+                    PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+                    itemPostResponseDTO.setId(itempost.getId());
+                    itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                    itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                    itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                    itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                    itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                    for(LikeResponse itemlike:  itempost.getListLike())
+                    {
+                        if(itemlike.getCreateBy().getId()==iduser)
+                        {
+                            itemPostResponseDTO.setUser_liked(true);
+
+                        }
+                        else {
+                            itemPostResponseDTO.setUser_liked(false);
+                        }
+                    }
+
+                    itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                    itemPostResponseDTO.setStatus(itempost.getStatus());
+                    itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                    itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    postResponseDTOList.add(itemPostResponseDTO);
+                }
+                UserResponseDTO responseDTO=new UserResponseDTO();
+                responseDTO.setProfilePicture(profile.getProfilePicture());
+                responseDTO.setBackGroundPicture(profile.getBackGroundPicture());
+                responseDTO.setId(profile.getId());
+                responseDTO.setEmail(profile.getEmail());
+                responseDTO.setAddress(profile.getAddress());
+                responseDTO.setFirstName(profile.getFirstName());
+                responseDTO.setFriendships(profile.getFriendships());
+                responseDTO.setCountFriend(profile.getCountFriend());
+                responseDTO.setPostList(postResponseDTOList);
+                responseDTO.setPhone(profile.getPhone());
+                responseDTO.setLastName(profile.getLastName());
+                responseDTO.setRole(profile.getRole());
+
+
+
+                userProgress.setUserResponse(responseDTO);
+                userProgress.setCountAllPostReply(profile.getPostListReply().size());
+                int count = 0;
+                if (profile.getPostListReply().size()!=0){
+                    for (PostResponse postResponse : profile.getPostListReply()){
+                        if (postResponse.getLisCmt().size()!=0){
+                            for (Comments comments : postResponse.getLisCmt()){
+                                if (comments.isAnwser() == true){
+                                    count ++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                userProgress.setCountPostReplied(count);
+                userProgressList.add(userProgress);
+            }
+            return userProgressList;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+
+    }
+    @Override
+    public UserProgress loadListTeacherProgress(int iduser){
+        try {
+            User user = userRepository.findById(iduser).orElseThrow(() -> new NotFoundException(" Not Found"));
+                UserProgress userProgress = new UserProgress();
+                UserResponse profile = userMapper.toResponse(user);
+                for (int i=0; i< user.getPostList().size(); i++){
+                    profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
+                }
+                List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
+                for(PostResponse itempost:profile.getPostList())
+                {
+                    PostResponseDTO itemPostResponseDTO=new PostResponseDTO();
+                    itemPostResponseDTO.setId(itempost.getId());
+                    itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                    itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                    itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                    itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                    itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                    for(LikeResponse itemlike:  itempost.getListLike())
+                    {
+                        if(itemlike.getCreateBy().getId()==iduser)
+                        {
+                            itemPostResponseDTO.setUser_liked(true);
+
+                        }
+                        else {
+                            itemPostResponseDTO.setUser_liked(false);
+                        }
+                    }
+
+                    itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                    itemPostResponseDTO.setStatus(itempost.getStatus());
+                    itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                    itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    postResponseDTOList.add(itemPostResponseDTO);
+                }
+                UserResponseDTO responseDTO=new UserResponseDTO();
+                responseDTO.setProfilePicture(profile.getProfilePicture());
+                responseDTO.setBackGroundPicture(profile.getBackGroundPicture());
+                responseDTO.setId(profile.getId());
+                responseDTO.setEmail(profile.getEmail());
+                responseDTO.setAddress(profile.getAddress());
+                responseDTO.setFirstName(profile.getFirstName());
+                responseDTO.setFriendships(profile.getFriendships());
+                responseDTO.setCountFriend(profile.getCountFriend());
+                responseDTO.setPostList(postResponseDTOList);
+                responseDTO.setPhone(profile.getPhone());
+                responseDTO.setLastName(profile.getLastName());
+                responseDTO.setRole(profile.getRole());
+                userProgress.setUserResponse(responseDTO);
+                userProgress.setCountAllPostReply(profile.getPostListReply().size());
+                int count = 0;
+                if (profile.getPostListReply().size()!=0){
+                    for (PostResponse postResponse : profile.getPostListReply()){
+                        if (postResponse.getLisCmt().size()!=0){
+                            for (Comments comments : postResponse.getLisCmt()){
+                                if (comments.isAnwser() == true){
+                                    count ++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                userProgress.setCountPostReplied(count);
+            return userProgress;
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+
     }
 }

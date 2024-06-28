@@ -15,6 +15,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+
     UserResponse toResponse(User userEntity);
     UserResponsePost toResponsePost(User userEntity);
     User toEntity(UserRequest userEntity);

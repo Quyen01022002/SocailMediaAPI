@@ -45,6 +45,15 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             "ORDER BY p.timeStamp DESC")
     List<Post> findPostsByUserId(@Param("userId") int userId, Pageable pageable);
 
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.CreateBy.id = :userId " +
+            "ORDER BY p.timeStamp DESC")
+    List<Post> findPostsByCreateById(@Param("userId") int userId, Pageable pageable);
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.CreateBy.id = :userId " +
+            "AND p.statusViewPostEnum <> 'ONLYME'"+
+            "ORDER BY p.timeStamp DESC")
+    List<Post> findPostsByCreateByIdOther(@Param("userId") int userId, Pageable pageable);
 
     @Query("SELECT p FROM Post p " +
             "JOIN p.classes c " +
@@ -75,4 +84,12 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             "SELECT gm.group.id FROM GroupMembers gm WHERE gm.user.id = :userId) " +
             "ORDER BY p.timeStamp DESC")
     List<Post> findPostsByUserGroups(@Param("userId") int userId, Pageable pageable);
+
+
+    List<Post> findAllByUserReplyId(int userId, Pageable pageable);
+
+    @Query("SELECT DISTINCT p FROM Post p " +
+            "WHERE p.UserReply.id = :userReplyId " +
+            "AND NOT EXISTS (SELECT c FROM Comments c WHERE c.postID.id = p.id AND c.isAnwser = true)")
+    List<Post> findPostsByUserReplyWithUnansweredComments(@Param("userReplyId") int userReplyId);
 }

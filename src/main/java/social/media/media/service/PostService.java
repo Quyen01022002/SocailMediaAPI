@@ -21,9 +21,15 @@ public interface PostService {
     public List<PostResponse> searchPost(String keyword, int pagenumber);
     public List<IntactionResponse> getAllMyLike(int userid);
     public List<PostResponse> getPostClass(int userid, int pagenumber);
+    public List<PostResponse> getMyPost(int userid, int pagenumber);
+    public List<PostResponse> getOtherPost(int userid, int pagenumber);
     public List<PostResponse> getTop5OnMonth(int userid);
     public String getPostCountStringByMonthAndAdminId(int adminId);
 
 
     public List<PostResponseDTO> getPostOfAllGroupFollow(int iduser, int pagenumber);
+    public List<PostResponseDTO> getPostReply(int iduser, int pagenumber);
+    public List<PostResponseDTO> getPostNotReply(int teacherid);
+
+    public PostResponse notSectorMe(int postid);
 }

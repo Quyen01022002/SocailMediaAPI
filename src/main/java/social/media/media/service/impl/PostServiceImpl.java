@@ -17,6 +17,7 @@ import social.media.media.model.mapper.UserMapper;
 import social.media.media.model.reponse.*;
 import social.media.media.repository.*;
 import social.media.media.service.PostService;
+import social.media.media.service.UserService;
 import social.media.media.service.friendsService;
 
 import java.util.ArrayList;
@@ -41,13 +42,24 @@ public class PostServiceImpl implements PostService {
     InterationsMapper interationsMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    UserService userService;
 
     @Override
     public PostResponse addPost(Post post, List<pictureOfPost> listImg) {
         try {
-
-            post.setStatusViewPostEnum(StatusViewPostEnum.ALLUSER);
-            post.setStatusCmtPostEnum(StatusCmtPostEnum.ALLUSER);
+            List<UserProgress> userProgressList = userService.loadListTeacherProgressInSector(0,post.getGroups().getId(),post.getSectors().getId());
+            User user = new User();
+            if (userProgressList.size()!=0){
+                UserProgress minUserProgress = userProgressList.get(0);
+                for (UserProgress userProgress : userProgressList) {
+                    if (userProgress.getCountAllPostReply() < minUserProgress.getCountAllPostReply()) {
+                        minUserProgress = userProgress;
+                    }
+                }
+                user.setId(minUserProgress.getUserResponse().getId());
+                post.setUserReply(user);
+            }
             Post savedPost = postRepository.saveAndFlush(post);
             for (pictureOfPost item : listImg) {
                 item.setListAnh(savedPost);
@@ -106,6 +118,9 @@ public class PostServiceImpl implements PostService {
         PageRequest pageable = PageRequest.of(0, 10);
         List<Post> result = postRepository.findTop10ByTeacherIdOrderByLikesDesc(adminId, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
         return listPost;
     }
 
@@ -146,6 +161,26 @@ public class PostServiceImpl implements PostService {
     public List<PostResponse> getPostClass(int userid, int pagenumber) {
         PageRequest pageable = PageRequest.of(pagenumber, 6);
         List<Post> result = postRepository.findPostsByUserId(userid, pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
+        return listPost;
+    }
+    @Override
+    public List<PostResponse> getMyPost(int userid, int pagenumber) {
+        PageRequest pageable = PageRequest.of(pagenumber, 50);
+        List<Post> result = postRepository.findPostsByCreateById(userid, pageable);
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
+        return listPost;
+    }
+    @Override
+    public List<PostResponse> getOtherPost(int userid, int pagenumber) {
+        PageRequest pageable = PageRequest.of(pagenumber, 50);
+        List<Post> result = postRepository.findPostsByCreateByIdOther(userid, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
         for (int i=0; i< result.size(); i++){
             listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
@@ -218,4 +253,97 @@ public class PostServiceImpl implements PostService {
 
         return postResponseDTOList;
     }
+
+    @Override
+    public List<PostResponseDTO> getPostReply(int iduser, int pagenumber) {
+        PageRequest pageable = PageRequest.of(pagenumber, 6);
+        List<Post> list = postRepository.findAllByUserReplyId(iduser, pageable);
+        List<PostResponse> postResponseList = postMapper.toResponseList(list);
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == iduser) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                } else {
+                    itemPostResponseDTO.setUser_liked(false);
+                }
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+
+
+        return postResponseDTOList;
+    }
+
+    @Override
+    public PostResponse notSectorMe(int postid){
+
+        try {
+            Post exPost = postRepository.findById(postid).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            if (exPost == null) {
+                throw new NotFoundException("Not Found");
+            }
+
+
+            exPost.setUserReply(null);
+            // Update
+            Post post = postRepository.saveAndFlush(exPost);
+
+            // Map to Response
+            return postMapper.toResponse(post);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+
+    }
+    @Override
+    public List<PostResponseDTO> getPostNotReply(int teacherid) {
+        //PageRequest pageable = PageRequest.of(pagenumber, 6);
+        List<Post> list = postRepository.findPostsByUserReplyWithUnansweredComments(teacherid);
+        List<PostResponse> postResponseList = postMapper.toResponseList(list);
+        for (int i=0; i< list.size(); i++){
+            postResponseList.get(i).setCreateBy(userMapper.toResponsePost(list.get(i).getCreateBy()));
+        }
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == teacherid) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                } else {
+                    itemPostResponseDTO.setUser_liked(false);
+                }
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        return postResponseDTOList;
+    }
+
 }

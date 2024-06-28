@@ -58,6 +58,10 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "CreateBy", referencedColumnName = "id")
     private User CreateBy;
+
+    @ManyToOne
+    @JoinColumn(name = "UserReply", referencedColumnName = "id")
+    private User UserReply;
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<SaveItem> pageMemberships;

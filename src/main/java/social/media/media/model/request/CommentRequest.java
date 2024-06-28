@@ -12,4 +12,5 @@ public class CommentRequest {
     private int post_id;
     private String content_post;
     private Date timeStamp;
+    private Boolean isAnwser;
 }
