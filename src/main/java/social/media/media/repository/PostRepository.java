@@ -92,4 +92,7 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             "WHERE p.UserReply.id = :userReplyId " +
             "AND NOT EXISTS (SELECT c FROM Comments c WHERE c.postID.id = p.id AND c.isAnwser = true)")
     List<Post> findPostsByUserReplyWithUnansweredComments(@Param("userReplyId") int userReplyId);
+
+    @Query("SELECT p FROM Post p JOIN Report r ON p.id = r.reportedPostID.id WHERE p.groups.id = :groupId")
+    List<Post> findReportedPostsInGroup(int groupId, Pageable pageable);
 }

@@ -32,4 +32,5 @@ public interface PostService {
     public List<PostResponseDTO> getPostNotReply(int teacherid);
 
     public PostResponse notSectorMe(int postid);
+    public List<PostResponseDTO> loadPostReportedInGroup(int pagenumber, int groupid);
 }
