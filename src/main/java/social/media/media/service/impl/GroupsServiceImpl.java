@@ -22,6 +22,7 @@ import social.media.media.service.GroupService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -129,26 +130,28 @@ public class GroupsServiceImpl implements GroupService {
                     }
                     List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
                     for (PostResponse itempost : responseList) {
-                        PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
-                        itemPostResponseDTO.setId(itempost.getId());
-                        itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
-                        itemPostResponseDTO.setLike_count(itempost.getListLike().size());
-                        itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
-                        itemPostResponseDTO.setContentPost(itempost.getContentPost());
-                        itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
-                        itemPostResponseDTO.setGroupid(itempost.getGroupid());
-                        for (LikeResponse itemlike : itempost.getListLike()) {
-                            if (itemlike.getCreateBy().getId() == id) {
-                                itemPostResponseDTO.setUser_liked(true);
-                                break;
+                        if(itempost.getStatus()) {
+                            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+                            itemPostResponseDTO.setId(itempost.getId());
+                            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+                            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+                            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+                            for (LikeResponse itemlike : itempost.getListLike()) {
+                                if (itemlike.getCreateBy().getId() == id) {
+                                    itemPostResponseDTO.setUser_liked(true);
+                                    break;
+                                }
+                                itemPostResponseDTO.setUser_liked(false);
                             }
-                            itemPostResponseDTO.setUser_liked(false);
+                            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+                            itemPostResponseDTO.setStatus(itempost.getStatus());
+                            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                            postResponseDTOList.add(itemPostResponseDTO);
                         }
-                        itemPostResponseDTO.setListAnh(itempost.getListAnh());
-                        itemPostResponseDTO.setStatus(itempost.getStatus());
-                        itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
-                        itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
-                        postResponseDTOList.add(itemPostResponseDTO);
                     }
 
                     groupsResponse.setListPost(postResponseDTOList);
@@ -301,11 +304,16 @@ public class GroupsServiceImpl implements GroupService {
     public List<PostResponse> loadPostOfAllGroupFollow(int pagenumber, int userid) {
         PageRequest pageable = PageRequest.of(pagenumber, 6);
         List<Post> result = postRepository.findPostsByUserGroups(userid, pageable);
+        System.out.println(result.get(0).getStatus());
         List<PostResponse> listPost = postMapper.toResponseList(result);
         for (int i=0; i< result.size(); i++){
             listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
         }
-        return listPost;
+        List<PostResponse> filteredList = listPost.stream()
+                .filter(post -> post.getStatus() == true)
+                .collect(Collectors.toList());
+
+        return filteredList;
     }
 
 

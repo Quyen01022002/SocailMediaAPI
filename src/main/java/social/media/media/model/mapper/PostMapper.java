@@ -43,7 +43,7 @@ public interface PostMapper {
             sector.setId(post.getSector());
             entity.setSectors(sector);
         }
-
+        entity.setStatus(post.getStatus());
         entity.setListAnh(INSTANCE.toEntity(post.getListAnh()));
         return entity;
     }

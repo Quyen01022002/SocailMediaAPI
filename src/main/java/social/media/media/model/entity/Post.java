@@ -30,8 +30,6 @@ public class Post {
 
     private Timestamp timeStamp;
 
-
-    //Thêm emun status
     private Boolean status;
 
     @ManyToOne

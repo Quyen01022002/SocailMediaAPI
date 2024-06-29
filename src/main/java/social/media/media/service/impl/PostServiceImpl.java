@@ -67,7 +67,7 @@ public class PostServiceImpl implements PostService {
             }
 
             // Map to Response
-            return postMapper.toResponse(post);
+            return postMapper.toResponse(savedPost);
         } catch (ApplicationException ex) {
             throw ex;
         }
