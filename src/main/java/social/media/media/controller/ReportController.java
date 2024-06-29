@@ -107,6 +107,7 @@ public class ReportController {
             {
             Post post=new Post();
             post.setId(postid);
+            System.out.println(postid);
             User userReporter = new User();
             userReporter.setId(reportRequest.getCreateById());
             Report report=new Report();

@@ -159,6 +159,8 @@ public class UserController {
                 itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
                 itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                 itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
                 itemPostResponseDTO.setContentPost(itempost.getContentPost());
                 itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
                 for(LikeResponse itemlike:  itempost.getListLike())
