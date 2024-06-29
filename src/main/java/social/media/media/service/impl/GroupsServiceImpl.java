@@ -309,11 +309,7 @@ public class GroupsServiceImpl implements GroupService {
         for (int i=0; i< result.size(); i++){
             listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
         }
-        List<PostResponse> filteredList = listPost.stream()
-                .filter(post -> post.getStatus() == true)
-                .collect(Collectors.toList());
-
-        return filteredList;
+        return listPost;
     }
 
 
