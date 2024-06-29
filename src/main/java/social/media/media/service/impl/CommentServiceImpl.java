@@ -11,6 +11,7 @@ import social.media.media.model.entity.Post;
 import social.media.media.model.entity.User;
 import social.media.media.model.entity.notications;
 import social.media.media.model.mapper.CommentMapper;
+import social.media.media.model.mapper.UserMapper;
 import social.media.media.model.reponse.CommentsResponse;
 import social.media.media.model.request.CommentReplyRequest;
 import social.media.media.model.request.CommentRequest;
@@ -31,6 +32,8 @@ public class CommentServiceImpl implements CommentService {
     private  final UserRepository userRepository;
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    UserMapper userMapper;
     private final PostRepository postRepository;
 
     @Override
@@ -106,6 +109,20 @@ public class CommentServiceImpl implements CommentService {
             PageRequest pageable = PageRequest.of(pagenumber, 6);
             List<Comments> listcmt = commentRepository.findAllCommentsByAdminId(id, pageable);
             return commentMapper.toListCommentResponse(listcmt);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+    @Override
+    public List<CommentsResponse> getAllMyCommentByMeInGroup(int id, int pagenumber) {
+        try {
+            PageRequest pageable = PageRequest.of(pagenumber, 6);
+            List<Comments> listcmt = commentRepository.findAllCommentsByMeInGroup(id, pageable);
+            List<CommentsResponse> commentsList =commentMapper.toListCommentResponse(listcmt);
+            for (int i= 0; i<listcmt.size(); i++){
+                commentsList.get(i).getPostID().setCreateBy(userMapper.toResponsePost(listcmt.get(i).getPostID().getCreateBy()));
+            }
+            return commentsList;
         } catch (ApplicationException ex) {
             throw ex;
         }

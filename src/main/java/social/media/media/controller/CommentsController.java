@@ -103,6 +103,18 @@ public class CommentsController {
             throw new ApplicationException(ex.getMessage()); // Handle other exceptions
         }
     }
+    @GetMapping("/group/{iduser}/getAllComment/{pagenumber}")
+    public ApiResponse<List<CommentsResponse>> getAllCommenByMeInGroup(@PathVariable int iduser,@PathVariable int pagenumber){
+        try {
+
+            List<CommentsResponse> profile = commentService.getAllMyCommentByMeInGroup(iduser,pagenumber);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(profile);
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+    }
 
     @PutMapping("/setAnswer/{cmtid}")
     public ApiResponse<CommentsResponse> setAnswer (@PathVariable int cmtid){
