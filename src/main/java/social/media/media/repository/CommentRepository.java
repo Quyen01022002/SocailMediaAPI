@@ -24,4 +24,8 @@ public interface CommentRepository extends JpaRepository<Comments,Integer> {
             "WHERE cl.teacher.id = :adminId " +
             "ORDER BY c.timeStamp DESC")
     List<Comments> findAllCommentsByAdminId(@Param("adminId") int adminId, Pageable pageable);
+    @Query("SELECT c FROM Comments c " +
+            "WHERE c.CreateBy.id = :adminId " +
+            "ORDER BY c.timeStamp DESC")
+    List<Comments> findAllCommentsByMeInGroup(@Param("adminId") int adminId, Pageable pageable);
 }
