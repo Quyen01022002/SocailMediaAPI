@@ -27,7 +27,7 @@ public class ReportReponse {
     private String reason;
 
     private Date timestamp;
-    private Date status;
+    private boolean status;
 
 
 

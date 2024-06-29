@@ -346,4 +346,40 @@ public class PostServiceImpl implements PostService {
         return postResponseDTOList;
     }
 
+
+    @Override
+    public List<PostResponseDTO> loadPostReportedInGroup(int pagenumber, int groupid) {
+        PageRequest pageable = PageRequest.of(pagenumber, 6);
+        List<Post> result = postRepository.findReportedPostsInGroup(groupid,pageable);
+        List<PostResponse> postResponseList = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            postResponseList.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            for (LikeResponse itemlike : itempost.getListLike()) {
+                if (itemlike.getCreateBy().getId() == result.get(0).getGroups().getAdminId().getId()) {
+                    itemPostResponseDTO.setUser_liked(true);
+                    break;
+                } else {
+                    itemPostResponseDTO.setUser_liked(false);
+                }
+            }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+        return postResponseDTOList;
+    }
 }

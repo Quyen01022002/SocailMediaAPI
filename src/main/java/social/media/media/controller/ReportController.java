@@ -158,5 +158,46 @@ public class ReportController {
         }
 
     }
+
+    @GetMapping("/getInGroup/{groupid}/{pagenumber}")
+    public ApiResponse<List<ReportReponse>> loadPostReport(@PathVariable int groupid, @PathVariable int pagenumber){
+        try{
+
+            List<ReportReponse> reportReponseList = reportService.loadPostReportInGroup(groupid, pagenumber);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok(reportReponseList);
+            return apiResponse;
+        }
+        catch(Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+
+    }
+    @PutMapping("/{idreport}/duyet")
+    public ApiResponse DuyetPost(@PathVariable int idreport) {
+        try {
+            reportService.DuyetPost(idreport);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+    @PutMapping("/{idreport}/cam")
+    public ApiResponse CamPost(@PathVariable int idreport) {
+        try {
+            reportService.CamPost(idreport);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
+
 }
 

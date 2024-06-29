@@ -2,6 +2,7 @@ package social.media.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import social.media.media.exception.ApplicationException;
 import social.media.media.exception.NotFoundException;
@@ -17,6 +18,7 @@ import social.media.media.repository.*;
 import social.media.media.service.ReportService;
 import social.media.media.service.SavedPostService;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,12 +68,34 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public PostResponse DuyetPost(int id) {
         try {
-            Post exPost = postRepository.findById(id).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            Report report = reportRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found"));
+            Post exPost = postRepository.findById(report.getReportedPostID().getId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
             if (exPost == null) {
                 throw new NotFoundException("Not Found");
             }
             exPost.setStatus(true);
+            report.setStatus(true);
             // Update
+            reportRepository.saveAndFlush(report);
+            postRepository.saveAndFlush(exPost);
+            // Map to Rsponse
+            return postMapper.toResponse(exPost);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+    @Override
+    public PostResponse CamPost(int id) {
+        try {
+            Report report = reportRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found"));
+            Post exPost = postRepository.findById(report.getReportedPostID().getId()).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            if (exPost == null) {
+                throw new NotFoundException("Not Found");
+            }
+            exPost.setStatus(false);
+            report.setStatus(true);
+            // Update
+            reportRepository.saveAndFlush(report);
             postRepository.saveAndFlush(exPost);
             // Map to Rsponse
             return postMapper.toResponse(exPost);
@@ -95,9 +119,6 @@ public class ReportServiceImpl implements ReportService {
 
             postResponseDTOList.add(fp);
         }
-
-
-
 
         return postResponseDTOList;
     }
@@ -165,5 +186,23 @@ catch (Exception e)
         {
             throw  e;
         }
+    }
+
+    @Override
+    public List<ReportReponse> loadPostReportInGroup(int groupid, int pagenumber){
+        PageRequest pageable = PageRequest.of(pagenumber, 10);
+        List<Report> list = reportRepository.findReportsByGroupIdAndStatusFalse(groupid, pageable);
+        List<ReportReponse> postResponseDTOList=new ArrayList<>();
+        for(Report item:list)
+        {
+
+            ReportReponse fp=reportMapper.toResponse(item);
+
+
+
+            postResponseDTOList.add(fp);
+        }
+
+        return postResponseDTOList;
     }
 }

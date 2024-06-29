@@ -10,9 +10,11 @@ public interface ReportService {
     public void reportPost(Report report);
     public void Delete(int id);
     public PostResponse DuyetPost(int id);
+    public PostResponse CamPost(int id);
     public List<ReportReponse> listReportPost(int report);
     public List<PostResponseDTO> listPosstWaiting(int groupid);
     public Report searchByIdUserReporterAndPost(int idreporter, int postid);
     public Report searchByIdUserReporterAndUser(int idreporter, int userid);
+    public List<ReportReponse> loadPostReportInGroup(int groupid, int pagenumber);
 
 }

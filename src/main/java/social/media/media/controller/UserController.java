@@ -177,7 +177,8 @@ public class UserController {
 
                 itemPostResponseDTO.setListAnh(itempost.getListAnh());
                 itemPostResponseDTO.setStatus(itempost.getStatus());
-
+itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
                 postResponseDTOList.add(itemPostResponseDTO);
             }
             UserResponseDTO responseDTO=new UserResponseDTO();
