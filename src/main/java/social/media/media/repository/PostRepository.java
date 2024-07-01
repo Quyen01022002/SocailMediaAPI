@@ -80,7 +80,7 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
     List<Post> findAllPostsFromFollowedGroups(int userId, StatusViewPostEnum statusViewPostEnum, Pageable pageable);
 
 
-    @Query("SELECT p FROM Post p WHERE p.status=true and p.groups.id IN (" +
+    @Query("SELECT p FROM Post p WHERE p.hotinday is null and p.status=true and p.groups.id IN (" +
             "SELECT gm.group.id FROM GroupMembers gm WHERE gm.user.id = :userId) " +
             "ORDER BY p.timeStamp DESC")
     List<Post> findPostsByUserGroups(@Param("userId") int userId, Pageable pageable);

@@ -72,6 +72,21 @@ public class PostServiceImpl implements PostService {
             throw ex;
         }
     }
+    @Override
+    public PostResponse addPostImportant(Post post, List<pictureOfPost> listImg) {
+        try {
+            Post savedPost = postRepository.saveAndFlush(post);
+            for (pictureOfPost item : listImg) {
+                item.setListAnh(savedPost);
+                postIimageRepository.saveAndFlush(item);
+            }
+
+            // Map to Response
+            return postMapper.toResponse(savedPost);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
 
     @Override
     public PostResponse updatePost(Post post, List<pictureOfPost> listImg) {
@@ -381,5 +396,64 @@ public class PostServiceImpl implements PostService {
         }
 
         return postResponseDTOList;
+    }
+
+    @Override
+    public PostResponseDTO blockCmt(int postid){
+        Post exPost = postRepository.findById(postid).orElseThrow(() -> new NotFoundException("friend Not Found"));
+        exPost.setStatusCmtPostEnum(StatusCmtPostEnum.NOTUSER);
+        postRepository.saveAndFlush(exPost);
+    PostResponse itempost = postMapper.toResponse(exPost);
+    itempost.setCreateBy(userMapper.toResponsePost(exPost.getCreateBy()));
+        PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+        itemPostResponseDTO.setId(itempost.getId());
+        itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+        itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+        itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+        itemPostResponseDTO.setContentPost(itempost.getContentPost());
+        itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+        itemPostResponseDTO.setGroupid(itempost.getGroupid());
+        for (LikeResponse itemlike : itempost.getListLike()) {
+            if (itemlike.getCreateBy().getId() == exPost.getCreateBy().getId()) {
+                itemPostResponseDTO.setUser_liked(true);
+                break;
+            } else {
+                itemPostResponseDTO.setUser_liked(false);
+            }
+        }
+        itemPostResponseDTO.setListAnh(itempost.getListAnh());
+        itemPostResponseDTO.setStatus(itempost.getStatus());
+        itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+        itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            return itemPostResponseDTO;
+        }
+    @Override
+    public PostResponseDTO unblockCmt(int postid){
+        Post exPost = postRepository.findById(postid).orElseThrow(() -> new NotFoundException("friend Not Found"));
+        exPost.setStatusCmtPostEnum(StatusCmtPostEnum.ALLUSER);
+        postRepository.saveAndFlush(exPost);
+        PostResponse itempost = postMapper.toResponse(exPost);
+        itempost.setCreateBy(userMapper.toResponsePost(exPost.getCreateBy()));
+        PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+        itemPostResponseDTO.setId(itempost.getId());
+        itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+        itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+        itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+        itemPostResponseDTO.setContentPost(itempost.getContentPost());
+        itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+        itemPostResponseDTO.setGroupid(itempost.getGroupid());
+        for (LikeResponse itemlike : itempost.getListLike()) {
+            if (itemlike.getCreateBy().getId() == exPost.getCreateBy().getId()) {
+                itemPostResponseDTO.setUser_liked(true);
+                break;
+            } else {
+                itemPostResponseDTO.setUser_liked(false);
+            }
+        }
+        itemPostResponseDTO.setListAnh(itempost.getListAnh());
+        itemPostResponseDTO.setStatus(itempost.getStatus());
+        itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+        itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+        return itemPostResponseDTO;
     }
 }

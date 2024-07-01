@@ -11,6 +11,7 @@ import java.util.Map;
 
 public interface PostService {
     public PostResponse addPost(Post post, List<pictureOfPost> listImg);
+    public PostResponse addPostImportant(Post post, List<pictureOfPost> listImg);
     public PostResponse updatePost(Post post, List<pictureOfPost> listImg);
     public PostResponse findOne(int postId);
 
@@ -33,4 +34,9 @@ public interface PostService {
 
     public PostResponse notSectorMe(int postid);
     public List<PostResponseDTO> loadPostReportedInGroup(int pagenumber, int groupid);
+
+
+    public PostResponseDTO blockCmt(int postid);
+    public PostResponseDTO unblockCmt(int postid);
+
 }

@@ -32,6 +32,9 @@ public class Post {
 
     private Boolean status;
 
+    @Column(nullable = true)
+    private Integer hotinday;
+
     @ManyToOne
     @JoinColumn(name = "saved_id")
     private Save page;
