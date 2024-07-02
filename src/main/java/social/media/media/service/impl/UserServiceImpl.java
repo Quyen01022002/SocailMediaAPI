@@ -263,6 +263,7 @@ public class UserServiceImpl implements UserService {
                     itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
                     itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                    itemPostResponseDTO.setSave_count(itempost.getSave_count());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
                     for(LikeResponse itemlike:  itempost.getListLike())
@@ -277,10 +278,18 @@ public class UserServiceImpl implements UserService {
                         }
                     }
 
+                    for (SaveItem itemlike : itempost.getSaveItemList()) {
+                        if (itemlike.getPage().getId() == userid) {
+                            itemPostResponseDTO.setUser_saved(true);
+                            break;
+                        }
+                        itemPostResponseDTO.setUser_saved(false);
+                    }
                     itemPostResponseDTO.setListAnh(itempost.getListAnh());
                     itemPostResponseDTO.setStatus(itempost.getStatus());
                     itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
                     itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    itemPostResponseDTO.setGroupname(itempost.getGroupname());
                     postResponseDTOList.add(itemPostResponseDTO);
                 }
                 UserResponseDTO responseDTO=new UserResponseDTO();
@@ -341,6 +350,7 @@ public class UserServiceImpl implements UserService {
                     itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
                     itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                    itemPostResponseDTO.setSave_count(itempost.getSave_count());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
                     for(LikeResponse itemlike:  itempost.getListLike())
@@ -354,11 +364,19 @@ public class UserServiceImpl implements UserService {
                             itemPostResponseDTO.setUser_liked(false);
                         }
                     }
+                    for (SaveItem itemlike : itempost.getSaveItemList()) {
+                        if (itemlike.getPage().getId() == iduser) {
+                            itemPostResponseDTO.setUser_saved(true);
+                            break;
+                        }
+                        itemPostResponseDTO.setUser_saved(false);
+                    }
 
                     itemPostResponseDTO.setListAnh(itempost.getListAnh());
                     itemPostResponseDTO.setStatus(itempost.getStatus());
                     itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
                     itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    itemPostResponseDTO.setGroupname(itempost.getGroupname());
                     postResponseDTOList.add(itemPostResponseDTO);
                 }
                 UserResponseDTO responseDTO=new UserResponseDTO();
@@ -431,11 +449,18 @@ public class UserServiceImpl implements UserService {
                             itemPostResponseDTO.setUser_liked(false);
                         }
                     }
-
+                    for (SaveItem itemlike : itempost.getSaveItemList()) {
+                        if (itemlike.getPage().getId() == iduser) {
+                            itemPostResponseDTO.setUser_saved(true);
+                            break;
+                        }
+                        itemPostResponseDTO.setUser_saved(false);
+                    }
                     itemPostResponseDTO.setListAnh(itempost.getListAnh());
                     itemPostResponseDTO.setStatus(itempost.getStatus());
                     itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
                     itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+                    itemPostResponseDTO.setGroupname(itempost.getGroupname());
                     postResponseDTOList.add(itemPostResponseDTO);
                 }
                 UserResponseDTO responseDTO=new UserResponseDTO();

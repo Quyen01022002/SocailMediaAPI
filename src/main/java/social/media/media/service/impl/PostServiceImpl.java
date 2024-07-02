@@ -75,6 +75,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse addPostImportant(Post post, List<pictureOfPost> listImg) {
         try {
+            post.setStatus(true);
             Post savedPost = postRepository.saveAndFlush(post);
             for (pictureOfPost item : listImg) {
                 item.setListAnh(savedPost);
@@ -246,6 +247,7 @@ public class PostServiceImpl implements PostService {
             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
             itemPostResponseDTO.setGroupid(itempost.getGroupid());
@@ -256,6 +258,13 @@ public class PostServiceImpl implements PostService {
                 } else {
                     itemPostResponseDTO.setUser_liked(false);
                 }
+            }
+            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                if (itemlike.getPage().getId() == iduser) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
             }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
@@ -279,6 +288,7 @@ public class PostServiceImpl implements PostService {
             PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
             itemPostResponseDTO.setId(itempost.getId());
             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
@@ -292,10 +302,18 @@ public class PostServiceImpl implements PostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                if (itemlike.getPage().getId() == iduser) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
+            }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
             itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
             itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            itemPostResponseDTO.setGroupname(itempost.getGroupname());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -340,6 +358,7 @@ public class PostServiceImpl implements PostService {
             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
             itemPostResponseDTO.setGroupid(itempost.getGroupid());
@@ -351,10 +370,18 @@ public class PostServiceImpl implements PostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                if (itemlike.getPage().getId() == teacherid) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
+            }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
             itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
             itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            itemPostResponseDTO.setGroupname(itempost.getGroupname());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -377,6 +404,7 @@ public class PostServiceImpl implements PostService {
             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
             itemPostResponseDTO.setGroupid(itempost.getGroupid());
@@ -388,10 +416,18 @@ public class PostServiceImpl implements PostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                if (itemlike.getPage().getId() == result.get(0).getGroups().getAdminId().getId()) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
+            }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
             itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
             itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            itemPostResponseDTO.setGroupname(itempost.getGroupname());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -410,6 +446,7 @@ public class PostServiceImpl implements PostService {
         itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
         itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
         itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+        itemPostResponseDTO.setSave_count(itempost.getSave_count());
         itemPostResponseDTO.setContentPost(itempost.getContentPost());
         itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
         itemPostResponseDTO.setGroupid(itempost.getGroupid());
@@ -421,10 +458,18 @@ public class PostServiceImpl implements PostService {
                 itemPostResponseDTO.setUser_liked(false);
             }
         }
+        for (SaveItem itemlike : itempost.getSaveItemList()) {
+            if (itemlike.getPage().getId() == exPost.getCreateBy().getId()) {
+                itemPostResponseDTO.setUser_saved(true);
+                break;
+            }
+            itemPostResponseDTO.setUser_saved(false);
+        }
         itemPostResponseDTO.setListAnh(itempost.getListAnh());
         itemPostResponseDTO.setStatus(itempost.getStatus());
         itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
         itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+        itemPostResponseDTO.setGroupname(itempost.getGroupname());
             return itemPostResponseDTO;
         }
     @Override
@@ -439,6 +484,7 @@ public class PostServiceImpl implements PostService {
         itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
         itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
         itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+        itemPostResponseDTO.setSave_count(itempost.getSave_count());
         itemPostResponseDTO.setContentPost(itempost.getContentPost());
         itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
         itemPostResponseDTO.setGroupid(itempost.getGroupid());
@@ -450,10 +496,18 @@ public class PostServiceImpl implements PostService {
                 itemPostResponseDTO.setUser_liked(false);
             }
         }
+        for (SaveItem itemlike : itempost.getSaveItemList()) {
+            if (itemlike.getPage().getId() == exPost.getCreateBy().getId()) {
+                itemPostResponseDTO.setUser_saved(true);
+                break;
+            }
+            itemPostResponseDTO.setUser_saved(false);
+        }
         itemPostResponseDTO.setListAnh(itempost.getListAnh());
         itemPostResponseDTO.setStatus(itempost.getStatus());
         itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
         itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+        itemPostResponseDTO.setGroupname(itempost.getGroupname());
         return itemPostResponseDTO;
     }
 }

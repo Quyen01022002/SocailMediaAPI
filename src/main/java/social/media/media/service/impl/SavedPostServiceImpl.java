@@ -65,6 +65,7 @@ public class SavedPostServiceImpl implements SavedPostService {
             itemPostResponseDTO.setId(fp.getId());
             itemPostResponseDTO.setComment_count(fp.getLisCmt().size());
             itemPostResponseDTO.setCreateBy(fp.getCreateBy());
+            itemPostResponseDTO.setSave_count(fp.getSave_count());
             itemPostResponseDTO.setLike_count(fp.getListLike().size());
             itemPostResponseDTO.setContentPost(fp.getContentPost());
             itemPostResponseDTO.setTimeStamp(fp.getTimeStamp());
@@ -79,9 +80,18 @@ public class SavedPostServiceImpl implements SavedPostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            for (SaveItem itemlike : fp.getSaveItemList()) {
+                if (itemlike.getPage().getId() == id) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
+            }
             itemPostResponseDTO.setListAnh(fp.getListAnh());
             itemPostResponseDTO.setStatus(fp.getStatus());
-
+itemPostResponseDTO.setStatusCmtPostEnum(fp.getStatusCmtPostEnum());
+itemPostResponseDTO.setStatusViewPostEnum(fp.getStatusViewPostEnum());
+itemPostResponseDTO.setGroupname(fp.getGroupname());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 

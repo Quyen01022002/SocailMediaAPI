@@ -84,6 +84,11 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             "SELECT gm.group.id FROM GroupMembers gm WHERE gm.user.id = :userId) " +
             "ORDER BY p.timeStamp DESC")
     List<Post> findPostsByUserGroups(@Param("userId") int userId, Pageable pageable);
+    @Query("SELECT p FROM Post p WHERE p.hotinday is not null" +
+            " and p.status=true and p.groups.id IN (" +
+            "SELECT gm.group.id FROM GroupMembers gm WHERE gm.user.id = :userId) " +
+            "ORDER BY p.timeStamp DESC")
+    List<Post> findHotPostsByUserGroups(@Param("userId") int userId, Pageable pageable);
 
 
     List<Post> findAllByUserReplyId(int userId, Pageable pageable);

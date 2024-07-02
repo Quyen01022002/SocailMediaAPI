@@ -25,9 +25,12 @@ public class PostResponseDTO {
     private int comment_count;
     private int savedId;
     private int groupid;
+    private String groupname;
 
     private int like_count;
+    private int save_count;
     private Boolean user_liked;
+    private Boolean user_saved;
     private List<postImgResponse> listAnh;
     private StatusViewPostEnum statusViewPostEnum;
     private StatusCmtPostEnum statusCmtPostEnum;

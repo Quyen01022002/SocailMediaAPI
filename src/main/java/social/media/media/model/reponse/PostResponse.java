@@ -27,7 +27,9 @@ public class PostResponse {
     private Timestamp timeStamp;
     private UserResponsePost CreateBy;
     private int groupid;
-
+    private String groupname;
+    private int save_count;
+    private List<SaveItem> saveItemList;
     //Thêm emun status
     private Boolean status;
 

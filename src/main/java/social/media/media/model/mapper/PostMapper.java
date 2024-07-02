@@ -15,9 +15,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
     pictureOfPostMapper INSTANCE = Mappers.getMapper( pictureOfPostMapper.class );
+
     @Mapping(source = "groups.id", target = "groupid")
+    @Mapping(source = "groups.name", target = "groupname")
+    @Mapping(source = "pageMemberships", target = "saveItemList")
+    @Mapping(expression = "java(post.getPageMemberships() != null ? post.getPageMemberships().size() : 0)", target = "save_count")
     PostResponse toResponse(Post post);
-    ;
     default Post toEnity(PostRequest post){
         Post entity = new Post();
         entity.setContentPost(post.getContentPost());
