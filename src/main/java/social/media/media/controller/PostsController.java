@@ -100,6 +100,9 @@ public class PostsController {
                         }
                         itemPostResponseDTO.setUser_liked(false);
                     }
+                    if (itempost.getSaveItemList().size() == 0)
+                        itemPostResponseDTO.setUser_saved(false);
+                    else
                     for (SaveItem itemlike : itempost.getSaveItemList()) {
                         if (itemlike.getPage().getId() == id) {
                             itemPostResponseDTO.setUser_saved(true);
@@ -185,6 +188,9 @@ public class PostsController {
             }
             itemPostResponseDTO.setUser_liked(false);
         }
+        if (itempost.getSaveItemList().size() == 0)
+            itemPostResponseDTO.setUser_saved(false);
+        else
         for (SaveItem itemlike : itempost.getSaveItemList()) {
             if (itemlike.getPage().getId() == iduser) {
                 itemPostResponseDTO.setUser_saved(true);
@@ -236,6 +242,9 @@ public class PostsController {
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == id) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -277,6 +286,9 @@ public class PostsController {
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == id) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -318,6 +330,9 @@ public class PostsController {
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == userid) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -359,6 +374,9 @@ public class PostsController {
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == userid) {
                     itemPostResponseDTO.setUser_saved(true);

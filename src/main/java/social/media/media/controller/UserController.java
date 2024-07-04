@@ -65,6 +65,9 @@ public class UserController {
                         itemPostResponseDTO.setUser_liked(false);
                     }
                 }
+                if (itempost.getSaveItemList().size() == 0)
+                    itemPostResponseDTO.setUser_saved(false);
+                else
                 for (SaveItem itemlike : itempost.getSaveItemList()) {
                     if (itemlike.getPage().getId() == id) {
                         itemPostResponseDTO.setUser_saved(true);
@@ -127,6 +130,9 @@ public class UserController {
                         itemPostResponseDTO.setUser_liked(false);
                     }
                 }
+                if (itempost.getSaveItemList().size() == 0)
+                    itemPostResponseDTO.setUser_saved(false);
+                else
                 for (SaveItem itemlike : itempost.getSaveItemList()) {
                     if (itemlike.getPage().getId() == profile.getId()) {
                         itemPostResponseDTO.setUser_saved(true);
@@ -192,6 +198,9 @@ public class UserController {
                         itemPostResponseDTO.setUser_liked(false);
                     }
                 }
+                if (itempost.getSaveItemList().size() == 0)
+                    itemPostResponseDTO.setUser_saved(false);
+                else
                 for (SaveItem itemlike : itempost.getSaveItemList()) {
                     if (itemlike.getPage().getId() == profile.getId()) {
                         itemPostResponseDTO.setUser_saved(true);
@@ -255,6 +264,9 @@ itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
                         itemPostResponseDTO.setUser_liked(false);
                     }
                 }
+                if (itempost.getSaveItemList().size() == 0)
+                    itemPostResponseDTO.setUser_saved(false);
+                else
                 for (SaveItem itemlike : itempost.getSaveItemList()) {
                     if (itemlike.getPage().getId() == id) {
                         itemPostResponseDTO.setUser_saved(true);
@@ -509,6 +521,9 @@ itemPostResponseDTO.setGroupname(itempost.getGroupname());
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == userid) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -550,6 +565,9 @@ itemPostResponseDTO.setGroupname(itempost.getGroupname());
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == myid) {
                     itemPostResponseDTO.setUser_saved(true);

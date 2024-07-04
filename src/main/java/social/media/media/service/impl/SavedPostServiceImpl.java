@@ -80,6 +80,9 @@ public class SavedPostServiceImpl implements SavedPostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            if (fp.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : fp.getSaveItemList()) {
                 if (itemlike.getPage().getId() == id) {
                     itemPostResponseDTO.setUser_saved(true);

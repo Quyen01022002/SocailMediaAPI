@@ -147,6 +147,9 @@ public class GroupsServiceImpl implements GroupService {
                                 }
                                 itemPostResponseDTO.setUser_liked(false);
                             }
+                            if (itempost.getSaveItemList().size() == 0)
+                                itemPostResponseDTO.setUser_saved(false);
+                            else
                             for (SaveItem itemlike : itempost.getSaveItemList()) {
                                 if (itemlike.getPage().getId() == id) {
                                     itemPostResponseDTO.setUser_saved(true);

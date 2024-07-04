@@ -84,6 +84,25 @@ public class GroupsController {
         }
 
     }
+    @PostMapping("/members/")
+    public ApiResponse AddMembers(@RequestParam("groupID") int groupid,@RequestParam("userID") int userId) {
+        try {
+            GroupMembers groupMembers=new GroupMembers();
+            User user=new User();
+            user.setId(userId);
+            Groups groups=new Groups();
+            groups.setId(groupid);
+            groupMembers.setGroup(groups);
+            groupMembers.setUser(user);
+            groupService.addMemberPage(groupMembers);
+            ApiResponse apiResponse = new ApiResponse();
+            apiResponse.ok();
+            return apiResponse;
+        } catch (Exception ex) {
+            throw new ApplicationException(ex.getMessage()); // Handle other exceptions
+        }
+
+    }
     @GetMapping("/{id}")
     public ApiResponse<GroupsResponse> getprofile(@PathVariable int id) {
         try {
@@ -415,6 +434,9 @@ itemPostResponseDTO.setSave_count(itempost.getSave_count());
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == userid) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -500,6 +522,9 @@ itemPostResponseDTO.setSave_count(itempost.getSave_count());
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == userid) {
                     itemPostResponseDTO.setUser_saved(true);
