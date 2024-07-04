@@ -154,7 +154,11 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findById(userid).orElseThrow(() -> new NotFoundException(" Not Found"));
 
         List<interations> result = inerationsRepository.findAllByCreateByOrderByTimeStampDesc(user);
-        return interationsMapper.toLResponse(result);
+        List<IntactionResponse> intactionResponseList = interationsMapper.toLResponse(result);
+        for (int i=0; i< result.size(); i++){
+            intactionResponseList.get(i).getPostID().setCreateBy(userMapper.toResponsePost(result.get(i).getPostID().getCreateBy()));
+        }
+        return intactionResponseList;
     }
 
     @Override
@@ -259,6 +263,9 @@ public class PostServiceImpl implements PostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == iduser) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -302,6 +309,9 @@ public class PostServiceImpl implements PostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == iduser) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -370,6 +380,9 @@ public class PostServiceImpl implements PostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == teacherid) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -416,6 +429,9 @@ public class PostServiceImpl implements PostService {
                     itemPostResponseDTO.setUser_liked(false);
                 }
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
             for (SaveItem itemlike : itempost.getSaveItemList()) {
                 if (itemlike.getPage().getId() == result.get(0).getGroups().getAdminId().getId()) {
                     itemPostResponseDTO.setUser_saved(true);
@@ -458,6 +474,9 @@ public class PostServiceImpl implements PostService {
                 itemPostResponseDTO.setUser_liked(false);
             }
         }
+        if (itempost.getSaveItemList().size() == 0)
+            itemPostResponseDTO.setUser_saved(false);
+        else
         for (SaveItem itemlike : itempost.getSaveItemList()) {
             if (itemlike.getPage().getId() == exPost.getCreateBy().getId()) {
                 itemPostResponseDTO.setUser_saved(true);
@@ -496,6 +515,9 @@ public class PostServiceImpl implements PostService {
                 itemPostResponseDTO.setUser_liked(false);
             }
         }
+        if (itempost.getSaveItemList().size() == 0)
+            itemPostResponseDTO.setUser_saved(false);
+        else
         for (SaveItem itemlike : itempost.getSaveItemList()) {
             if (itemlike.getPage().getId() == exPost.getCreateBy().getId()) {
                 itemPostResponseDTO.setUser_saved(true);
