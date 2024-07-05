@@ -30,5 +30,6 @@ public interface GroupService {
     public List<GroupsResponse> Search(String keyword);
     public List<PostResponse> loadPost(int groupid, int page, int userid);
     public List<PostResponse> loadPostOfAllGroupFollow(int pagenumber, int userid);
+    public List<PostResponse> loadHotPostOfAllGroupFollow(int pagenumber, int userid);
 
 }

@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import social.media.media.exception.ApplicationException;
 import social.media.media.model.entity.*;
+import social.media.media.model.enums.StatusCmtPostEnum;
+import social.media.media.model.enums.StatusViewPostEnum;
 import social.media.media.model.mapper.PostMapper;
 import social.media.media.model.reponse.*;
+import social.media.media.model.request.HotPostRequest;
 import social.media.media.model.request.PostRequest;
 import social.media.media.service.CommentService;
 import social.media.media.service.GroupService;
@@ -52,6 +55,7 @@ public class PostsController {
                     PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
                     itemPostResponseDTO.setId(itempost.getId());
                     itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+                    itemPostResponseDTO.setSave_count(itempost.getSave_count());
                     itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
@@ -65,10 +69,18 @@ public class PostsController {
                             itemPostResponseDTO.setUser_liked(false);
                         }
                     }
+                    for (SaveItem itemlike : itempost.getSaveItemList()) {
+                        if (itemlike.getPage().getId() == id) {
+                            itemPostResponseDTO.setUser_saved(true);
+                            break;
+                        }
+                        itemPostResponseDTO.setUser_saved(false);
+                    }
                     itemPostResponseDTO.setListAnh(itempost.getListAnh());
                     itemPostResponseDTO.setStatus(itempost.getStatus());
                     itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
                     itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                    itemPostResponseDTO.setGroupname(itempost.getGroupname());
                     postResponseDTOList.add(itemPostResponseDTO);
                 }
                 for (PostResponse itempost : item.getFriend().getPostList()) {
@@ -76,6 +88,7 @@ public class PostsController {
                     itemPostResponseDTO.setId(itempost.getId());
                     itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
                     itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+                    itemPostResponseDTO.setSave_count(itempost.getSave_count());
                     itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
                     itemPostResponseDTO.setContentPost(itempost.getContentPost());
                     itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
@@ -87,10 +100,21 @@ public class PostsController {
                         }
                         itemPostResponseDTO.setUser_liked(false);
                     }
+                    if (itempost.getSaveItemList().size() == 0)
+                        itemPostResponseDTO.setUser_saved(false);
+                    else
+                    for (SaveItem itemlike : itempost.getSaveItemList()) {
+                        if (itemlike.getPage().getId() == id) {
+                            itemPostResponseDTO.setUser_saved(true);
+                            break;
+                        }
+                        itemPostResponseDTO.setUser_saved(false);
+                    }
                     itemPostResponseDTO.setListAnh(itempost.getListAnh());
                     itemPostResponseDTO.setStatus(itempost.getStatus());
                     itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
                     itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                    itemPostResponseDTO.setGroupname(itempost.getGroupname());
                     postResponseDTOList.add(itemPostResponseDTO);
                 }
 
@@ -122,6 +146,17 @@ public class PostsController {
         apiResponse.ok(savedpost);
         return apiResponse;
     }
+    @PostMapping("/post/important")
+    public ApiResponse<PostResponse> postImportant(@RequestBody HotPostRequest post) {
+        Post postEnity = postMapper.HotToEnity(post);
+        postEnity.setStatusCmtPostEnum(StatusCmtPostEnum.NOTUSER);
+        postEnity.setStatusViewPostEnum(StatusViewPostEnum.ALLUSER);
+        PostResponse savedpost = postService.addPostImportant(postEnity, postEnity.getListAnh());
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(savedpost);
+        return apiResponse;
+    }
 
     @PutMapping("/update")
     public ApiResponse<PostResponse> Updatepost(@RequestBody PostRequest post) {
@@ -141,6 +176,7 @@ public class PostsController {
         itemPostResponseDTO.setId(itempost.getId());
         itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
         itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+        itemPostResponseDTO.setSave_count(itempost.getSave_count());
         itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
         itemPostResponseDTO.setContentPost(itempost.getContentPost());
         itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
@@ -152,10 +188,21 @@ public class PostsController {
             }
             itemPostResponseDTO.setUser_liked(false);
         }
+        if (itempost.getSaveItemList().size() == 0)
+            itemPostResponseDTO.setUser_saved(false);
+        else
+        for (SaveItem itemlike : itempost.getSaveItemList()) {
+            if (itemlike.getPage().getId() == iduser) {
+                itemPostResponseDTO.setUser_saved(true);
+                break;
+            }
+            itemPostResponseDTO.setUser_saved(false);
+        }
         itemPostResponseDTO.setListAnh(itempost.getListAnh());
         itemPostResponseDTO.setStatus(itempost.getStatus());
         itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
         itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+        itemPostResponseDTO.setGroupname(itempost.getGroupname());
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(itemPostResponseDTO);
         return apiResponse;
@@ -183,6 +230,7 @@ public class PostsController {
             itemPostResponseDTO.setId(itempost.getId());
             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
@@ -194,10 +242,21 @@ public class PostsController {
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
+            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                if (itemlike.getPage().getId() == id) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
+            }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
             itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
             itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            itemPostResponseDTO.setGroupname(itempost.getGroupname());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -215,6 +274,7 @@ public class PostsController {
             itemPostResponseDTO.setId(itempost.getId());
             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
@@ -226,10 +286,21 @@ public class PostsController {
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
+            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                if (itemlike.getPage().getId() == id) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
+            }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
             itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
             itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            itemPostResponseDTO.setGroupname(itempost.getGroupname());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -247,6 +318,7 @@ public class PostsController {
             itemPostResponseDTO.setId(itempost.getId());
             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
@@ -258,8 +330,19 @@ public class PostsController {
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
+            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                if (itemlike.getPage().getId() == userid) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
+            }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
+            itemPostResponseDTO.setGroupname(itempost.getGroupname());
             itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
             itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
@@ -279,6 +362,7 @@ public class PostsController {
             itemPostResponseDTO.setId(itempost.getId());
             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
@@ -290,10 +374,21 @@ public class PostsController {
                 }
                 itemPostResponseDTO.setUser_liked(false);
             }
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
+            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                if (itemlike.getPage().getId() == userid) {
+                    itemPostResponseDTO.setUser_saved(true);
+                    break;
+                }
+                itemPostResponseDTO.setUser_saved(false);
+            }
             itemPostResponseDTO.setListAnh(itempost.getListAnh());
             itemPostResponseDTO.setStatus(itempost.getStatus());
             itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
             itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            itemPostResponseDTO.setGroupname(itempost.getGroupname());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
@@ -431,6 +526,24 @@ public class PostsController {
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+    }
+
+
+    @PutMapping("/{postid}/blockCmt")
+    public ApiResponse<PostResponseDTO> blockCmt(@PathVariable int postid){
+        PostResponseDTO responseDTO = postService.blockCmt(postid);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(responseDTO);
+        return apiResponse;
+    }
+    @PutMapping("/{postid}/unblockCmt")
+    public ApiResponse<PostResponseDTO> unblockCmt(@PathVariable int postid){
+        PostResponseDTO responseDTO = postService.unblockCmt(postid);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(responseDTO);
         return apiResponse;
     }
 }

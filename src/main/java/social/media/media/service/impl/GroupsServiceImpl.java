@@ -136,6 +136,7 @@ public class GroupsServiceImpl implements GroupService {
                             itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
                             itemPostResponseDTO.setLike_count(itempost.getListLike().size());
                             itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+                            itemPostResponseDTO.setSave_count(itempost.getSave_count());
                             itemPostResponseDTO.setContentPost(itempost.getContentPost());
                             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
                             itemPostResponseDTO.setGroupid(itempost.getGroupid());
@@ -146,10 +147,21 @@ public class GroupsServiceImpl implements GroupService {
                                 }
                                 itemPostResponseDTO.setUser_liked(false);
                             }
+                            if (itempost.getSaveItemList().size() == 0)
+                                itemPostResponseDTO.setUser_saved(false);
+                            else
+                            for (SaveItem itemlike : itempost.getSaveItemList()) {
+                                if (itemlike.getPage().getId() == id) {
+                                    itemPostResponseDTO.setUser_saved(true);
+                                    break;
+                                }
+                                itemPostResponseDTO.setUser_saved(false);
+                            }
                             itemPostResponseDTO.setListAnh(itempost.getListAnh());
                             itemPostResponseDTO.setStatus(itempost.getStatus());
                             itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
                             itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+                            itemPostResponseDTO.setGroupname(itempost.getGroupname());
                             postResponseDTOList.add(itemPostResponseDTO);
                         }
                     }
@@ -304,6 +316,17 @@ public class GroupsServiceImpl implements GroupService {
     public List<PostResponse> loadPostOfAllGroupFollow(int pagenumber, int userid) {
         PageRequest pageable = PageRequest.of(pagenumber, 6);
         List<Post> result = postRepository.findPostsByUserGroups(userid, pageable);
+        System.out.println(result.get(0).getStatus());
+        List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i< result.size(); i++){
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
+        return listPost;
+    }
+    @Override
+    public List<PostResponse> loadHotPostOfAllGroupFollow(int pagenumber, int userid) {
+        PageRequest pageable = PageRequest.of(pagenumber, 6);
+        List<Post> result = postRepository.findHotPostsByUserGroups(userid, pageable);
         System.out.println(result.get(0).getStatus());
         List<PostResponse> listPost = postMapper.toResponseList(result);
         for (int i=0; i< result.size(); i++){

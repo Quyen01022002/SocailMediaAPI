@@ -98,7 +98,10 @@ public class CommentServiceImpl implements CommentService {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(" Not Found"));
             List<Comments> listcmt = commentRepository.findAllByCreateBy(id);
-            return commentMapper.toListCommentResponse(listcmt);
+             List<CommentsResponse> commentsResponseList =commentMapper.toListCommentResponse(listcmt);
+             for (int i = 0; i<listcmt.size(); i++)
+                 commentsResponseList.get(i).getPostID().setCreateBy(userMapper.toResponsePost(listcmt.get(i).getPostID().getCreateBy()));
+             return commentsResponseList;
         } catch (ApplicationException ex) {
             throw ex;
         }
@@ -106,7 +109,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentsResponse> getAllMyCommentClasses(int id, int pagenumber) {
         try {
-            PageRequest pageable = PageRequest.of(pagenumber, 6);
+            PageRequest pageable = PageRequest.of(pagenumber, 20);
             List<Comments> listcmt = commentRepository.findAllCommentsByAdminId(id, pageable);
             return commentMapper.toListCommentResponse(listcmt);
         } catch (ApplicationException ex) {

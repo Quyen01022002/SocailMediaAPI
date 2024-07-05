@@ -139,6 +139,7 @@ public class ReportServiceImpl implements ReportService {
             itemPostResponseDTO.setComment_count(fp.getLisCmt().size());
             itemPostResponseDTO.setCreateBy(fp.getCreateBy());
             itemPostResponseDTO.setLike_count(fp.getListLike().size());
+            itemPostResponseDTO.setSave_count(fp.getSave_count());
             itemPostResponseDTO.setContentPost(fp.getContentPost());
             itemPostResponseDTO.setTimeStamp(fp.getTimeStamp());
 //            for(LikeResponse itemlike:  fp.getListLike())
@@ -154,7 +155,9 @@ public class ReportServiceImpl implements ReportService {
 //            }
             itemPostResponseDTO.setListAnh(fp.getListAnh());
             itemPostResponseDTO.setStatus(fp.getStatus());
-
+            itemPostResponseDTO.setGroupname(fp.getGroupname());
+            itemPostResponseDTO.setStatusViewPostEnum(fp.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(fp.getStatusCmtPostEnum());
             postResponseDTOList.add(itemPostResponseDTO);
         }
 
