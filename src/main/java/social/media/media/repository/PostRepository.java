@@ -28,7 +28,11 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             "ORDER BY likeCount DESC")
     List<Post> findTop10PostsByLikes(Pageable pageable);
 
-    @Query("SELECT p FROM Post p WHERE p.contentPost LIKE %:key% AND p.statusViewPostEnum <> :statusViewPostEnum")
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.contentPost LIKE %:key% " +
+            "AND p.classes is null " +
+            "AND p.status = true " +
+            "AND p.statusViewPostEnum <> :statusViewPostEnum")
     List<Post> findByContentPostContaining(@Param("key") String key, @Param("statusViewPostEnum") StatusViewPostEnum statusViewPostEnum, Pageable pageable);
 
 

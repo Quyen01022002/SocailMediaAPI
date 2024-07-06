@@ -410,6 +410,9 @@ public class PostsController {
             itemPostResponseDTO.setContentPost(itempost.getContentPost());
             itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
             itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            if (itempost.getListLike()== null || itempost.getListLike().size()==0)
+                itemPostResponseDTO.setUser_liked(false);
+            else
             for (LikeResponse itemlike : itempost.getListLike()) {
                 if (itemlike.getCreateBy().getId() == userid) {
                     itemPostResponseDTO.setUser_liked(true);

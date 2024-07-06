@@ -148,6 +148,10 @@ public class PostServiceImpl implements PostService {
         StatusViewPostEnum statusViewPostEnum = StatusViewPostEnum.ONLYME;
         List<Post> result = postRepository.findByContentPostContaining(keyword, statusViewPostEnum, pageable);
         List<PostResponse> listPost = postMapper.toResponseList(result);
+        for (int i=0; i<result.size(); i++)
+        {
+            listPost.get(i).setCreateBy(userMapper.toResponsePost(result.get(i).getCreateBy()));
+        }
         return listPost;
     }
 
