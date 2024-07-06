@@ -119,6 +119,15 @@ SectorMemberResponse rss = sectorMapper.toMemberResponse(rs);
         return apiResponse;
 
     }
+    @GetMapping("/{sectorid}/teacher")
+    public ApiResponse<List<SectorMemberResponse>> getTeacherInOneSector(@PathVariable int sectorid){
+        List<SectorMemberResponse> rs = sectorService.getTeacherInSector(sectorid);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(rs);
+        return apiResponse;
+
+    }
     @GetMapping("/sectorTeacher/{id}")
     public ApiResponse<SectorMemberResponse> getOneSectorTeacher(@PathVariable int id){
         SectorMemberResponse rs = sectorService.getOneTeacherInGroup(id);

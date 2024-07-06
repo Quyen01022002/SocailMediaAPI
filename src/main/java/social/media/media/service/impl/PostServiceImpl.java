@@ -44,6 +44,8 @@ public class PostServiceImpl implements PostService {
     UserMapper userMapper;
     @Autowired
     UserService userService;
+    @Autowired
+    private SectorRepository sectorRepository;
 
     @Override
     public PostResponse addPost(Post post, List<pictureOfPost> listImg) {
@@ -331,6 +333,47 @@ public class PostServiceImpl implements PostService {
 
         return postResponseDTOList;
     }
+    @Override
+    public List<PostResponseDTO> getPostNotUserReply(int idgroup, int pagenumber) {
+        PageRequest pageable = PageRequest.of(pagenumber, 6);
+        List<Post> list = postRepository.findAllByNotUserReplyId(idgroup, pageable);
+        List<PostResponse> postResponseList = postMapper.toResponseList(list);
+        for (int i= 0; i<list.size(); i++)
+            postResponseList.get(i).setCreateBy(userMapper.toResponsePost(list.get(i).getCreateBy()));
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+        for (PostResponse itempost : postResponseList) {
+            PostResponseDTO itemPostResponseDTO = new PostResponseDTO();
+            itemPostResponseDTO.setId(itempost.getId());
+            itemPostResponseDTO.setComment_count(itempost.getLisCmt().size());
+            itemPostResponseDTO.setSave_count(itempost.getSave_count());
+            itemPostResponseDTO.setCreateBy(itempost.getCreateBy());
+            itemPostResponseDTO.setLike_count(itempost.getListLike().size());
+            itemPostResponseDTO.setContentPost(itempost.getContentPost());
+            itemPostResponseDTO.setTimeStamp(itempost.getTimeStamp());
+            itemPostResponseDTO.setGroupid(itempost.getGroupid());
+            itemPostResponseDTO.setUser_liked(false);
+            if (itempost.getSaveItemList().size() == 0)
+                itemPostResponseDTO.setUser_saved(false);
+            else
+                for (SaveItem itemlike : itempost.getSaveItemList()) {
+                    if (itemlike.getPage().getId() == 0) {
+                        itemPostResponseDTO.setUser_saved(true);
+                        break;
+                    }
+                    itemPostResponseDTO.setUser_saved(false);
+                }
+            itemPostResponseDTO.setListAnh(itempost.getListAnh());
+            itemPostResponseDTO.setStatus(itempost.getStatus());
+            itemPostResponseDTO.setStatusViewPostEnum(itempost.getStatusViewPostEnum());
+            itemPostResponseDTO.setStatusCmtPostEnum(itempost.getStatusCmtPostEnum());
+            itemPostResponseDTO.setGroupname(itempost.getGroupname());
+            postResponseDTOList.add(itemPostResponseDTO);
+        }
+
+
+
+        return postResponseDTOList;
+    }
 
     @Override
     public PostResponse notSectorMe(int postid){
@@ -353,6 +396,29 @@ public class PostServiceImpl implements PostService {
         }
 
     }
+    @Override
+    public PostResponse phancong(int postid, int userid, int sectorid){
+
+        try {
+            Post exPost = postRepository.findById(postid).orElseThrow(() -> new NotFoundException("friend Not Found"));
+            if (exPost == null) {
+                throw new NotFoundException("Not Found");
+            }
+            Sector sector = sectorRepository.findById(sectorid).orElseThrow(() -> new NotFoundException(" Not Found"));
+            User user = userRepository.findById(userid).orElseThrow(() -> new NotFoundException(" Not Found"));
+            exPost.setUserReply(user);
+            exPost.setSectors(sector);
+            // Update
+            Post post = postRepository.saveAndFlush(exPost);
+
+            // Map to Response
+            return postMapper.toResponse(post);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+
+    }
+
     @Override
     public List<PostResponseDTO> getPostNotReply(int teacherid) {
         //PageRequest pageable = PageRequest.of(pagenumber, 6);

@@ -100,4 +100,10 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
 
     @Query("SELECT p FROM Post p JOIN Report r ON p.id = r.reportedPostID.id WHERE p.groups.id = :groupId")
     List<Post> findReportedPostsInGroup(int groupId, Pageable pageable);
+
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.groups.id = :groupId AND p.hotinday is null" +
+            " AND p.status = true" +
+            " AND p.UserReply is null ORDER BY p.timeStamp DESC")
+    List<Post> findAllByNotUserReplyId(@Param("groupId")int groupId, Pageable pageable);
 }

@@ -497,12 +497,32 @@ public class PostsController {
         return apiResponse;
 
     }
+    @GetMapping("/notUserReply/{idgroup}/{pagenumber}")
+    public ApiResponse<List<PostResponseDTO>> getPostNotUserReply(@PathVariable int idgroup, @PathVariable int pagenumber){
+
+        List<PostResponseDTO> postResponseDTOList = postService.getPostNotUserReply(idgroup,pagenumber);
 
 
-    @PostMapping("/{postid}/notSectorMe")
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(postResponseDTOList);
+        return apiResponse;
+
+    }
+
+
+    @PutMapping("/{postid}/notSectorMe")
     public ApiResponse notSectorMe (@PathVariable int postid){
 
         PostResponse postResponse = postService.notSectorMe(postid);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok();
+        return apiResponse;
+    }
+    @PutMapping("/{postid}/phancong/{sectorid}/{userid}")
+    public ApiResponse phanCongReply (@PathVariable int postid, @PathVariable int userid, @PathVariable int sectorid){
+
+        PostResponse postResponse = postService.phancong(postid, userid, sectorid);
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.ok();

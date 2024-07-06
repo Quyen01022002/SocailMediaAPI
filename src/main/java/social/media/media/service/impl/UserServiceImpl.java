@@ -75,8 +75,8 @@ public class UserServiceImpl implements UserService {
             UserResponse userResponse=userMapper.toResponse(user);
             for (int i=0; i< user.getPostList().size(); i++){
                 userResponse.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
-                userResponse.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
-                userResponse.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());
+                userResponse.getPostList().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                userResponse.getPostList().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
             }
             List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
 
@@ -261,8 +261,8 @@ public class UserServiceImpl implements UserService {
                 UserResponse profile = userMapper.toResponse(user);
                 for (int i=0; i< user.getPostList().size(); i++){
                     profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
-                    profile.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
-                    profile.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());
+                    profile.getPostList().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                    profile.getPostList().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
                 }
                 List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
                 for(PostResponse itempost:profile.getPostList())
@@ -286,7 +286,7 @@ public class UserServiceImpl implements UserService {
                             itemPostResponseDTO.setUser_liked(false);
                         }
                     }
-                    if (itempost.getSaveItemList().size() == 0)
+                    if (itempost.getSaveItemList() == null)
                     itemPostResponseDTO.setUser_saved(false);
                 else
 
@@ -353,8 +353,8 @@ public class UserServiceImpl implements UserService {
                 UserResponse profile = userMapper.toResponse(user);
                 for (int i=0; i< user.getPostList().size(); i++){
                     profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
-                    profile.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
-                    profile.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());
+                    profile.getPostList().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                    profile.getPostList().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
                 }
                 List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
                 for(PostResponse itempost:profile.getPostList())
@@ -444,8 +444,8 @@ public class UserServiceImpl implements UserService {
                 UserResponse profile = userMapper.toResponse(user);
                 for (int i=0; i< user.getPostList().size(); i++){
                     profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
-                    profile.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
-                    profile.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());
+                    profile.getPostList().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                    profile.getPostList().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
                 }
                 List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
                 for(PostResponse itempost:profile.getPostList())
@@ -468,7 +468,7 @@ public class UserServiceImpl implements UserService {
                             itemPostResponseDTO.setUser_liked(false);
                         }
                     }
-                    if (itempost.getSaveItemList().size() == 0)
+                    if (itempost.getSaveItemList() == null)
                         itemPostResponseDTO.setUser_saved(false);
                     else
                     for (SaveItem itemlike : itempost.getSaveItemList()) {

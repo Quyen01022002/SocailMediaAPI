@@ -19,5 +19,6 @@ public interface SectorService {
  public List<SectorResponse> getSectorInGroup(int groupid);
  public SectorResponse getSector(int sectorid);
  public List<SectorMemberResponse> getTeacherInGroup(int groupid);
+ public List<SectorMemberResponse> getTeacherInSector(int groupid);
  public SectorMemberResponse getOneTeacherInGroup(int id);
 }

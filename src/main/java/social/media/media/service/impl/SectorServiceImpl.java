@@ -109,6 +109,11 @@ private final SectorMembersRepository sectorMembersRepository;
         List<SectorMembers> rs = sectorMembersRepository.findAllByGroupId(groupid);
         return sectorMapper.toListMemberResponse(rs);
     }
+    @Override
+    public List<SectorMemberResponse> getTeacherInSector(int groupid){
+        List<SectorMembers> rs = sectorMembersRepository.findAllBySectorId(groupid);
+        return sectorMapper.toListMemberResponse(rs);
+    }
 
     @Override
     public SectorMemberResponse getOneTeacherInGroup(int id){
