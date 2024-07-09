@@ -30,9 +30,11 @@ public interface PostService {
 
     public List<PostResponseDTO> getPostOfAllGroupFollow(int iduser, int pagenumber);
     public List<PostResponseDTO> getPostReply(int iduser, int pagenumber);
+    public List<PostResponseDTO> getPostNotUserReply(int iduser, int pagenumber);
     public List<PostResponseDTO> getPostNotReply(int teacherid);
 
     public PostResponse notSectorMe(int postid);
+    public PostResponse phancong(int postid, int userid, int sectorid);
     public List<PostResponseDTO> loadPostReportedInGroup(int pagenumber, int groupid);
 
 
