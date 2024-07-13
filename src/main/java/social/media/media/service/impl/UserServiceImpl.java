@@ -41,10 +41,19 @@ public class UserServiceImpl implements UserService {
             UserResponse userResponse=userMapper.toResponse(user);
             for (int i=0; i< user.getPostList().size(); i++){
                 userResponse.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
+                if (user.getPostList().get(i).getGroups() != null){
                 userResponse.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
-                userResponse.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());
+                userResponse.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());}
                 userResponse.getPostList().get(i).setStatus(user.getPostList().get(i).getStatus());
                 userResponse.getPostList().get(i).setSaveItemList(user.getPostList().get(i).getPageMemberships());
+
+            }
+            for (int i=0; i< user.getPostListReply().size(); i++){
+                userResponse.getPostListReply().get(i).setCreateBy(userMapper.toResponsePost(user.getPostListReply().get(i).getCreateBy()));
+                userResponse.getPostListReply().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                userResponse.getPostListReply().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                userResponse.getPostListReply().get(i).setStatus(user.getPostListReply().get(i).getStatus());
+                userResponse.getPostListReply().get(i).setSaveItemList(user.getPostListReply().get(i).getPageMemberships());
 
             }
             List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
@@ -75,8 +84,20 @@ public class UserServiceImpl implements UserService {
             UserResponse userResponse=userMapper.toResponse(user);
             for (int i=0; i< user.getPostList().size(); i++){
                 userResponse.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
-                userResponse.getPostList().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
-                userResponse.getPostList().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                if (user.getPostList().get(i).getGroups() != null){
+                userResponse.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
+                userResponse.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());}
+                userResponse.getPostList().get(i).setStatus(user.getPostList().get(i).getStatus());
+                userResponse.getPostList().get(i).setSaveItemList(user.getPostList().get(i).getPageMemberships());
+
+            }
+            for (int i=0; i< user.getPostListReply().size(); i++){
+                userResponse.getPostListReply().get(i).setCreateBy(userMapper.toResponsePost(user.getPostListReply().get(i).getCreateBy()));
+                userResponse.getPostListReply().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                userResponse.getPostListReply().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                userResponse.getPostListReply().get(i).setStatus(user.getPostListReply().get(i).getStatus());
+                userResponse.getPostListReply().get(i).setSaveItemList(user.getPostListReply().get(i).getPageMemberships());
+
             }
             List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
 
@@ -106,6 +127,23 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.findByEmail(resetPasswordRequest.getEmail()).orElseThrow(() -> new NotFoundException(" Not Found"));
             if (passwordEncoder.matches(resetPasswordRequest.getNewPassword(), user.getPassword()))
             {UserResponse userResponse=userMapper.toResponse(user);
+                for (int i=0; i< user.getPostList().size(); i++){
+                    userResponse.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
+                    if (user.getPostList().get(i).getGroups() != null){
+                        userResponse.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
+                        userResponse.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());}
+                    userResponse.getPostList().get(i).setStatus(user.getPostList().get(i).getStatus());
+                    userResponse.getPostList().get(i).setSaveItemList(user.getPostList().get(i).getPageMemberships());
+
+                }
+                for (int i=0; i< user.getPostListReply().size(); i++){
+                    userResponse.getPostListReply().get(i).setCreateBy(userMapper.toResponsePost(user.getPostListReply().get(i).getCreateBy()));
+                    userResponse.getPostListReply().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                    userResponse.getPostListReply().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                    userResponse.getPostListReply().get(i).setStatus(user.getPostListReply().get(i).getStatus());
+                    userResponse.getPostListReply().get(i).setSaveItemList(user.getPostListReply().get(i).getPageMemberships());
+
+                }
             List<FriendsResponseDTO> friendsResponseDTOList=new ArrayList<>();
 
             for(friends item:user.getFriendships())
@@ -261,8 +299,20 @@ public class UserServiceImpl implements UserService {
                 UserResponse profile = userMapper.toResponse(user);
                 for (int i=0; i< user.getPostList().size(); i++){
                     profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
-                    profile.getPostList().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
-                    profile.getPostList().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                    if (user.getPostList().get(i).getGroups() != null)
+                    {profile.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
+                        profile.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());}
+                    profile.getPostList().get(i).setStatus(user.getPostList().get(i).getStatus());
+                    profile.getPostList().get(i).setSaveItemList(user.getPostList().get(i).getPageMemberships());
+
+                }
+                for (int i=0; i< user.getPostListReply().size(); i++){
+                    profile.getPostListReply().get(i).setCreateBy(userMapper.toResponsePost(user.getPostListReply().get(i).getCreateBy()));
+                    profile.getPostListReply().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                    profile.getPostListReply().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                    profile.getPostListReply().get(i).setStatus(user.getPostListReply().get(i).getStatus());
+                    profile.getPostListReply().get(i).setSaveItemList(user.getPostListReply().get(i).getPageMemberships());
+
                 }
                 List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
                 for(PostResponse itempost:profile.getPostList())
@@ -353,8 +403,20 @@ public class UserServiceImpl implements UserService {
                 UserResponse profile = userMapper.toResponse(user);
                 for (int i=0; i< user.getPostList().size(); i++){
                     profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
-                    profile.getPostList().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
-                    profile.getPostList().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                    if (user.getPostList().get(i).getGroups() != null)
+                    {profile.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
+                        profile.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());}
+                    profile.getPostList().get(i).setStatus(user.getPostList().get(i).getStatus());
+                    profile.getPostList().get(i).setSaveItemList(user.getPostList().get(i).getPageMemberships());
+
+                }
+                for (int i=0; i< user.getPostListReply().size(); i++){
+                    profile.getPostListReply().get(i).setCreateBy(userMapper.toResponsePost(user.getPostListReply().get(i).getCreateBy()));
+                    profile.getPostListReply().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                    profile.getPostListReply().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                    profile.getPostListReply().get(i).setStatus(user.getPostListReply().get(i).getStatus());
+                    profile.getPostListReply().get(i).setSaveItemList(user.getPostListReply().get(i).getPageMemberships());
+
                 }
                 List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
                 for(PostResponse itempost:profile.getPostList())
@@ -442,11 +504,23 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.findById(iduser).orElseThrow(() -> new NotFoundException(" Not Found"));
                 UserProgress userProgress = new UserProgress();
                 UserResponse profile = userMapper.toResponse(user);
-                for (int i=0; i< user.getPostList().size(); i++){
-                    profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
-                    profile.getPostList().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
-                    profile.getPostList().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
-                }
+            for (int i=0; i< user.getPostList().size(); i++){
+                profile.getPostList().get(i).setCreateBy(userMapper.toResponsePost(user.getPostList().get(i).getCreateBy()));
+                if (user.getPostList().get(i).getGroups() != null)
+                {profile.getPostList().get(i).setGroupid(user.getPostList().get(i).getGroups().getId());
+                profile.getPostList().get(i).setGroupname(user.getPostList().get(i).getGroups().getName());}
+                profile.getPostList().get(i).setStatus(user.getPostList().get(i).getStatus());
+                profile.getPostList().get(i).setSaveItemList(user.getPostList().get(i).getPageMemberships());
+
+            }
+            for (int i=0; i< user.getPostListReply().size(); i++){
+                profile.getPostListReply().get(i).setCreateBy(userMapper.toResponsePost(user.getPostListReply().get(i).getCreateBy()));
+                profile.getPostListReply().get(i).setGroupid(user.getPostListReply().get(i).getGroups().getId());
+                profile.getPostListReply().get(i).setGroupname(user.getPostListReply().get(i).getGroups().getName());
+                profile.getPostListReply().get(i).setStatus(user.getPostListReply().get(i).getStatus());
+                profile.getPostListReply().get(i).setSaveItemList(user.getPostListReply().get(i).getPageMemberships());
+
+            }
                 List<PostResponseDTO> postResponseDTOList=new ArrayList<>();
                 for(PostResponse itempost:profile.getPostList())
                 {
