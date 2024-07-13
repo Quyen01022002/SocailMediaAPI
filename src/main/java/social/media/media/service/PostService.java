@@ -11,6 +11,7 @@ import java.util.Map;
 
 public interface PostService {
     public PostResponse addPost(Post post, List<pictureOfPost> listImg);
+    public PostResponse addPostClass(Post post, List<pictureOfPost> listImg);
     public PostResponse addPostImportant(Post post, List<pictureOfPost> listImg);
     public PostResponse updatePost(Post post, List<pictureOfPost> listImg);
     public PostResponse findOne(int postId);

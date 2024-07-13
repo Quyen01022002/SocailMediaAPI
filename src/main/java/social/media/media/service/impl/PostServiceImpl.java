@@ -75,6 +75,21 @@ public class PostServiceImpl implements PostService {
         }
     }
     @Override
+    public PostResponse addPostClass(Post post, List<pictureOfPost> listImg) {
+        try {
+            Post savedPost = postRepository.saveAndFlush(post);
+            for (pictureOfPost item : listImg) {
+                item.setListAnh(savedPost);
+                postIimageRepository.saveAndFlush(item);
+            }
+
+            // Map to Response
+            return postMapper.toResponse(savedPost);
+        } catch (ApplicationException ex) {
+            throw ex;
+        }
+    }
+    @Override
     public PostResponse addPostImportant(Post post, List<pictureOfPost> listImg) {
         try {
             post.setStatus(true);
