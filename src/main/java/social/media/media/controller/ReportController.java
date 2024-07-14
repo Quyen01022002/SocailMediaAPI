@@ -116,12 +116,12 @@ public class ReportController {
             report.setReason(reportRequest.getContent_report());
             reportService.reportPost(report);
             ApiResponse apiResponse = new ApiResponse();
-            apiResponse.ok("Báo cáo thành công");
+            apiResponse.ok("1");
             return apiResponse;}
             else
             {
                 ApiResponse apiResponse = new ApiResponse();
-                apiResponse.ok("Đã báo cáo rồi!");
+                apiResponse.ok("2");
                 return apiResponse;
             }
         } catch (Exception ex) {
