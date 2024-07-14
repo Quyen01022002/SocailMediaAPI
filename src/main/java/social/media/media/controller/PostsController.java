@@ -157,6 +157,17 @@ public class PostsController {
         apiResponse.ok(savedpost);
         return apiResponse;
     }
+    @PostMapping("/post/class")
+    public ApiResponse<PostResponse> postClass(@RequestBody PostRequest post) {
+        Post postEnity = postMapper.toEnity(post);
+        postEnity.setStatusCmtPostEnum(StatusCmtPostEnum.ONLYCLASS);
+        postEnity.setStatusViewPostEnum(StatusViewPostEnum.ONLYCLASS);
+        PostResponse savedpost = postService.addPostClass(postEnity, postEnity.getListAnh());
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.ok(savedpost);
+        return apiResponse;
+    }
 
     @PutMapping("/update")
     public ApiResponse<PostResponse> Updatepost(@RequestBody PostRequest post) {
