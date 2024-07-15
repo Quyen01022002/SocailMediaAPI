@@ -21,6 +21,8 @@ public interface ClassMapper {
     Classes toEntity(ClassResponse Groups);
 
     @Mapping(source = "groups", target = "groups.id")
+    @Mapping(source = "avatar", target = "Avatar")
+    @Mapping(source = "backavatar", target = "BackAvatar")
     Classes classRequestToEntity(ClassRequest classRequest);
     List<ClassResponse> toResponseList(List<Classes> Groups);
 }

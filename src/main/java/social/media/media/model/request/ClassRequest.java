@@ -16,8 +16,8 @@ public class ClassRequest {
 
     private int groups;
     private String description;
-    private String Avatar;
-    private String BackAvatar;
+    private String avatar;
+    private String backavatar;
 
 
 
