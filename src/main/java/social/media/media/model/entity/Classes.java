@@ -26,7 +26,6 @@ public class Classes {
     @ManyToOne
     @JoinColumn(name = "adminId", referencedColumnName = "id")
     @JsonIgnore
-    @Future
     private User teacher;
     private String name;
     @ManyToOne
